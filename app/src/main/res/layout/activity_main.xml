@@ -16,33 +16,45 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/main_sign"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:text="人脸打卡"/>
 
         <Button
+            android:id="@+id/main_member"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
             android:text="人员管理"/>
 
         <Button
+            android:id="@+id/main_plan"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
-            android:text="创建计划"/>
+            android:text="查看计划"/>
 
         <Button
+            android:id="@+id/main_attendance"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
             android:text="查看考勤"/>
 
         <Button
+            android:id="@+id/main_vacate"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
             android:text="查看假条"/>
+
+        <Button
+            android:id="@+id/main_backup"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:text="备份数据"/>
     </LinearLayout>
 
 </LinearLayout>
