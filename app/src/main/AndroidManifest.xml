@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MemberListActivity"
+            android:label="人员管理"/>
+        <activity
+            android:name=".MemberActivity"
+            android:label="人员管理"/>
     </application>
 
 </manifest>

@@ -1,79 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="30dp"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handlers"
+            type="com.niucong.punchcardserver.MainActivity.MainClickHandlers"/>
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="30dp"
+        tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/main_sign"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="人脸打卡"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/main_member"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="20dp"
-            android:text="人员管理"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
+            <Button
+                android:id="@+id/main_sign"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="人脸打卡"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
 
-        <Button
-            android:id="@+id/main_plan"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="20dp"
-            android:text="查看计划"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
+            <Button
+                android:id="@+id/main_member"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="人员管理"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/main_plan"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="查看计划"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/main_attendance"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="查看考勤"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/main_vacate"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="查看假条"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/main_backup"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="备份数据"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/main_attendance"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="查看考勤"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/main_vacate"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="20dp"
-            android:text="查看假条"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/main_backup"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginLeft="20dp"
-            android:text="备份数据"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-</LinearLayout>
+</layout>
