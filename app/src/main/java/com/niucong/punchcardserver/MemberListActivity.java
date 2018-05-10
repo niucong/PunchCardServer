@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.niucong.punchcardserver.app.App;
+
 public class MemberListActivity extends AppCompatActivity {
 
     @Override
@@ -35,9 +37,19 @@ public class MemberListActivity extends AppCompatActivity {
                 this.finish();
                 break;
             case R.id.action_add:
-                startActivity(new Intent(MemberListActivity.this, MemberActivity.class));
+                startActivityForResult(new Intent(MemberListActivity.this, MemberActivity.class), 0);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_OK) {
+            if (requestCode == 0) {
+                App.showToast("保存成功");
+            }
+        }
     }
 }

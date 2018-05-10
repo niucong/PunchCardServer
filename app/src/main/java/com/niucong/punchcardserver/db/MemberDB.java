@@ -1,15 +1,18 @@
 package com.niucong.punchcardserver.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.litepal.crud.DataSupport;
 
 /**
  * 实验室人员
  */
-public class MemberDB extends DataSupport {
+public class MemberDB extends DataSupport implements Parcelable {
 
     private int id;// 唯一主键
     private int serverId;// 服务端生成的Id
-    private int number;// 工号或者学号（工号4位、学号7位）
+    private String number;// 工号或者学号（工号4位、学号7位）
     private String password;// 账号密码
     private String name;// 实验室人员名称
     private String phone;// 手机号
@@ -36,11 +39,11 @@ public class MemberDB extends DataSupport {
         this.serverId = serverId;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -115,4 +118,55 @@ public class MemberDB extends DataSupport {
     public void setDelete(boolean delete) {
         isDelete = delete;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.serverId);
+        dest.writeString(this.number);
+        dest.writeString(this.password);
+        dest.writeString(this.name);
+        dest.writeString(this.phone);
+        dest.writeInt(this.type);
+        dest.writeInt(this.memberId);
+        dest.writeString(this.MAC);
+        dest.writeString(this.faceId);
+        dest.writeLong(this.lastEditTime);
+        dest.writeByte(this.isDelete ? (byte) 1 : (byte) 0);
+    }
+
+    public MemberDB() {
+    }
+
+    protected MemberDB(Parcel in) {
+        this.id = in.readInt();
+        this.serverId = in.readInt();
+        this.number = in.readString();
+        this.password = in.readString();
+        this.name = in.readString();
+        this.phone = in.readString();
+        this.type = in.readInt();
+        this.memberId = in.readInt();
+        this.MAC = in.readString();
+        this.faceId = in.readString();
+        this.lastEditTime = in.readLong();
+        this.isDelete = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<MemberDB> CREATOR = new Parcelable.Creator<MemberDB>() {
+        @Override
+        public MemberDB createFromParcel(Parcel source) {
+            return new MemberDB(source);
+        }
+
+        @Override
+        public MemberDB[] newArray(int size) {
+            return new MemberDB[size];
+        }
+    };
 }
