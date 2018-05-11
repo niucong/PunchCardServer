@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/item_member_num"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="序号"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="名称"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="身份"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="工号/学号"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="手机号"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="密码"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_mac"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="mac地址"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/item_member_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:gravity="center_horizontal"
+            android:text="账号状态"
+            android:textSize="18dp"/>
+    </LinearLayout>
+</layout>

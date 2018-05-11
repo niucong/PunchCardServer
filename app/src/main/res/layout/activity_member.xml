@@ -61,8 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
-                android:maxLength="15"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:maxLength="15"/>
         </LinearLayout>
 
         <LinearLayout
@@ -121,6 +121,26 @@
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
                 android:maxLength="15"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mamber_mac_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MAC地址："/>
+
+            <EditText
+                android:id="@+id/member_mac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="17"/>
         </LinearLayout>
 
         <LinearLayout

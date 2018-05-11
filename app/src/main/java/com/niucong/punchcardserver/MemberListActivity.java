@@ -8,8 +8,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.niucong.punchcardserver.app.App;
+import com.niucong.punchcardserver.db.MemberDB;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberListActivity extends AppCompatActivity {
+
+    private List<MemberDB> list = new ArrayList<>();
+
+    private int allSize;
+    private int offset = 0;
+    private int pageSize = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +33,17 @@ public class MemberListActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
+    }
+
+    private void queryMembers(){
+        if (offset == 0) {
+            list.clear();
+            allSize = DataSupport.count(MemberDB.class);
+        }
+        list = DataSupport.offset(offset).limit(pageSize).find(MemberDB.class);
+
     }
 
     @Override
