@@ -3,6 +3,7 @@ package com.niucong.punchcardserver.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -21,7 +22,7 @@ public class MemberDB extends DataSupport implements Parcelable {
     private String MAC;// 蓝牙MAC地址
     private String faceId;// 人脸标识
     private long lastEditTime;// 最后一次编辑时间
-    private boolean isDelete;// 是否删除
+    private int isDelete;// 是否删除：0正常、1停用
 
     public int getId() {
         return id;
@@ -111,12 +112,12 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.lastEditTime = lastEditTime;
     }
 
-    public boolean isDelete() {
+    public int getIsDelete() {
         return isDelete;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 
     @Override
@@ -137,7 +138,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         dest.writeString(this.MAC);
         dest.writeString(this.faceId);
         dest.writeLong(this.lastEditTime);
-        dest.writeByte(this.isDelete ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.isDelete);
     }
 
     public MemberDB() {
@@ -155,10 +156,10 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.MAC = in.readString();
         this.faceId = in.readString();
         this.lastEditTime = in.readLong();
-        this.isDelete = in.readByte() != 0;
+        this.isDelete = in.readInt();
     }
 
-    public static final Parcelable.Creator<MemberDB> CREATOR = new Parcelable.Creator<MemberDB>() {
+    public static final Creator<MemberDB> CREATOR = new Creator<MemberDB>() {
         @Override
         public MemberDB createFromParcel(Parcel source) {
             return new MemberDB(source);

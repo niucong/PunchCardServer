@@ -34,8 +34,6 @@ public class MemberActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_member);
-//        setContentView(R.layout.activity_member);
-//        binding = ActivityMemberBinding.inflate(getLayoutInflater());
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -68,7 +66,7 @@ public class MemberActivity extends AppCompatActivity {
                         break;
                     case R.id.member_student:
                         if (dbs == null) {
-                            dbs = DataSupport.where("type = ?", "2").find(MemberDB.class);
+                            dbs = DataSupport.where("type = ? and isDelete = ?", "2", "0").find(MemberDB.class);
                         }
                         int size = dbs.size();
                         if (size == 0) {
@@ -108,7 +106,7 @@ public class MemberActivity extends AppCompatActivity {
         binding.memberNumber.setText(db.getNumber());
         binding.memberPhone.setText(db.getPhone());
         binding.memberPassword.setText(db.getPassword());
-        binding.memberStatus.setChecked(!db.isDelete());
+        binding.memberStatus.setChecked(db.getIsDelete() == 0);
 
         if ("3".equals(db.getType())) {
             binding.memberSpinner.setVisibility(View.VISIBLE);
@@ -129,14 +127,16 @@ public class MemberActivity extends AppCompatActivity {
             binding.memberSpinner.setSelection(select);
         }
 
+        binding.memberTeacher.setEnabled(false);
+        binding.memberStudent.setEnabled(false);
+
         if (!isEdit) {
-            binding.memberTeacher.setEnabled(false);
-            binding.memberStudent.setEnabled(false);
             binding.memberName.setEnabled(false);
             binding.memberPhone.setEnabled(false);
             binding.memberPassword.setEnabled(false);
             binding.memberStatus.setEnabled(false);
             binding.memberSpinner.setEnabled(false);
+            binding.memberMac.setEnabled(false);
         }
     }
 
@@ -173,7 +173,6 @@ public class MemberActivity extends AppCompatActivity {
             App.showToast("密码不能为空");
             return;
         }
-        boolean isDelete = !binding.memberStatus.isChecked();
 
         if (db == null) {
             db = new MemberDB();
@@ -187,11 +186,14 @@ public class MemberActivity extends AppCompatActivity {
         db.setPhone(phone);
         db.setPassword(password);
         db.setMAC("");
-        db.setDelete(isDelete);
+        db.setIsDelete(binding.memberStatus.isChecked() ? 0 : 1);
+        db.setLastEditTime(System.currentTimeMillis());
         if (isEdit) {
             db.update(db.getId());
+            setResult(RESULT_OK, getIntent().putExtra("MemberDB", db));
         } else {
             db.save();
+            setResult(RESULT_OK);
         }
         finish();
     }
