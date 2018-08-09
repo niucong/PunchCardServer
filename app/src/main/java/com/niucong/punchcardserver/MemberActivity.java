@@ -167,6 +167,9 @@ public class MemberActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(phone.trim()) || phone.length() < 11 || !phone.startsWith("1")) {
             App.showToast("手机号码错误");
             return;
+        } else if (DataSupport.where("phone = ?", phone).count(MemberDB.class) > 0) {
+            App.showToast("手机号码已被使用");
+            return;
         }
         String password = binding.memberPassword.getText().toString();
         if (TextUtils.isEmpty(password.trim())) {

@@ -3,7 +3,6 @@ package com.niucong.punchcardserver.db;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 /**
@@ -12,7 +11,6 @@ import org.litepal.crud.DataSupport;
 public class MemberDB extends DataSupport implements Parcelable {
 
     private int id;// 唯一主键
-    private int serverId;// 服务端生成的Id
     private String number;// 工号或者学号（工号4位、学号7位）
     private String password;// 账号密码
     private String name;// 实验室人员名称
@@ -30,14 +28,6 @@ public class MemberDB extends DataSupport implements Parcelable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getServerId() {
-        return serverId;
-    }
-
-    public void setServerId(int serverId) {
-        this.serverId = serverId;
     }
 
     public String getNumber() {
@@ -128,7 +118,6 @@ public class MemberDB extends DataSupport implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
-        dest.writeInt(this.serverId);
         dest.writeString(this.number);
         dest.writeString(this.password);
         dest.writeString(this.name);
@@ -146,7 +135,6 @@ public class MemberDB extends DataSupport implements Parcelable {
 
     protected MemberDB(Parcel in) {
         this.id = in.readInt();
-        this.serverId = in.readInt();
         this.number = in.readString();
         this.password = in.readString();
         this.name = in.readString();

@@ -1,11 +1,13 @@
 package com.niucong.punchcardserver.app;
 
-import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
 import org.litepal.LitePal;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     public static App app;
 
@@ -14,6 +16,12 @@ public class App extends Application {
         super.onCreate();
         app = this;
         LitePal.initialize(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     public static void showToast(String text) {

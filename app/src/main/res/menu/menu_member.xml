@@ -4,4 +4,10 @@
     <item
         android:id="@+id/action_add"
         android:title="新增"/>
+    <item
+        android:id="@+id/action_import"
+        android:title="导入"/>
+    <item
+        android:id="@+id/action_export"
+        android:title="导出"/>
 </menu>
