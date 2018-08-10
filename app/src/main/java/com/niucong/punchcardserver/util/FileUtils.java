@@ -12,17 +12,13 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 public class FileUtils {
@@ -194,42 +190,41 @@ public class FileUtils {
      * @param sheetTitle
      * @param headers
      * @param result
-     * @param out
      * @throws Exception
      */
-    public static void exportExcel(HSSFWorkbook workbook, int sheetNum, String sheetTitle, String[] headers, List<List<String>> result,
-                                   OutputStream out) throws Exception {
+    public static void exportExcel(HSSFWorkbook workbook, int sheetNum, String sheetTitle,
+                                   String[] headers, List<List<String>> result) throws Exception {
 // 第一步，创建一个webbook，对应一个Excel以xsl为扩展名文件
         HSSFSheet sheet = workbook.createSheet();
         workbook.setSheetName(sheetNum, sheetTitle);
 //设置列宽度大小
-        sheet.setDefaultColumnWidth((short) 20);
+//        sheet.setDefaultColumnWidth((short) 20);
 //第二步， 生成表格第一行的样式和字体
-        HSSFCellStyle style = workbook.createCellStyle();
+//        HSSFCellStyle style = workbook.createCellStyle();
 // 设置这些样式
-        style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
-        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//        style.setFillForegroundColor(XSSFColor.PALE_BLUE.index);
+//        style.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
+//        style.setBorderBottom(XSSFCellStyle.BORDER_THIN);
+//        style.setBorderLeft(XSSFCellStyle.BORDER_THIN);
+//        style.setBorderRight(XSSFCellStyle.BORDER_THIN);
+//        style.setBorderTop(XSSFCellStyle.BORDER_THIN);
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
 // 生成一个字体
-        HSSFFont font = workbook.createFont();
-        font.setColor(HSSFColor.BLACK.index);
+//        HSSFFont font = workbook.createFont();
+//        font.setColor(XSSFColor.BLACK.index);
 //设置字体所在的行高度
-        font.setFontHeightInPoints((short) 20);
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//        font.setFontHeightInPoints((short) 20);
+//        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 // 把字体应用到当前的样式
-        style.setFont(font);
+//        style.setFont(font);
 // 指定当单元格内容显示不下时自动换行
-        style.setWrapText(true);
+//        style.setWrapText(true);
 // 产生表格标题行
         HSSFRow row = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
             HSSFCell cell = row.createCell((short) i);
-            cell.setCellStyle(style);
-            XSSFRichTextString text = new XSSFRichTextString(headers[i]);
+//            cell.setCellStyle(style);
+            HSSFRichTextString text = new HSSFRichTextString(headers[i]);
             cell.setCellValue(text.toString());
         }
 // 第三步：遍历集合数据，产生数据行，开始插入数据

@@ -174,7 +174,7 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                 }
                 break;
             case R.id.action_export:
-                final String path = FileUtils.getSdcardDir() + "/人员表_" + System.currentTimeMillis() + ".xlsx";
+                final String path = FileUtils.getSdcardDir() + "/人员表_" + System.currentTimeMillis() + ".xls";
                 showProgressDialog("正在导出人员……");
                 new Thread() {
                     @Override
@@ -252,9 +252,9 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
 //3、生成格式是xlsx可存储103万行数据，如果是xls则只能存不到6万行数据
         HSSFWorkbook workbook = new HSSFWorkbook();
 //第一个表格内容
-        FileUtils.exportExcel(workbook, 0, "人员表", summary, summaryData, out);
+        FileUtils.exportExcel(workbook, 0, "人员表", summary, summaryData);
 //第二个表格内容
-//            exportExcel(workbook, 1, "部分流水数据", water, waterData, out);
+//            exportExcel(workbook, 1, "部分流水数据", water, waterData);
 //将所有的数据一起写入，然后再关闭输入流。
         workbook.write(out);
         out.close();
