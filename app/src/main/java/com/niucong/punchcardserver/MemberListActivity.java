@@ -378,9 +378,19 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                             } else if (columnIndex == 1) {
                                 memberDB.setType("主任".equals(myCell.toString()) ? 1 : "老师".equals(myCell.toString()) ? 2 : 3);
                             } else if (columnIndex == 2) {
-                                memberDB.setNumber(myCell.toString());
+                                if (TextUtils.isEmpty(myCell.toString())) {
+                                    isFailure = true;
+                                    break;
+                                } else {
+                                    memberDB.setNumber(myCell.toString());
+                                }
                             } else if (columnIndex == 3) {
-                                memberDB.setPhone(myCell.toString());
+                                if (TextUtils.isEmpty(myCell.toString())) {
+                                    isFailure = true;
+                                    break;
+                                } else {
+                                    memberDB.setPhone(myCell.toString());
+                                }
                             } else if (columnIndex == 4) {
                                 memberDB.setPassword(myCell.toString());
                             } else if (columnIndex == 5) {
@@ -394,8 +404,8 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                         j += 1;
                     }
                     if (!isFailure) {
-                        MemberDB oldDb = DataSupport.where("name = ? and type = ? and number = ?",
-                                memberDB.getName(), "" + memberDB.getType(), memberDB.getNumber()).findFirst(MemberDB.class);
+                        MemberDB oldDb = DataSupport.where("phone = ?",
+                                memberDB.getPhone()).findFirst(MemberDB.class);
                         if (oldDb == null) {
                             memberDB.save();
                         } else {

@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!--获取GSM（2g）、WCDMA（联通3g）等网络状态的信息  -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--获取wifi网络状态的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许读取手机状态 用于创建BmobInstallation-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".app.App"
         android:allowBackup="true"
@@ -29,6 +36,10 @@
         <activity
             android:name=".MemberActivity"
             android:label="人员管理"/>
+
+        <service
+            android:name=".service.CoreService"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -91,7 +90,6 @@ public class MemberActivity extends AppCompatActivity {
         binding.memberButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MemberActivity", "保存");
                 saveMember();
             }
         });
@@ -167,7 +165,7 @@ public class MemberActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(phone.trim()) || phone.length() < 11 || !phone.startsWith("1")) {
             App.showToast("手机号码错误");
             return;
-        } else if (DataSupport.where("phone = ?", phone).count(MemberDB.class) > 0) {
+        } else if (db == null && DataSupport.where("phone = ?", phone).count(MemberDB.class) > 0) {
             App.showToast("手机号码已被使用");
             return;
         }
@@ -177,7 +175,7 @@ public class MemberActivity extends AppCompatActivity {
             return;
         }
 
-        if (db == null) {
+        if (!isEdit) {
             db = new MemberDB();
         }
         db.setType(type);
@@ -198,6 +196,7 @@ public class MemberActivity extends AppCompatActivity {
             db.save();
             setResult(RESULT_OK);
         }
+
         finish();
     }
 
