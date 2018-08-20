@@ -37,8 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * <p>Login Handler.</p>
- * Created by Yan Zhenjie on 2016/6/13.
+ * 签到接口
  */
 public class SignInHandler implements RequestHandler {
 

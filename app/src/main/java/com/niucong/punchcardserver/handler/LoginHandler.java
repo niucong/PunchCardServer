@@ -36,8 +36,7 @@ import java.net.URLDecoder;
 import java.util.Map;
 
 /**
- * <p>Login Handler.</p>
- * Created by Yan Zhenjie on 2016/6/13.
+ * 登录接口
  */
 public class LoginHandler implements RequestHandler {
 
