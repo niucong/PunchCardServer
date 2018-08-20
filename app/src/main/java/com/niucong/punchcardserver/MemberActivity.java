@@ -29,6 +29,8 @@ public class MemberActivity extends AppCompatActivity {
     private List<MemberDB> dbs;
     private MemberDB selectDB;
 
+    private boolean isOwner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +42,57 @@ public class MemberActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        db = getIntent().getParcelableExtra("MemberDB");
-        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        isOwner = getIntent().getBooleanExtra("Owner", false);
+
+        if (isOwner) {
+            binding.llMemberType.setVisibility(View.GONE);
+            db = DataSupport.where("type = ?", "1").findFirst(MemberDB.class);
+            if (db != null) {
+                isEdit = true;
+            }
+        } else {
+            if (DataSupport.where("type = ?", "1").count(MemberDB.class) == 0) {
+                isOwner = true;
+                binding.llMemberType.setVisibility(View.GONE);
+            } else {
+                binding.memberType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.member_teacher:
+                                binding.memberSpinner.setVisibility(View.GONE);
+                                binding.memberOwner.setVisibility(View.GONE);
+                                binding.memberNumberTip.setText("工号：");
+                                break;
+                            case R.id.member_student:
+                                if (dbs == null) {
+                                    dbs = DataSupport.where("type = ? and isDelete = ?", "2", "0").find(MemberDB.class);
+                                }
+                                int size = dbs.size();
+                                if (size == 0) {
+                                    binding.memberTeacher.setChecked(true);
+                                    App.showToast("请先添加老师账号");
+                                } else {
+                                    binding.memberSpinner.setVisibility(View.VISIBLE);
+                                    binding.memberOwner.setVisibility(View.VISIBLE);
+                                    binding.memberNumberTip.setText("学号：");
+
+                                    String[] strs = new String[size + 1];
+                                    strs[0] = "请选择";
+                                    for (int i = 0; i < size; i++) {
+                                        strs[i + 1] = dbs.get(i).getName();
+                                    }
+                                    setSpinner(binding.memberSpinner, strs, 0);
+                                }
+                                break;
+                        }
+                    }
+                });
+                db = getIntent().getParcelableExtra("MemberDB");
+                isEdit = getIntent().getBooleanExtra("isEdit", false);
+            }
+        }
+
         if (db == null) {
             actionBar.setTitle("新增人员");
         } else {
@@ -55,38 +106,6 @@ public class MemberActivity extends AppCompatActivity {
             setData();
         }
 
-        binding.memberType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.member_teacher:
-                        binding.memberSpinner.setVisibility(View.GONE);
-                        binding.memberNumberTip.setText("工号：");
-                        break;
-                    case R.id.member_student:
-                        if (dbs == null) {
-                            dbs = DataSupport.where("type = ? and isDelete = ?", "2", "0").find(MemberDB.class);
-                        }
-                        int size = dbs.size();
-                        if (size == 0) {
-                            binding.memberTeacher.setChecked(true);
-                            App.showToast("请先添加老师账号");
-                        } else {
-                            binding.memberSpinner.setVisibility(View.VISIBLE);
-                            binding.memberNumberTip.setText("学号：");
-
-                            String[] strs = new String[size + 1];
-                            strs[0] = "请选择老师";
-                            for (int i = 0; i < size; i++) {
-                                strs[i + 1] = dbs.get(i).getName();
-                            }
-                            setSpinner(binding.memberSpinner, strs, 0);
-                        }
-                        break;
-                }
-            }
-        });
-
         binding.memberButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,34 +118,35 @@ public class MemberActivity extends AppCompatActivity {
      * 显示人员信息
      */
     private void setData() {
-        binding.memberStudent.setChecked("3".equals(db.getType()));
+        if (isOwner || db.getType() == 1) {
+            binding.llMemberType.setVisibility(View.GONE);
+        } else {
+            binding.memberStudent.setChecked(db.getType() == 3);
+            if (db.getType() == 3) {
+                binding.memberSpinner.setVisibility(View.VISIBLE);
+                binding.memberOwner.setVisibility(View.VISIBLE);
+                binding.memberNumberTip.setText("学号：");
+
+                dbs = DataSupport.where("type = ?", "2").find(MemberDB.class);
+                int size = dbs.size();
+                String[] strs = new String[size + 1];
+                strs[0] = "请选择老师";
+                int select = 0;
+                for (int i = 0; i < size; i++) {
+                    strs[i + 1] = dbs.get(i).getName();
+                    if (db.getMemberId() == dbs.get(i).getId()) {
+                        select = i + 1;
+                    }
+                }
+                setSpinner(binding.memberSpinner, strs, 0);
+                binding.memberSpinner.setSelection(select);
+            }
+        }
         binding.memberName.setText(db.getName());
         binding.memberNumber.setText(db.getNumber());
         binding.memberPhone.setText(db.getPhone());
         binding.memberPassword.setText(db.getPassword());
         binding.memberStatus.setChecked(db.getIsDelete() == 0);
-
-        if ("3".equals(db.getType())) {
-            binding.memberSpinner.setVisibility(View.VISIBLE);
-            binding.memberNumberTip.setText("学号：");
-
-            dbs = DataSupport.where("type = ?", "2").find(MemberDB.class);
-            int size = dbs.size();
-            String[] strs = new String[size + 1];
-            strs[0] = "请选择老师";
-            int select = 0;
-            for (int i = 0; i < size; i++) {
-                strs[i + 1] = dbs.get(i).getName();
-                if (db.getMemberId() == dbs.get(i).getMemberId()) {
-                    select = i + 1;
-                }
-            }
-            setSpinner(binding.memberSpinner, strs, 0);
-            binding.memberSpinner.setSelection(select);
-        }
-
-        binding.memberTeacher.setEnabled(false);
-        binding.memberStudent.setEnabled(false);
 
         if (!isEdit) {
             binding.memberName.setEnabled(false);
@@ -135,6 +155,8 @@ public class MemberActivity extends AppCompatActivity {
             binding.memberStatus.setEnabled(false);
             binding.memberSpinner.setEnabled(false);
             binding.memberMac.setEnabled(false);
+            binding.memberTeacher.setEnabled(false);
+            binding.memberStudent.setEnabled(false);
         }
     }
 
@@ -143,6 +165,9 @@ public class MemberActivity extends AppCompatActivity {
      */
     private void saveMember() {
         int type = binding.memberStudent.isChecked() ? 3 : 2;
+        if (isOwner) {
+            type = 1;
+        }
         if (type == 3 && selectDB == null) {
             App.showToast("请先选择老师");
             return;
@@ -154,7 +179,7 @@ public class MemberActivity extends AppCompatActivity {
         }
         String number = binding.memberNumber.getText().toString();
         if (TextUtils.isEmpty(number.trim())) {
-            if (type == 2) {
+            if (type == 1 || type == 2) {
                 App.showToast("工号不能为空");
             } else {
                 App.showToast("学号不能为空");
@@ -181,6 +206,8 @@ public class MemberActivity extends AppCompatActivity {
         db.setType(type);
         if (type == 3) {
             db.setMemberId(selectDB.getId());
+        } else if (type == 2) {
+            db.setMemberId(DataSupport.where("type = ?", "1").findFirst(MemberDB.class).getId());
         }
         db.setName(name);
         db.setNumber(number);

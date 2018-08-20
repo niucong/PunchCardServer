@@ -14,8 +14,8 @@ public class VacateRecordDB extends DataSupport {
     private long createTime;// 请假时间
     private long startTime;// 请假开始时间
     private long endTime;// 请假结束时间
+    private int approveResult;// 审批结果：0待批复、1同意、2不同意
     private boolean isUpPush;// 是否推送给上级
-    private int approveResult;// 审批结果：1同意、2不同意
     private boolean isDownPush;// 是否推送反馈给下级
     private long lastPushTime;// 最后一次推送时间
     private int number;// 推送次数

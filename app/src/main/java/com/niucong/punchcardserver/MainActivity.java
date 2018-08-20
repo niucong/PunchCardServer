@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.main_attendance:
                     startActivity(new Intent(MainActivity.this, SignRecordListActivity.class));
                     break;
+                case R.id.main_setting:
+                    startActivity(new Intent(MainActivity.this, MemberActivity.class)
+                            .putExtra("Owner", true));
+                    break;
                 case R.id.btn_start:
                     showDialog();
                     mServerManager.startService();

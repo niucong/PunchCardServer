@@ -80,12 +80,12 @@
                 android:textStyle="bold"/>
 
             <Button
-                android:id="@+id/main_backup"
+                android:id="@+id/main_setting"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="20dp"
                 android:onClick="@{handlers::onClickName}"
-                android:text="备份数据"
+                android:text="设置"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
         </LinearLayout>

@@ -32,18 +32,32 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
         final int position = helper.getLayoutPosition();
         helper.setText(R.id.item_member_num, (position + 1) + "");
         helper.setText(R.id.item_member_name, db.getName());
-        helper.setText(R.id.item_member_type, db.getType() == 2 ? "老师" : "学生");
+        helper.setText(R.id.item_member_type, db.getType() == 1 ? "主任" : db.getType() == 2 ? "老师" : "学生");
         helper.setText(R.id.item_member_number, db.getNumber());
         helper.setText(R.id.item_member_phone, db.getPhone());
         helper.setText(R.id.item_member_password, db.getPassword());
         helper.setText(R.id.item_member_mac, db.getMAC());
-        helper.setText(R.id.item_member_status, 0 == db.getIsDelete() ? "正常" : "停用");
+
+        if (0 == db.getIsDelete()) {
+            if (db.getType() == 3 && db.getMemberId() == 0) {
+                helper.setText(R.id.item_member_status, "待编辑");
+            } else {
+                helper.setText(R.id.item_member_status, "正常");
+            }
+        } else {
+            helper.setText(R.id.item_member_status, "停用");
+        }
 
         helper.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, MemberActivity.class)
-                        .putExtra("MemberDB", db));
+                boolean isEdit = false;
+                if (db.getType() == 3 && db.getMemberId() == 0) {
+                    isEdit = true;
+                }
+                ((Activity) context).startActivityForResult(new Intent(context, MemberActivity.class)
+                        .putExtra("MemberDB", db).putExtra("position", position)
+                        .putExtra("isEdit", isEdit), 1);
             }
         });
 
