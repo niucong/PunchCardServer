@@ -21,6 +21,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.niucong.punchcardserver.handler.LoginHandler;
+import com.niucong.punchcardserver.handler.SignInHandler;
 import com.niucong.punchcardserver.util.NetUtils;
 import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
@@ -50,7 +51,7 @@ public class CoreService extends Service {
                 .website(new AssetsWebsite(getAssets(), "web"))
 //                .registerHandler("/download", new FileHandler())
                 .registerHandler("/login", new LoginHandler())
-//                .registerHandler("/upload", new UploadHandler())
+                .registerHandler("/signIn", new SignInHandler())
 //                .registerHandler("/image", new ImageHandler())
                 .filter(new HttpCacheFilter())
                 .listener(mListener)

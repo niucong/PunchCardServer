@@ -74,7 +74,8 @@ public class LoginHandler implements RequestHandler {
         } else {
             jsonObject.put("code", 1);
             jsonObject.put("msg", "登录成功");
-            jsonObject.put("MemberId", memberDB.getId());
+            jsonObject.put("memberId", memberDB.getId());
+            jsonObject.put("type", memberDB.getType());
         }
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
     }

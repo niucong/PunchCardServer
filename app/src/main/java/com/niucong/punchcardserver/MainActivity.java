@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.main_member:
                     startActivity(new Intent(MainActivity.this, MemberListActivity.class));
                     break;
+                case R.id.main_attendance:
+                    startActivity(new Intent(MainActivity.this, SignRecordListActivity.class));
+                    break;
                 case R.id.btn_start:
                     showDialog();
                     mServerManager.startService();
