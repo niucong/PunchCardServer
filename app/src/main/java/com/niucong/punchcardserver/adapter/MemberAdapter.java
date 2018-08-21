@@ -3,6 +3,7 @@ package com.niucong.punchcardserver.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -40,12 +41,12 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
 
         if (0 == db.getIsDelete()) {
             if (db.getType() == 3 && db.getMemberId() == 0) {
-                helper.setText(R.id.item_member_status, "待编辑");
+                setTextStutas(helper, "待编辑", Color.argb(128, 0, 0, 255));
             } else {
-                helper.setText(R.id.item_member_status, "正常");
+                setTextStutas(helper, "正常", Color.argb(128, 0, 255, 0));
             }
         } else {
-            helper.setText(R.id.item_member_status, "停用");
+            setTextStutas(helper, "停用", Color.argb(128, 255, 0, 0));
         }
 
         helper.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +71,10 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
                 return false;
             }
         });
+    }
+
+    private void setTextStutas(BaseViewHolder helper, String status, int Color) {
+        helper.setText(R.id.item_member_status, status);
+        helper.setTextColor(R.id.item_member_status, Color);
     }
 }

@@ -69,8 +69,6 @@ public class SignInHandler implements RequestHandler {
                 recordDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
                 recordDB.setName(memberDB.getName());
-                recordDB.setType(memberDB.getType());
-                recordDB.setNumber(memberDB.getNumber());
                 recordDB.setStartTime(System.currentTimeMillis());
                 recordDB.save();
             } else {

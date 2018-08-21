@@ -114,13 +114,13 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                 list.clear();
                 allSize = DataSupport.count(MemberDB.class);
             }
-            list.addAll(DataSupport.offset(offset).limit(pageSize).find(MemberDB.class));
+            list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(MemberDB.class));
         } else {
             if (offset == 0) {
                 list.clear();
                 allSize = DataSupport.where("number = ? or name = ? or phone = ?", searchKey, searchKey, searchKey).count(MemberDB.class);
             }
-            list.addAll(DataSupport.where("number = ? or name = ? or phone = ?", searchKey, searchKey, searchKey)
+            list.addAll(DataSupport.order("id desc").where("number = ? or name = ? or phone = ?", searchKey, searchKey, searchKey)
                     .offset(offset).limit(pageSize).find(MemberDB.class));
         }
         Log.d("MemberListActivity", "queryMembers " + list.size() + "/" + allSize);

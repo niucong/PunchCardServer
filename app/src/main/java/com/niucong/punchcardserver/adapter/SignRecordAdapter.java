@@ -26,8 +26,6 @@ public class SignRecordAdapter extends BaseQuickAdapter<SignRecordDB, BaseViewHo
         final int position = helper.getLayoutPosition();
         helper.setText(R.id.item_signrecord_num, (position + 1) + "");
         helper.setText(R.id.item_signrecord_name, db.getName());
-        helper.setText(R.id.item_signrecord_type, db.getType() == 2 ? "老师" : "学生");
-        helper.setText(R.id.item_signrecord_number, db.getNumber());
         helper.setText(R.id.item_signrecord_starttime, YMDHMS.format(new Date(db.getStartTime())));
         helper.setText(R.id.item_signrecord_endtime, db.getEndTime() > 0 ? YMDHMS.format(new Date(db.getEndTime())) : "-");
     }

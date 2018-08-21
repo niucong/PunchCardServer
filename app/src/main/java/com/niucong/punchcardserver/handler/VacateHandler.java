@@ -18,6 +18,7 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.VacateRecordDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
@@ -76,7 +77,9 @@ public class VacateHandler implements RequestHandler {
                 long end = Long.valueOf(params.get("end"));
                 String cause = URLDecoder.decode(params.get("cause"), "utf-8");
                 VacateRecordDB recordDB = new VacateRecordDB();
-                recordDB.setOwnerId(Integer.valueOf(userId));
+                recordDB.setMemberId(Integer.valueOf(userId));
+                MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
+                recordDB.setName(memberDB.getName());
                 recordDB.setType(type);
                 recordDB.setCause(cause);
                 recordDB.setStartTime(start);
@@ -98,6 +101,7 @@ public class VacateHandler implements RequestHandler {
                     return;
                 }
                 VacateRecordDB recordDB = DataSupport.find(VacateRecordDB.class, serverId);
+                recordDB.setEditTime(System.currentTimeMillis());
                 recordDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
                 recordDB.update(serverId);
                 jsonObject.put("msg", "批复成功");

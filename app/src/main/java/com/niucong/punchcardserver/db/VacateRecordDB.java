@@ -8,13 +8,16 @@ import org.litepal.crud.DataSupport;
 public class VacateRecordDB extends DataSupport {
 
     private long id;// 唯一主键
-    private int ownerId;// 请假者Id
+    private int memberId;// 请假者Id
+    private String name;// 请假者名称
     private int type;// 请假类型：1事假、2病假、3年假、4调休、5其他（3、4、5只有老师有）
     private String cause;// 请假原因
     private long createTime;// 请假时间
     private long startTime;// 请假开始时间
     private long endTime;// 请假结束时间
+    private long editTime;// 批复时间
     private int approveResult;// 审批结果：0待批复、1同意、2不同意
+
     private boolean isUpPush;// 是否推送给上级
     private boolean isDownPush;// 是否推送反馈给下级
     private long lastPushTime;// 最后一次推送时间
@@ -28,12 +31,20 @@ public class VacateRecordDB extends DataSupport {
         this.id = id;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public int getMemberId() {
+        return memberId;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setMemberId(int memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getType() {
@@ -74,6 +85,14 @@ public class VacateRecordDB extends DataSupport {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    public long getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(long editTime) {
+        this.editTime = editTime;
     }
 
     public boolean isUpPush() {

@@ -39,6 +39,9 @@
         <activity
             android:name=".SignRecordListActivity"
             android:label="考勤管理"/>
+        <activity
+            android:name=".VacateListActivity"
+            android:label="请假管理"/>
 
         <service
             android:name=".service.CoreService"
