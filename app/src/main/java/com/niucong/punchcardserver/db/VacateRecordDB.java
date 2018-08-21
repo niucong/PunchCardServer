@@ -10,6 +10,7 @@ public class VacateRecordDB extends DataSupport {
     private long id;// 唯一主键
     private int memberId;// 请假者Id
     private String name;// 请假者名称
+    private int superId;// 上级id
     private int type;// 请假类型：1事假、2病假、3年假、4调休、5其他（3、4、5只有老师有）
     private String cause;// 请假原因
     private long createTime;// 请假时间
@@ -45,6 +46,14 @@ public class VacateRecordDB extends DataSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getSuperId() {
+        return superId;
+    }
+
+    public void setSuperId(int superId) {
+        this.superId = superId;
     }
 
     public int getType() {

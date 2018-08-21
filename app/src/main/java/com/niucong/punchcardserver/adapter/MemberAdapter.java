@@ -40,7 +40,7 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
         helper.setText(R.id.item_member_mac, db.getMAC());
 
         if (0 == db.getIsDelete()) {
-            if (db.getType() == 3 && db.getMemberId() == 0) {
+            if (db.getType() == 3 && db.getSuperId() == 0) {
                 setTextStutas(helper, "待编辑", Color.argb(128, 0, 0, 255));
             } else {
                 setTextStutas(helper, "正常", Color.argb(128, 0, 255, 0));
@@ -53,7 +53,7 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
             @Override
             public void onClick(View v) {
                 boolean isEdit = false;
-                if (db.getType() == 3 && db.getMemberId() == 0) {
+                if (db.getType() == 3 && db.getSuperId() == 0) {
                     isEdit = true;
                 }
                 ((Activity) context).startActivityForResult(new Intent(context, MemberActivity.class)

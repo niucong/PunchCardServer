@@ -5,6 +5,8 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import org.litepal.LitePal;
 
 public class App extends MultiDexApplication {
@@ -16,6 +18,7 @@ public class App extends MultiDexApplication {
         super.onCreate();
         app = this;
         LitePal.initialize(this);
+        Stetho.initializeWithDefaults(this);
     }
 
     @Override

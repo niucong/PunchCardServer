@@ -80,6 +80,7 @@ public class VacateHandler implements RequestHandler {
                 recordDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
                 recordDB.setName(memberDB.getName());
+                recordDB.setSuperId(memberDB.getSuperId());
                 recordDB.setType(type);
                 recordDB.setCause(cause);
                 recordDB.setStartTime(start);

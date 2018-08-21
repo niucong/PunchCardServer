@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,12 +50,16 @@ public class MemberActivity extends AppCompatActivity {
             db = DataSupport.where("type = ?", "1").findFirst(MemberDB.class);
             if (db != null) {
                 isEdit = true;
+            } else {
+                binding.memberOwnerTip.setVisibility(View.VISIBLE);
             }
         } else {
             if (DataSupport.where("type = ?", "1").count(MemberDB.class) == 0) {
                 isOwner = true;
                 binding.llMemberType.setVisibility(View.GONE);
+                binding.memberOwnerTip.setVisibility(View.VISIBLE);
             } else {
+                binding.memberOwnerTip.setVisibility(View.GONE);
                 binding.memberType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -134,7 +139,7 @@ public class MemberActivity extends AppCompatActivity {
                 int select = 0;
                 for (int i = 0; i < size; i++) {
                     strs[i + 1] = dbs.get(i).getName();
-                    if (db.getMemberId() == dbs.get(i).getId()) {
+                    if (db.getSuperId() == dbs.get(i).getId()) {
                         select = i + 1;
                     }
                 }
@@ -205,9 +210,9 @@ public class MemberActivity extends AppCompatActivity {
         }
         db.setType(type);
         if (type == 3) {
-            db.setMemberId(selectDB.getId());
+            db.setSuperId(selectDB.getId());
         } else if (type == 2) {
-            db.setMemberId(DataSupport.where("type = ?", "1").findFirst(MemberDB.class).getId());
+            db.setSuperId(DataSupport.where("type = ?", "1").findFirst(MemberDB.class).getId());
         }
         db.setName(name);
         db.setNumber(number);
@@ -224,6 +229,7 @@ public class MemberActivity extends AppCompatActivity {
             setResult(RESULT_OK);
         }
 
+        Log.d("MemberActivity", "SuperId=" + db.getSuperId());
         finish();
     }
 

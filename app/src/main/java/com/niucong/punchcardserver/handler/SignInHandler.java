@@ -69,12 +69,14 @@ public class SignInHandler implements RequestHandler {
                 recordDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
                 recordDB.setName(memberDB.getName());
+                recordDB.setSuperId(memberDB.getSuperId());
                 recordDB.setStartTime(System.currentTimeMillis());
                 recordDB.save();
             } else {
                 recordDB.setEndTime(System.currentTimeMillis());
                 recordDB.update(recordDB.getId());
             }
+            Log.d("SignInHandler", "SuperId=" + recordDB.getSuperId());
 
             jsonObject.put("code", 1);
             jsonObject.put("msg", "签到成功");

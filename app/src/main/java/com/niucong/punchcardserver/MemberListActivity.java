@@ -406,6 +406,7 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                     if (!isFailure) {
                         MemberDB oldDb = DataSupport.where("phone = ?",
                                 memberDB.getPhone()).findFirst(MemberDB.class);
+
                         if (oldDb == null) {
                             memberDB.save();
                         } else {

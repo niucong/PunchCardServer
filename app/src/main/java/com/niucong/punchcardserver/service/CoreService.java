@@ -22,7 +22,9 @@ import android.support.annotation.Nullable;
 
 import com.niucong.punchcardserver.handler.LoginHandler;
 import com.niucong.punchcardserver.handler.SignInHandler;
+import com.niucong.punchcardserver.handler.SignInListHandler;
 import com.niucong.punchcardserver.handler.VacateHandler;
+import com.niucong.punchcardserver.handler.VacateListHandler;
 import com.niucong.punchcardserver.util.NetUtils;
 import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
@@ -53,7 +55,9 @@ public class CoreService extends Service {
 //                .registerHandler("/download", new FileHandler())
                 .registerHandler("/login", new LoginHandler())
                 .registerHandler("/signIn", new SignInHandler())
+                .registerHandler("/signInList", new SignInListHandler())
                 .registerHandler("/vacate", new VacateHandler())
+                .registerHandler("/vacateList", new VacateListHandler())
                 .filter(new HttpCacheFilter())
                 .listener(mListener)
                 .build();

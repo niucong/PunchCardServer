@@ -16,7 +16,7 @@ public class MemberDB extends DataSupport implements Parcelable {
     private String name;// 实验室人员名称
     private String phone;// 手机号
     private int type;// 身份类型：1主任、2老师、3学生
-    private int memberId;// 上级id
+    private int superId;// 上级id
     private String MAC;// 蓝牙MAC地址
     private String faceId;// 人脸标识
     private long lastEditTime;// 最后一次编辑时间
@@ -70,12 +70,12 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.type = type;
     }
 
-    public int getMemberId() {
-        return memberId;
+    public int getSuperId() {
+        return superId;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setSuperId(int superId) {
+        this.superId = superId;
     }
 
     public String getMAC() {
@@ -123,7 +123,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.phone);
         dest.writeInt(this.type);
-        dest.writeInt(this.memberId);
+        dest.writeInt(this.superId);
         dest.writeString(this.MAC);
         dest.writeString(this.faceId);
         dest.writeLong(this.lastEditTime);
@@ -140,7 +140,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.name = in.readString();
         this.phone = in.readString();
         this.type = in.readInt();
-        this.memberId = in.readInt();
+        this.superId = in.readInt();
         this.MAC = in.readString();
         this.faceId = in.readString();
         this.lastEditTime = in.readLong();

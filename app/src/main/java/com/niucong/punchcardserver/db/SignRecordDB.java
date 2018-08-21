@@ -10,6 +10,7 @@ public class SignRecordDB extends DataSupport {
     private long id;// 唯一主键
     private int memberId;// 实验室人员Id
     private String name;// 实验室人员名称
+    private int superId;// 上级id
     private long startTime;
     private long endTime;
 
@@ -35,6 +36,14 @@ public class SignRecordDB extends DataSupport {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getSuperId() {
+        return superId;
+    }
+
+    public void setSuperId(int superId) {
+        this.superId = superId;
     }
 
     public long getStartTime() {
