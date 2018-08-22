@@ -20,8 +20,8 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.SignRecordDB;
+import com.niucong.punchcardserver.db.CoursePlanDB;
+import com.niucong.punchcardserver.db.VacateRecordDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -41,15 +41,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 签到列表
+ * 请假批假接口
  */
-public class SignInListHandler implements RequestHandler {
+public class PlanListHandler implements RequestHandler {
 
     @RequestMapping(method = {RequestMethod.POST})
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parseParams(request);
-        Log.d("SignInListHandler", "params=" + params.toString());
+        Log.d("PlanListHandler", "params=" + params.toString());
         JSONObject jsonObject = new JSONObject();
 
         String userId = "";
@@ -70,7 +70,7 @@ public class SignInListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求起始参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("SignInListHandler", jsonObject.toJSONString());
+                Log.d("PlanListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -82,7 +82,7 @@ public class SignInListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求数量参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("SignInListHandler", jsonObject.toJSONString());
+                Log.d("PlanListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -90,69 +90,47 @@ public class SignInListHandler implements RequestHandler {
         if (params.containsKey("searchKey")) {
             searchKey = URLDecoder.decode(params.get("searchKey"), "utf-8");
         }
-        MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
-        int type = memberDB.getType();
-        Log.d("SignInListHandler", "userId=" + userId + ",type=" + type + ",searchKey=" + searchKey);
-        if (type == 1) {
-            if (TextUtils.isEmpty(searchKey)) {
-                if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.count(SignRecordDB.class));
-                }
-                listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
-                        .limit(pageSize).find(SignRecordDB.class));
-            } else {
-                if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
-                            .count(SignRecordDB.class));
-                }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignRecordDB.class));
-            }
-        } else if (type == 2) {
-            if (TextUtils.isEmpty(searchKey)) {
-                Log.d("SignInListHandler", "20");
-                if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                            .count(SignRecordDB.class));
-                }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignRecordDB.class));
-            } else {
-                Log.d("SignInListHandler", "21");
-                if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                            .count(SignRecordDB.class));
-                }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                        .offset(offset).limit(pageSize).find(SignRecordDB.class));
-            }
-        } else {
-            Log.d("SignInListHandler", "30");
+        if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignRecordDB.class));
+                jsonObject.put("allSize", DataSupport.where("createrId = ? or members like ?", userId, "%\"" + userId + "\"%")
+                        .count(CoursePlanDB.class));
             }
-            listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
-                    .offset(offset).limit(pageSize).find(SignRecordDB.class));
+            listToArray(response, jsonObject, DataSupport.order("id desc")
+                    .where("createrId = ? or members like ?", userId, "%\"" + userId + "\"%").offset(offset).limit(pageSize).find(CoursePlanDB.class));
+        } else {
+            if (offset == 0) {
+                jsonObject.put("allSize", DataSupport.where("(createrId = ? or members like ?) and (createrName = ? or members = ?)",
+                        userId, "%\"" + userId + "\"%", searchKey, "%\"" + searchKey + "\"%")
+                        .count(VacateRecordDB.class));
+            }
+            listToArray(response, jsonObject, DataSupport.order("id desc")
+                    .where("(createrId = ? or members like ?) and (createrName = ? or members = ?)",
+                            userId, "%\"" + userId + "\"%", searchKey, "%\"" + searchKey + "\"%")
+                    .offset(offset).limit(pageSize).find(CoursePlanDB.class));
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<SignRecordDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<CoursePlanDB> list) {
         JSONArray array = new JSONArray();
-        for (SignRecordDB recordDB : list) {
+        for (CoursePlanDB planDB : list) {
             JSONObject json = new JSONObject();
-            json.put("id", recordDB.getId());
-            json.put("memberId", recordDB.getMemberId());
-            json.put("name", recordDB.getName());
-            json.put("superId", recordDB.getSuperId());
-            json.put("startTime", recordDB.getStartTime());
-            json.put("endTime", recordDB.getEndTime());
+            json.put("id", planDB.getId());
+            json.put("name", planDB.getName());
+            json.put("createrId", planDB.getCreaterId());
+            json.put("createrName", planDB.getCreaterName());
+            json.put("members", planDB.getMembers());
+            json.put("cause", planDB.getCause());
+            json.put("createTime", planDB.getCreateTime());
+            json.put("startTime", planDB.getStartTime());
+            json.put("endTime", planDB.getEndTime());
+            json.put("editTime", planDB.getEditTime());
+            json.put("forceFinish", planDB.getForceFinish());
             array.add(json);
         }
         jsonObject.put("list", array);
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-        Log.d("SignInListHandler", jsonObject.toJSONString());
+        Log.d("PlanListHandler", jsonObject.toJSONString());
     }
 }

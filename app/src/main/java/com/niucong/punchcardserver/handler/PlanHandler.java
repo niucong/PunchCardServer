@@ -18,8 +18,8 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.niucong.punchcardserver.db.CoursePlanDB;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.VacateRecordDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -38,15 +38,15 @@ import java.net.URLDecoder;
 import java.util.Map;
 
 /**
- * 请假批假接口
+ * 课程计划接口
  */
-public class VacateHandler implements RequestHandler {
+public class PlanHandler implements RequestHandler {
 
     @RequestMapping(method = {RequestMethod.POST})
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parseParams(request);
-        Log.d("VacateHandler", "params=" + params.toString());
+        Log.d("PlanHandler", "params=" + params.toString());
         JSONObject jsonObject = new JSONObject();
 
         String userId = "";
@@ -61,59 +61,61 @@ public class VacateHandler implements RequestHandler {
         if (params.containsKey("serverId")) {
             serverId = Long.valueOf(params.get("serverId"));
         }
-        Log.d("VacateHandler", "userId=" + userId + ",serverId=" + serverId);
+        Log.d("PlanHandler", "userId=" + userId + ",serverId=" + serverId);
         try {
             jsonObject.put("code", 1);
             if (serverId == 0) {
-                if (!params.containsKey("type") || !params.containsKey("start") || !params.containsKey("end")) {
+                if (!params.containsKey("name") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
                     jsonObject.put("code", 0);
                     jsonObject.put("msg", "请求参数错误");
                     response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                    Log.d("VacateHandler", jsonObject.toJSONString());
+                    Log.d("PlanHandler", jsonObject.toJSONString());
                     return;
                 }
-                int type = Integer.valueOf(params.get("type"));
                 long start = Long.valueOf(params.get("start"));
                 long end = Long.valueOf(params.get("end"));
-                VacateRecordDB recordDB = new VacateRecordDB();
-                recordDB.setMemberId(Integer.valueOf(userId));
+                CoursePlanDB planDB = new CoursePlanDB();
+                planDB.setName(URLDecoder.decode(params.get("name"), "utf-8"));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
-                recordDB.setName(memberDB.getName());
-                recordDB.setSuperId(memberDB.getSuperId());
-                recordDB.setType(type);
-                recordDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
-                recordDB.setStartTime(start);
-                recordDB.setEndTime(end);
-                recordDB.setCreateTime(System.currentTimeMillis());
-                recordDB.setApproveResult(0);
-                recordDB.save();
+                planDB.setCreaterId(Integer.valueOf(userId));
+                planDB.setCreaterName(memberDB.getName());
+                if (params.containsKey("members")){
+                    planDB.setMembers(URLDecoder.decode(params.get("members"), "utf-8"));
+                }
+                if (params.containsKey("cause")){
+                    planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                }
+                planDB.setStartTime(start);
+                planDB.setEndTime(end);
+                planDB.setCreateTime(System.currentTimeMillis());
+                planDB.save();
 
-                jsonObject.put("serverId", recordDB.getId());
-                jsonObject.put("createTime", recordDB.getCreateTime());
+                jsonObject.put("serverId", planDB.getId());
+                jsonObject.put("createTime", planDB.getCreateTime());
                 jsonObject.put("msg", "创建成功");
             } else {
-                if (!params.containsKey("approveResult")) {
+                if (!params.containsKey("forceFinish")) {
                     response.setStatusCode(400);
                     jsonObject.put("code", 0);
                     jsonObject.put("msg", "请求参数错误");
                     response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                    Log.d("VacateHandler", jsonObject.toJSONString());
+                    Log.d("PlanHandler", jsonObject.toJSONString());
                     return;
                 }
-                VacateRecordDB recordDB = DataSupport.find(VacateRecordDB.class, serverId);
-                recordDB.setEditTime(System.currentTimeMillis());
-                recordDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
-                recordDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
-                recordDB.update(serverId);
-                jsonObject.put("msg", "批复成功");
+                CoursePlanDB planDB = DataSupport.find(CoursePlanDB.class, serverId);
+                planDB.setEditTime(System.currentTimeMillis());
+                planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
+                planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                planDB.update(serverId);
+                jsonObject.put("msg", "操作成功");
             }
         } catch (Exception e) {
             response.setStatusCode(400);
             jsonObject.put("code", 0);
             jsonObject.put("msg", "请求异常");
         }
-        Log.d("VacateHandler", jsonObject.toJSONString());
+        Log.d("PlanHandler", jsonObject.toJSONString());
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
     }
 }

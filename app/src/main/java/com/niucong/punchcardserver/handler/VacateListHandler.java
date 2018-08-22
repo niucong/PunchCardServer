@@ -49,6 +49,7 @@ public class VacateListHandler implements RequestHandler {
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parseParams(request);
+        Log.d("VacateListHandler", "params=" + params.toString());
         JSONObject jsonObject = new JSONObject();
 
         String userId = "";
@@ -69,7 +70,7 @@ public class VacateListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求起始参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("VacateHandler", jsonObject.toJSONString());
+                Log.d("VacateListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -81,7 +82,7 @@ public class VacateListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求数量参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("VacateHandler", jsonObject.toJSONString());
+                Log.d("VacateListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -153,5 +154,6 @@ public class VacateListHandler implements RequestHandler {
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
+        Log.d("VacateListHandler", jsonObject.toJSONString());
     }
 }

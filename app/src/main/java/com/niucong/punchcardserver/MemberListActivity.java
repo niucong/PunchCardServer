@@ -411,6 +411,7 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                                 memberDB.getPhone()).findFirst(MemberDB.class);
 
                         if (oldDb == null) {
+                            memberDB.setLastEditTime(System.currentTimeMillis());
                             memberDB.save();
                         } else {
                             oldDb.setName(memberDB.getName());
@@ -419,6 +420,7 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                             oldDb.setPhone(memberDB.getPhone());
                             oldDb.setPassword(memberDB.getPassword());
                             oldDb.setMAC(memberDB.getMAC());
+                            oldDb.setLastEditTime(System.currentTimeMillis());
                             oldDb.setIsDelete(memberDB.getIsDelete());
                             oldDb.update(oldDb.getId());
                         }

@@ -21,6 +21,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.niucong.punchcardserver.handler.LoginHandler;
+import com.niucong.punchcardserver.handler.MemberListHandler;
+import com.niucong.punchcardserver.handler.PlanHandler;
 import com.niucong.punchcardserver.handler.SignInHandler;
 import com.niucong.punchcardserver.handler.SignInListHandler;
 import com.niucong.punchcardserver.handler.VacateHandler;
@@ -52,12 +54,13 @@ public class CoreService extends Service {
                 .port(8080)
                 .timeout(10, TimeUnit.SECONDS)
                 .website(new AssetsWebsite(getAssets(), "web"))
-//                .registerHandler("/download", new FileHandler())
                 .registerHandler("/login", new LoginHandler())
+                .registerHandler("/memberList", new MemberListHandler())
                 .registerHandler("/signIn", new SignInHandler())
                 .registerHandler("/signInList", new SignInListHandler())
                 .registerHandler("/vacate", new VacateHandler())
                 .registerHandler("/vacateList", new VacateListHandler())
+                .registerHandler("/plan", new PlanHandler())
                 .filter(new HttpCacheFilter())
                 .listener(mListener)
                 .build();

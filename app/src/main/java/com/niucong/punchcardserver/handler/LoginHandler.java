@@ -16,6 +16,7 @@
 package com.niucong.punchcardserver.handler;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.niucong.punchcardserver.db.MemberDB;
@@ -44,6 +45,7 @@ public class LoginHandler implements RequestHandler {
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parseParams(request);
+        Log.d("LoginHandler", "params=" + params.toString());
         JSONObject jsonObject = new JSONObject();
         if (!params.containsKey("username") || !params.containsKey("password")) {
             response.setStatusCode(400);
@@ -70,6 +72,9 @@ public class LoginHandler implements RequestHandler {
         } else if (!password.equals(memberDB.getPassword())) {
             jsonObject.put("code", 0);
             jsonObject.put("msg", "密码错误");
+        } else if (memberDB.getIsDelete() == 1) {
+            jsonObject.put("code", 0);
+            jsonObject.put("msg", "账号已失效");
         } else {
             jsonObject.put("code", 1);
             jsonObject.put("msg", "登录成功");

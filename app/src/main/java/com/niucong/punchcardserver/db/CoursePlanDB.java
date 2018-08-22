@@ -8,14 +8,17 @@ import org.litepal.crud.DataSupport;
 public class CoursePlanDB extends DataSupport {
 
     private int id;// 唯一主键
-    private int serverId;// 服务端生成的Id
     private String name;// 计划名称
-    private int ownerId;// 计划归属者Id
+    private String members;// 计划关联者id、name
     private int createrId;// 计划创建者Id
+    private String createrName;// 计划创建者name
     private long createTime;// 创建时间
     private long startTime;// 计划开始时间
     private long endTime;// 计划结束时间
-    private long lastEditTime;// 最后一次编辑时间
+    private int forceFinish;// 0正常、1被取消（开始之前可以取消）、2被终止（开始以后只能终止）
+    private String cause;// 取消或终止原因
+    private long editTime;// 编辑时间
+
     private long lastPushTime;// 最后一次推送时间
     private int number;// 推送次数
     private boolean isSync;// 是否同步到手机
@@ -28,14 +31,6 @@ public class CoursePlanDB extends DataSupport {
         this.id = id;
     }
 
-    public int getServerId() {
-        return serverId;
-    }
-
-    public void setServerId(int serverId) {
-        this.serverId = serverId;
-    }
-
     public String getName() {
         return name;
     }
@@ -44,12 +39,12 @@ public class CoursePlanDB extends DataSupport {
         this.name = name;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public String getMembers() {
+        return members;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setMembers(String members) {
+        this.members = members;
     }
 
     public int getCreaterId() {
@@ -58,6 +53,14 @@ public class CoursePlanDB extends DataSupport {
 
     public void setCreaterId(int createrId) {
         this.createrId = createrId;
+    }
+
+    public String getCreaterName() {
+        return createrName;
+    }
+
+    public void setCreaterName(String createrName) {
+        this.createrName = createrName;
     }
 
     public long getCreateTime() {
@@ -84,12 +87,28 @@ public class CoursePlanDB extends DataSupport {
         this.endTime = endTime;
     }
 
-    public long getLastEditTime() {
-        return lastEditTime;
+    public int getForceFinish() {
+        return forceFinish;
     }
 
-    public void setLastEditTime(long lastEditTime) {
-        this.lastEditTime = lastEditTime;
+    public void setForceFinish(int forceFinish) {
+        this.forceFinish = forceFinish;
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public void setCause(String cause) {
+        this.cause = cause;
+    }
+
+    public long getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(long editTime) {
+        this.editTime = editTime;
     }
 
     public long getLastPushTime() {
