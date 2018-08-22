@@ -31,9 +31,9 @@ public class VacateRecordAdapter extends BaseQuickAdapter<VacateRecordDB, BaseVi
         helper.setText(R.id.item_vacate_type, db.getType() == 1 ? "事假" : db.getType() == 2 ? "病假" :
                 db.getType() == 3 ? "年假" : db.getType() == 4 ? "调休" : "其它");
         helper.setText(R.id.item_vacate_starttime, YMDHM.format(new Date(db.getStartTime())));
-        helper.setText(R.id.item_vacate_endtime, db.getEndTime() > 0 ? YMDHM.format(new Date(db.getEndTime())) : "-");
+        helper.setText(R.id.item_vacate_endtime, YMDHM.format(new Date(db.getEndTime())));
         helper.setText(R.id.item_vacate_creattime, YMDHM.format(new Date(db.getCreateTime())));
-        helper.setText(R.id.item_vacate_edittime, db.getEndTime() > 0 ? YMDHM.format(new Date(db.getEditTime())) : "-");
+        helper.setText(R.id.item_vacate_edittime, db.getEditTime() > 0 ? YMDHM.format(new Date(db.getEditTime())) : "");
 
         if (db.getApproveResult() == 0) {
             setTextStutas(helper, "待批复", Color.argb(128, 0, 0, 255));

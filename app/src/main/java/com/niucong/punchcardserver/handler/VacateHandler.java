@@ -75,14 +75,13 @@ public class VacateHandler implements RequestHandler {
                 int type = Integer.valueOf(params.get("type"));
                 long start = Long.valueOf(params.get("start"));
                 long end = Long.valueOf(params.get("end"));
-                String cause = URLDecoder.decode(params.get("cause"), "utf-8");
                 VacateRecordDB recordDB = new VacateRecordDB();
                 recordDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
                 recordDB.setName(memberDB.getName());
                 recordDB.setSuperId(memberDB.getSuperId());
                 recordDB.setType(type);
-                recordDB.setCause(cause);
+                recordDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
                 recordDB.setStartTime(start);
                 recordDB.setEndTime(end);
                 recordDB.setCreateTime(System.currentTimeMillis());
@@ -104,6 +103,7 @@ public class VacateHandler implements RequestHandler {
                 VacateRecordDB recordDB = DataSupport.find(VacateRecordDB.class, serverId);
                 recordDB.setEditTime(System.currentTimeMillis());
                 recordDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
+                recordDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
                 recordDB.update(serverId);
                 jsonObject.put("msg", "批复成功");
             }

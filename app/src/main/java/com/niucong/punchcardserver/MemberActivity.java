@@ -212,7 +212,7 @@ public class MemberActivity extends AppCompatActivity {
         if (type == 3) {
             db.setSuperId(selectDB.getId());
         } else if (type == 2) {
-            db.setSuperId(DataSupport.where("type = ?", "1").findFirst(MemberDB.class).getId());
+            db.setSuperId(DataSupport.where("type = ? and isDelete = ?", "1", "0").findFirst(MemberDB.class).getId());
         }
         db.setName(name);
         db.setNumber(number);

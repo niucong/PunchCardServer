@@ -18,6 +18,7 @@ public class VacateRecordDB extends DataSupport {
     private long endTime;// 请假结束时间
     private long editTime;// 批复时间
     private int approveResult;// 审批结果：0待批复、1同意、2不同意
+    private String refuseCause;// 拒绝理由
 
     private boolean isUpPush;// 是否推送给上级
     private boolean isDownPush;// 是否推送反馈给下级
@@ -104,20 +105,28 @@ public class VacateRecordDB extends DataSupport {
         this.editTime = editTime;
     }
 
-    public boolean isUpPush() {
-        return isUpPush;
-    }
-
-    public void setUpPush(boolean upPush) {
-        isUpPush = upPush;
-    }
-
     public int getApproveResult() {
         return approveResult;
     }
 
     public void setApproveResult(int approveResult) {
         this.approveResult = approveResult;
+    }
+
+    public String getRefuseCause() {
+        return refuseCause;
+    }
+
+    public void setRefuseCause(String refuseCause) {
+        this.refuseCause = refuseCause;
+    }
+
+    public boolean isUpPush() {
+        return isUpPush;
+    }
+
+    public void setUpPush(boolean upPush) {
+        isUpPush = upPush;
     }
 
     public boolean isDownPush() {

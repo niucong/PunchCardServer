@@ -138,6 +138,7 @@ public class VacateListHandler implements RequestHandler {
             json.put("id", recordDB.getId());
             json.put("memberId", recordDB.getMemberId());
             json.put("name", recordDB.getName());
+            json.put("superId", recordDB.getSuperId());
             json.put("type", recordDB.getType());
             json.put("cause", recordDB.getCause());
             json.put("createTime", recordDB.getCreateTime());
@@ -145,6 +146,7 @@ public class VacateListHandler implements RequestHandler {
             json.put("endTime", recordDB.getEndTime());
             json.put("editTime", recordDB.getEditTime());
             json.put("approveResult", recordDB.getApproveResult());
+            json.put("refuseCause", recordDB.getRefuseCause());
             array.add(json);
         }
         jsonObject.put("list", array);

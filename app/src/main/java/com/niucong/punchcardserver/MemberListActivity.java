@@ -41,7 +41,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -174,7 +176,8 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                 }
                 break;
             case R.id.action_export:
-                final String path = FileUtils.getSdcardDir() + "/人员表_" + System.currentTimeMillis() + ".xls";
+                SimpleDateFormat YMDHM = new SimpleDateFormat("yyyyMMddHHmm");
+                final String path = FileUtils.getSdcardDir() + "/人员表_" + YMDHM.format(new Date()) + ".xls";
                 showProgressDialog("正在导出人员……");
                 new Thread() {
                     @Override

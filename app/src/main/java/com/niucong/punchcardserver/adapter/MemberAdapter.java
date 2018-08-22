@@ -40,13 +40,13 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
         helper.setText(R.id.item_member_mac, db.getMAC());
 
         if (0 == db.getIsDelete()) {
-            if (db.getType() == 3 && db.getSuperId() == 0) {
-                setTextStutas(helper, "待编辑", Color.argb(128, 0, 0, 255));
+            if (db.getType() != 1 && db.getSuperId() == 0) {
+                setTextStutas(helper, "待编辑", Color.argb(168, 0, 0, 255));
             } else {
-                setTextStutas(helper, "正常", Color.argb(128, 0, 255, 0));
+                setTextStutas(helper, "正常", Color.argb(168, 0, 255, 0));
             }
         } else {
-            setTextStutas(helper, "停用", Color.argb(128, 255, 0, 0));
+            setTextStutas(helper, "停用", Color.argb(168, 255, 0, 0));
         }
 
         helper.itemView.setOnClickListener(new View.OnClickListener() {
