@@ -37,7 +37,7 @@
             android:name=".MemberActivity"
             android:label="人员管理"/>
         <activity
-            android:name=".SignRecordListActivity"
+            android:name=".SignListActivity"
             android:label="考勤管理"/>
         <activity
             android:name=".VacateListActivity"

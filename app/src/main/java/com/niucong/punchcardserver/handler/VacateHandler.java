@@ -19,7 +19,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.VacateRecordDB;
+import com.niucong.punchcardserver.db.VacateDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -63,7 +63,6 @@ public class VacateHandler implements RequestHandler {
         }
         Log.d("VacateHandler", "userId=" + userId + ",serverId=" + serverId);
         try {
-            jsonObject.put("code", 1);
             if (serverId == 0) {
                 if (!params.containsKey("type") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
@@ -76,21 +75,20 @@ public class VacateHandler implements RequestHandler {
                 int type = Integer.valueOf(params.get("type"));
                 long start = Long.valueOf(params.get("start"));
                 long end = Long.valueOf(params.get("end"));
-                VacateRecordDB recordDB = new VacateRecordDB();
-                recordDB.setMemberId(Integer.valueOf(userId));
+                VacateDB vacateDB = new VacateDB();
+                vacateDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
-                recordDB.setName(memberDB.getName());
-                recordDB.setSuperId(memberDB.getSuperId());
-                recordDB.setType(type);
-                recordDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
-                recordDB.setStartTime(start);
-                recordDB.setEndTime(end);
-                recordDB.setCreateTime(System.currentTimeMillis());
-                recordDB.setApproveResult(0);
-                recordDB.save();
+                vacateDB.setName(memberDB.getName());
+                vacateDB.setSuperId(memberDB.getSuperId());
+                vacateDB.setType(type);
+                vacateDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                vacateDB.setStartTime(start);
+                vacateDB.setEndTime(end);
+                vacateDB.setCreateTime(System.currentTimeMillis());
+                vacateDB.setApproveResult(0);
+                vacateDB.save();
 
-                jsonObject.put("serverId", recordDB.getId());
-                jsonObject.put("createTime", recordDB.getCreateTime());
+                jsonObject.put("code", 1);
                 jsonObject.put("msg", "创建成功");
             } else {
                 if (!params.containsKey("approveResult")) {
@@ -101,11 +99,7 @@ public class VacateHandler implements RequestHandler {
                     Log.d("VacateHandler", jsonObject.toJSONString());
                     return;
                 }
-                VacateRecordDB recordDB = DataSupport.find(VacateRecordDB.class, serverId);
-                recordDB.setEditTime(System.currentTimeMillis());
-                recordDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
-                recordDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
-                recordDB.update(serverId);
+                jsonObject.put("code", 1);
                 jsonObject.put("msg", "批复成功");
             }
         } catch (Exception e) {

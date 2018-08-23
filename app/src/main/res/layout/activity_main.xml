@@ -50,7 +50,8 @@
                 android:onClick="@{handlers::onClickName}"
                 android:text="查看计划"
                 android:textSize="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -87,7 +88,8 @@
                 android:onClick="@{handlers::onClickName}"
                 android:text="设置"
                 android:textSize="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <View

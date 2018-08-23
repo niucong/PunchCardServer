@@ -16,9 +16,9 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.niucong.punchcardserver.adapter.SignRecordAdapter;
+import com.niucong.punchcardserver.adapter.SignAdapter;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.SignRecordDB;
+import com.niucong.punchcardserver.db.SignDB;
 
 import org.litepal.crud.DataSupport;
 
@@ -28,17 +28,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SignRecordListActivity extends AppCompatActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class SignListActivity extends AppCompatActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.signrecord_search)
-    EditText signrecordSearch;
-    @BindView(R.id.signrecord_rv)
-    RecyclerView signrecordRv;
-    @BindView(R.id.signrecord_srl)
-    SwipeRefreshLayout signrecordSrl;
+    @BindView(R.id.sign_search)
+    EditText signSearch;
+    @BindView(R.id.sign_rv)
+    RecyclerView signRv;
+    @BindView(R.id.sign_srl)
+    SwipeRefreshLayout signSrl;
 
-    private SignRecordAdapter adapter;
-    private List<SignRecordDB> list = new ArrayList<>();
+    private SignAdapter adapter;
+    private List<SignDB> list = new ArrayList<>();
 
     private int allSize;
     private int offset = 0;
@@ -48,7 +48,7 @@ public class SignRecordListActivity extends AppCompatActivity implements BaseQui
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signrecord_list);
+        setContentView(R.layout.activity_sign_list);
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
@@ -56,7 +56,7 @@ public class SignRecordListActivity extends AppCompatActivity implements BaseQui
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        signrecordSearch.addTextChangedListener(new TextWatcher() {
+        signSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -80,27 +80,27 @@ public class SignRecordListActivity extends AppCompatActivity implements BaseQui
     }
 
     private void setAdapter() {
-        signrecordSrl.setOnRefreshListener(this);
-        signrecordSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
-        adapter = new SignRecordAdapter(R.layout.item_signrecord, list);
-        adapter.setOnLoadMoreListener(this, signrecordRv);
-        signrecordRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        signrecordRv.setAdapter(adapter);
+        signSrl.setOnRefreshListener(this);
+        signSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
+        adapter = new SignAdapter(R.layout.item_sign, list);
+        adapter.setOnLoadMoreListener(this, signRv);
+        signRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        signRv.setAdapter(adapter);
     }
 
     private void queryMembers() {
         if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
                 list.clear();
-                allSize = DataSupport.count(SignRecordDB.class);
+                allSize = DataSupport.count(SignDB.class);
             }
-            list.addAll(DataSupport.offset(offset).limit(pageSize).find(SignRecordDB.class));
+            list.addAll(DataSupport.offset(offset).limit(pageSize).find(SignDB.class));
         } else {
             if (offset == 0) {
                 list.clear();
                 allSize = DataSupport.where("name = ?", searchKey).count(MemberDB.class);
             }
-            list.addAll(DataSupport.where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignRecordDB.class));
+            list.addAll(DataSupport.where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
         }
         Log.d("MemberListActivity", "queryMembers " + list.size() + "/" + allSize);
 //        setAdapter();
@@ -111,9 +111,9 @@ public class SignRecordListActivity extends AppCompatActivity implements BaseQui
             adapter.loadMoreComplete();
         }
         //取消下拉刷新动画
-        signrecordSrl.setRefreshing(false);
+        signSrl.setRefreshing(false);
         //禁止下拉刷新
-        signrecordSrl.setEnabled(true);
+        signSrl.setEnabled(true);
     }
 
     @Override
@@ -125,14 +125,14 @@ public class SignRecordListActivity extends AppCompatActivity implements BaseQui
 
     @Override
     public void onLoadMoreRequested() {
-        signrecordSrl.setEnabled(false);
+        signSrl.setEnabled(false);
         offset = list.size();
         queryMembers();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.getMenuInflater().inflate(R.menu.menu_signrecord, menu);
+        this.getMenuInflater().inflate(R.menu.menu_sign, menu);
         return true;
     }
 

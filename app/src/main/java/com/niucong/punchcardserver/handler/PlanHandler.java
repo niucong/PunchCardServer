@@ -18,7 +18,7 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
-import com.niucong.punchcardserver.db.CoursePlanDB;
+import com.niucong.punchcardserver.db.PlanDB;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
@@ -63,7 +63,6 @@ public class PlanHandler implements RequestHandler {
         }
         Log.d("PlanHandler", "userId=" + userId + ",serverId=" + serverId);
         try {
-            jsonObject.put("code", 1);
             if (serverId == 0) {
                 if (!params.containsKey("name") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
@@ -73,17 +72,24 @@ public class PlanHandler implements RequestHandler {
                     Log.d("PlanHandler", jsonObject.toJSONString());
                     return;
                 }
+
+                String name = URLDecoder.decode(params.get("name"), "utf-8");
                 long start = Long.valueOf(params.get("start"));
                 long end = Long.valueOf(params.get("end"));
-                CoursePlanDB planDB = new CoursePlanDB();
-                planDB.setName(URLDecoder.decode(params.get("name"), "utf-8"));
+
+//                if (DataSupport.where("name = ? and creatorId = ?", name, userId).count(PlanDB.class) > 0) {
+//
+//                }
+
+                PlanDB planDB = new PlanDB();
+                planDB.setName(name);
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
-                planDB.setCreaterId(Integer.valueOf(userId));
-                planDB.setCreaterName(memberDB.getName());
-                if (params.containsKey("members")){
+                planDB.setCreatorId(Integer.valueOf(userId));
+                planDB.setCreatorName(memberDB.getName());
+                if (params.containsKey("members")) {
                     planDB.setMembers(URLDecoder.decode(params.get("members"), "utf-8"));
                 }
-                if (params.containsKey("cause")){
+                if (params.containsKey("cause")) {
                     planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
                 }
                 planDB.setStartTime(start);
@@ -91,8 +97,7 @@ public class PlanHandler implements RequestHandler {
                 planDB.setCreateTime(System.currentTimeMillis());
                 planDB.save();
 
-                jsonObject.put("serverId", planDB.getId());
-                jsonObject.put("createTime", planDB.getCreateTime());
+                jsonObject.put("code", 1);
                 jsonObject.put("msg", "创建成功");
             } else {
                 if (!params.containsKey("forceFinish")) {
@@ -103,11 +108,7 @@ public class PlanHandler implements RequestHandler {
                     Log.d("PlanHandler", jsonObject.toJSONString());
                     return;
                 }
-                CoursePlanDB planDB = DataSupport.find(CoursePlanDB.class, serverId);
-                planDB.setEditTime(System.currentTimeMillis());
-                planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
-                planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
-                planDB.update(serverId);
+                jsonObject.put("code", 1);
                 jsonObject.put("msg", "操作成功");
             }
         } catch (Exception e) {

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, MemberListActivity.class));
                     break;
                 case R.id.main_attendance:
-                    startActivity(new Intent(MainActivity.this, SignRecordListActivity.class));
+                    startActivity(new Intent(MainActivity.this, SignListActivity.class));
                     break;
                 case R.id.main_vacate:
                     startActivity(new Intent(MainActivity.this, VacateListActivity.class));

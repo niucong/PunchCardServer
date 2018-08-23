@@ -5,9 +5,9 @@
 
     <list>
         <mapping class="com.niucong.punchcardserver.db.MemberDB"/>
-        <mapping class="com.niucong.punchcardserver.db.SignRecordDB"/>
-        <mapping class="com.niucong.punchcardserver.db.CoursePlanDB"/>
-        <mapping class="com.niucong.punchcardserver.db.VacateRecordDB"/>
+        <mapping class="com.niucong.punchcardserver.db.SignDB"/>
+        <mapping class="com.niucong.punchcardserver.db.PlanDB"/>
+        <mapping class="com.niucong.punchcardserver.db.VacateDB"/>
     </list>
 
 </litepal>

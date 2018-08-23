@@ -16,8 +16,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.niucong.punchcardserver.adapter.VacateRecordAdapter;
-import com.niucong.punchcardserver.db.VacateRecordDB;
+import com.niucong.punchcardserver.adapter.VacateAdapter;
+import com.niucong.punchcardserver.db.VacateDB;
 
 import org.litepal.crud.DataSupport;
 
@@ -36,8 +36,8 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
     @BindView(R.id.vacate_srl)
     SwipeRefreshLayout vacateSrl;
 
-    private VacateRecordAdapter adapter;
-    private List<VacateRecordDB> list = new ArrayList<>();
+    private VacateAdapter adapter;
+    private List<VacateDB> list = new ArrayList<>();
 
     private int allSize;
     private int offset = 0;
@@ -81,7 +81,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
     private void setAdapter() {
         vacateSrl.setOnRefreshListener(this);
         vacateSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
-        adapter = new VacateRecordAdapter(R.layout.item_vacate, list);
+        adapter = new VacateAdapter(R.layout.item_vacate, list);
         adapter.setOnLoadMoreListener(this, vacateRv);
         vacateRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         vacateRv.setAdapter(adapter);
@@ -91,15 +91,15 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
         if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
                 list.clear();
-                allSize = DataSupport.count(VacateRecordDB.class);
+                allSize = DataSupport.count(VacateDB.class);
             }
-            list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(VacateRecordDB.class));
+            list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(VacateDB.class));
         } else {
             if (offset == 0) {
                 list.clear();
-                allSize = DataSupport.where("name = ?", searchKey).count(VacateRecordDB.class);
+                allSize = DataSupport.where("name = ?", searchKey).count(VacateDB.class);
             }
-            list.addAll(DataSupport.order("id desc").where("name = ?", searchKey).offset(offset).limit(pageSize).find(VacateRecordDB.class));
+            list.addAll(DataSupport.order("id desc").where("name = ?", searchKey).offset(offset).limit(pageSize).find(VacateDB.class));
         }
         Log.d("MemberListActivity", "queryMembers " + list.size() + "/" + allSize);
 //        setAdapter();
@@ -131,7 +131,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.getMenuInflater().inflate(R.menu.menu_signrecord, menu);
+        this.getMenuInflater().inflate(R.menu.menu_sign, menu);
         return true;
     }
 

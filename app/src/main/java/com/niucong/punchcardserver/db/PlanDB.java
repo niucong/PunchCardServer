@@ -5,13 +5,13 @@ import org.litepal.crud.DataSupport;
 /**
  * 课程计划
  */
-public class CoursePlanDB extends DataSupport {
+public class PlanDB extends DataSupport {
 
     private int id;// 唯一主键
     private String name;// 计划名称
     private String members;// 计划关联者id、name
-    private int createrId;// 计划创建者Id
-    private String createrName;// 计划创建者name
+    private int creatorId;// 计划创建者Id
+    private String creatorName;// 计划创建者name
     private long createTime;// 创建时间
     private long startTime;// 计划开始时间
     private long endTime;// 计划结束时间
@@ -47,20 +47,20 @@ public class CoursePlanDB extends DataSupport {
         this.members = members;
     }
 
-    public int getCreaterId() {
-        return createrId;
+    public int getCreatorId() {
+        return creatorId;
     }
 
-    public void setCreaterId(int createrId) {
-        this.createrId = createrId;
+    public void setCreatorId(int creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public String getCreaterName() {
-        return createrName;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setCreaterName(String createrName) {
-        this.createrName = createrName;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
     public long getCreateTime() {

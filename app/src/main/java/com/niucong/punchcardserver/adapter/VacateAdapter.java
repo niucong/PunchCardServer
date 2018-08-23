@@ -5,13 +5,13 @@ import android.graphics.Color;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.niucong.punchcardserver.R;
-import com.niucong.punchcardserver.db.VacateRecordDB;
+import com.niucong.punchcardserver.db.VacateDB;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class VacateRecordAdapter extends BaseQuickAdapter<VacateRecordDB, BaseViewHolder> {
+public class VacateAdapter extends BaseQuickAdapter<VacateDB, BaseViewHolder> {
 
     SimpleDateFormat YMDHM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -19,12 +19,12 @@ public class VacateRecordAdapter extends BaseQuickAdapter<VacateRecordDB, BaseVi
      * @param layoutResId
      * @param dbs
      */
-    public VacateRecordAdapter(int layoutResId, List<VacateRecordDB> dbs) {
+    public VacateAdapter(int layoutResId, List<VacateDB> dbs) {
         super(layoutResId, dbs);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, final VacateRecordDB db) {
+    protected void convert(BaseViewHolder helper, final VacateDB db) {
         final int position = helper.getLayoutPosition();
         helper.setText(R.id.item_vacate_num, (position + 1) + "");
         helper.setText(R.id.item_vacate_name, db.getName());

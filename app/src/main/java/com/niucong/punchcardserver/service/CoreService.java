@@ -23,8 +23,9 @@ import android.support.annotation.Nullable;
 import com.niucong.punchcardserver.handler.LoginHandler;
 import com.niucong.punchcardserver.handler.MemberListHandler;
 import com.niucong.punchcardserver.handler.PlanHandler;
-import com.niucong.punchcardserver.handler.SignInHandler;
-import com.niucong.punchcardserver.handler.SignInListHandler;
+import com.niucong.punchcardserver.handler.PlanListHandler;
+import com.niucong.punchcardserver.handler.SignHandler;
+import com.niucong.punchcardserver.handler.SignListHandler;
 import com.niucong.punchcardserver.handler.VacateHandler;
 import com.niucong.punchcardserver.handler.VacateListHandler;
 import com.niucong.punchcardserver.util.NetUtils;
@@ -56,11 +57,12 @@ public class CoreService extends Service {
                 .website(new AssetsWebsite(getAssets(), "web"))
                 .registerHandler("/login", new LoginHandler())
                 .registerHandler("/memberList", new MemberListHandler())
-                .registerHandler("/signIn", new SignInHandler())
-                .registerHandler("/signInList", new SignInListHandler())
+                .registerHandler("/sign", new SignHandler())
+                .registerHandler("/signList", new SignListHandler())
                 .registerHandler("/vacate", new VacateHandler())
                 .registerHandler("/vacateList", new VacateListHandler())
                 .registerHandler("/plan", new PlanHandler())
+                .registerHandler("/planList", new PlanListHandler())
                 .filter(new HttpCacheFilter())
                 .listener(mListener)
                 .build();

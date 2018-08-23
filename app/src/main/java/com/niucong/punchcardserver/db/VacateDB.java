@@ -5,7 +5,7 @@ import org.litepal.crud.DataSupport;
 /**
  * 请假记录
  */
-public class VacateRecordDB extends DataSupport {
+public class VacateDB extends DataSupport {
 
     private long id;// 唯一主键
     private int memberId;// 请假者Id

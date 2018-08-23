@@ -21,7 +21,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.SignRecordDB;
+import com.niucong.punchcardserver.db.SignDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -43,13 +43,13 @@ import java.util.Map;
 /**
  * 签到列表
  */
-public class SignInListHandler implements RequestHandler {
+public class SignListHandler implements RequestHandler {
 
     @RequestMapping(method = {RequestMethod.POST})
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parseParams(request);
-        Log.d("SignInListHandler", "params=" + params.toString());
+        Log.d("SignListHandler", "params=" + params.toString());
         JSONObject jsonObject = new JSONObject();
 
         String userId = "";
@@ -70,7 +70,7 @@ public class SignInListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求起始参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("SignInListHandler", jsonObject.toJSONString());
+                Log.d("SignListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -82,7 +82,7 @@ public class SignInListHandler implements RequestHandler {
                 jsonObject.put("code", 0);
                 jsonObject.put("msg", "请求数量参数错误");
                 response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-                Log.d("SignInListHandler", jsonObject.toJSONString());
+                Log.d("SignListHandler", jsonObject.toJSONString());
                 return;
             }
         }
@@ -92,67 +92,64 @@ public class SignInListHandler implements RequestHandler {
         }
         MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
         int type = memberDB.getType();
-        Log.d("SignInListHandler", "userId=" + userId + ",type=" + type + ",searchKey=" + searchKey);
+        Log.d("SignListHandler", "userId=" + userId + ",type=" + type + ",searchKey=" + searchKey);
         if (type == 1) {
             if (TextUtils.isEmpty(searchKey)) {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.count(SignRecordDB.class));
+                    jsonObject.put("allSize", DataSupport.count(SignDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
-                        .limit(pageSize).find(SignRecordDB.class));
+                        .limit(pageSize).find(SignDB.class));
             } else {
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
-                            .count(SignRecordDB.class));
+                            .count(SignDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignRecordDB.class));
+                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
             }
         } else if (type == 2) {
             if (TextUtils.isEmpty(searchKey)) {
-                Log.d("SignInListHandler", "20");
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                            .count(SignRecordDB.class));
+                            .count(SignDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignRecordDB.class));
+                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class));
             } else {
-                Log.d("SignInListHandler", "21");
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                            .count(SignRecordDB.class));
+                            .count(SignDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
                         .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                        .offset(offset).limit(pageSize).find(SignRecordDB.class));
+                        .offset(offset).limit(pageSize).find(SignDB.class));
             }
         } else {
-            Log.d("SignInListHandler", "30");
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignRecordDB.class));
+                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignDB.class));
             }
             listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
-                    .offset(offset).limit(pageSize).find(SignRecordDB.class));
+                    .offset(offset).limit(pageSize).find(SignDB.class));
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<SignRecordDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<SignDB> list) {
         JSONArray array = new JSONArray();
-        for (SignRecordDB recordDB : list) {
+        for (SignDB signDB : list) {
             JSONObject json = new JSONObject();
-            json.put("id", recordDB.getId());
-            json.put("memberId", recordDB.getMemberId());
-            json.put("name", recordDB.getName());
-            json.put("superId", recordDB.getSuperId());
-            json.put("startTime", recordDB.getStartTime());
-            json.put("endTime", recordDB.getEndTime());
+            json.put("id", signDB.getId());
+            json.put("memberId", signDB.getMemberId());
+            json.put("name", signDB.getName());
+            json.put("superId", signDB.getSuperId());
+            json.put("startTime", signDB.getStartTime());
+            json.put("endTime", signDB.getEndTime());
             array.add(json);
         }
         jsonObject.put("list", array);
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
-        Log.d("SignInListHandler", jsonObject.toJSONString());
+        Log.d("SignListHandler", jsonObject.toJSONString());
     }
 }

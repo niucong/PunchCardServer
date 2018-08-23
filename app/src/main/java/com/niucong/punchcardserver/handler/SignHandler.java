@@ -19,7 +19,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.SignRecordDB;
+import com.niucong.punchcardserver.db.SignDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -39,14 +39,14 @@ import java.util.Date;
 /**
  * 签到接口
  */
-public class SignInHandler implements RequestHandler {
+public class SignHandler implements RequestHandler {
 
     @RequestMapping(method = {RequestMethod.POST})
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
 //        Map<String, String> params = HttpRequestParser.parseParams(request);
 
-        Log.d("SignInHandler", "开始签到");
+        Log.d("SignHandler", "开始签到");
 
         String userId = "";
         for (Header header : request.getAllHeaders()) {
@@ -55,40 +55,39 @@ public class SignInHandler implements RequestHandler {
                 break;
             }
         }
-        Log.d("SignInHandler", "userId=" + userId);
+        Log.d("SignHandler", "userId=" + userId);
 
         JSONObject jsonObject = new JSONObject();
         try {
             SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
             long time = YMD.parse(YMD.format(new Date())).getTime();
-            SignRecordDB recordDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
-                    userId, time + "", time + 24 * 60 * 60 * 1000 + "").findFirst(SignRecordDB.class);
-            Log.d("SignInHandler", "startTime=" + YMD.format(new Date()));
-            if (recordDB == null) {
-                recordDB = new SignRecordDB();
-                recordDB.setMemberId(Integer.valueOf(userId));
+            SignDB signDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
+                    userId, time + "", time + 24 * 60 * 60 * 1000 + "").findFirst(SignDB.class);
+            Log.d("SignHandler", "startTime=" + YMD.format(new Date()));
+            if (signDB == null) {
+                signDB = new SignDB();
+                signDB.setMemberId(Integer.valueOf(userId));
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
-                recordDB.setName(memberDB.getName());
-                recordDB.setSuperId(memberDB.getSuperId());
-                recordDB.setStartTime(System.currentTimeMillis());
-                recordDB.save();
+                signDB.setName(memberDB.getName());
+                signDB.setSuperId(memberDB.getSuperId());
+                signDB.setStartTime(System.currentTimeMillis());
+                signDB.save();
             } else {
-                recordDB.setEndTime(System.currentTimeMillis());
-                recordDB.update(recordDB.getId());
+                signDB.setEndTime(System.currentTimeMillis());
+                signDB.update(signDB.getId());
             }
-            Log.d("SignInHandler", "SuperId=" + recordDB.getSuperId());
+            Log.d("SignHandler", "SuperId=" + signDB.getSuperId());
 
+            jsonObject.put("startTime", signDB.getStartTime());
+            jsonObject.put("endTime", signDB.getEndTime());
             jsonObject.put("code", 1);
             jsonObject.put("msg", "签到成功");
-            jsonObject.put("serverId", recordDB.getId());
-            jsonObject.put("startTime", recordDB.getStartTime());
-            jsonObject.put("endTime", recordDB.getEndTime());
-            Log.d("SignInHandler", jsonObject.toJSONString());
         } catch (Exception e) {
             response.setStatusCode(400);
             jsonObject.put("code", 0);
             jsonObject.put("msg", "请求参数错误");
         }
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
+        Log.d("SignHandler", jsonObject.toJSONString());
     }
 }

@@ -20,8 +20,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.niucong.punchcardserver.db.CoursePlanDB;
-import com.niucong.punchcardserver.db.VacateRecordDB;
+import com.niucong.punchcardserver.db.PlanDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -90,34 +89,35 @@ public class PlanListHandler implements RequestHandler {
         if (params.containsKey("searchKey")) {
             searchKey = URLDecoder.decode(params.get("searchKey"), "utf-8");
         }
+        Log.d("PlanListHandler", "searchKey=" + searchKey);
         if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("createrId = ? or members like ?", userId, "%\"" + userId + "\"%")
-                        .count(CoursePlanDB.class));
+                jsonObject.put("allSize", DataSupport.where("creatorId = ? or members like ?", userId, "%:" + userId + ",%")
+                        .count(PlanDB.class));
             }
             listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("createrId = ? or members like ?", userId, "%\"" + userId + "\"%").offset(offset).limit(pageSize).find(CoursePlanDB.class));
+                    .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(PlanDB.class));
         } else {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("(createrId = ? or members like ?) and (createrName = ? or members = ?)",
-                        userId, "%\"" + userId + "\"%", searchKey, "%\"" + searchKey + "\"%")
-                        .count(VacateRecordDB.class));
+                jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?)",
+                        userId, "%:" + userId + ",%", "%" + searchKey + "%")
+                        .count(PlanDB.class));
             }
             listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("(createrId = ? or members like ?) and (createrName = ? or members = ?)",
-                            userId, "%\"" + userId + "\"%", searchKey, "%\"" + searchKey + "\"%")
-                    .offset(offset).limit(pageSize).find(CoursePlanDB.class));
+                    .where("(creatorId = ? or members like ?) and (name like ?)",
+                            userId, "%:" + userId + ",%", "%" + searchKey + "%")
+                    .offset(offset).limit(pageSize).find(PlanDB.class));
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<CoursePlanDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<PlanDB> list) {
         JSONArray array = new JSONArray();
-        for (CoursePlanDB planDB : list) {
+        for (PlanDB planDB : list) {
             JSONObject json = new JSONObject();
             json.put("id", planDB.getId());
             json.put("name", planDB.getName());
-            json.put("createrId", planDB.getCreaterId());
-            json.put("createrName", planDB.getCreaterName());
+            json.put("creatorId", planDB.getCreatorId());
+            json.put("creatorName", planDB.getCreatorName());
             json.put("members", planDB.getMembers());
             json.put("cause", planDB.getCause());
             json.put("createTime", planDB.getCreateTime());

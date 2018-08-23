@@ -9,7 +9,7 @@
     android:padding="20dp">
 
     <TextView
-        android:id="@+id/item_signrecord_num"
+        android:id="@+id/item_sign_num"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
@@ -18,7 +18,7 @@
         android:textSize="18dp"/>
 
     <TextView
-        android:id="@+id/item_signrecord_name"
+        android:id="@+id/item_sign_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -27,7 +27,7 @@
         android:textSize="18dp"/>
 
     <TextView
-        android:id="@+id/item_signrecord_starttime"
+        android:id="@+id/item_sign_starttime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -36,7 +36,7 @@
         android:textSize="18dp"/>
 
     <TextView
-        android:id="@+id/item_signrecord_endtime"
+        android:id="@+id/item_sign_endtime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

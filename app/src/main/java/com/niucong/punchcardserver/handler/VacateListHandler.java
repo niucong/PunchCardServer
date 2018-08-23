@@ -21,7 +21,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.punchcardserver.db.VacateRecordDB;
+import com.niucong.punchcardserver.db.VacateDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -94,60 +94,60 @@ public class VacateListHandler implements RequestHandler {
         if (memberDB.getType() == 1) {
             if (TextUtils.isEmpty(searchKey)) {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.count(VacateRecordDB.class));
+                    jsonObject.put("allSize", DataSupport.count(VacateDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
-                        .limit(pageSize).find(VacateRecordDB.class));
+                        .limit(pageSize).find(VacateDB.class));
             } else {
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
-                            .count(VacateRecordDB.class));
+                            .count(VacateDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(VacateRecordDB.class));
+                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(VacateDB.class));
             }
         } else if (memberDB.getType() == 2) {
             if (TextUtils.isEmpty(searchKey)) {
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                            .count(VacateRecordDB.class));
+                            .count(VacateDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(VacateRecordDB.class));
+                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(VacateDB.class));
             } else {
                 if (offset == 0) {
                     jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                            .count(VacateRecordDB.class));
+                            .count(VacateDB.class));
                 }
                 listToArray(response, jsonObject, DataSupport.order("id desc")
                         .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                        .offset(offset).limit(pageSize).find(VacateRecordDB.class));
+                        .offset(offset).limit(pageSize).find(VacateDB.class));
             }
         } else {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(VacateRecordDB.class));
+                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(VacateDB.class));
             }
             listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
-                    .offset(offset).limit(pageSize).find(VacateRecordDB.class));
+                    .offset(offset).limit(pageSize).find(VacateDB.class));
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<VacateRecordDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<VacateDB> list) {
         JSONArray array = new JSONArray();
-        for (VacateRecordDB recordDB : list) {
+        for (VacateDB vacateDB : list) {
             JSONObject json = new JSONObject();
-            json.put("id", recordDB.getId());
-            json.put("memberId", recordDB.getMemberId());
-            json.put("name", recordDB.getName());
-            json.put("superId", recordDB.getSuperId());
-            json.put("type", recordDB.getType());
-            json.put("cause", recordDB.getCause());
-            json.put("createTime", recordDB.getCreateTime());
-            json.put("startTime", recordDB.getStartTime());
-            json.put("endTime", recordDB.getEndTime());
-            json.put("editTime", recordDB.getEditTime());
-            json.put("approveResult", recordDB.getApproveResult());
-            json.put("refuseCause", recordDB.getRefuseCause());
+            json.put("id", vacateDB.getId());
+            json.put("memberId", vacateDB.getMemberId());
+            json.put("name", vacateDB.getName());
+            json.put("superId", vacateDB.getSuperId());
+            json.put("type", vacateDB.getType());
+            json.put("cause", vacateDB.getCause());
+            json.put("createTime", vacateDB.getCreateTime());
+            json.put("startTime", vacateDB.getStartTime());
+            json.put("endTime", vacateDB.getEndTime());
+            json.put("editTime", vacateDB.getEditTime());
+            json.put("approveResult", vacateDB.getApproveResult());
+            json.put("refuseCause", vacateDB.getRefuseCause());
             array.add(json);
         }
         jsonObject.put("list", array);
