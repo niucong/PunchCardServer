@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--确认收货-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="起始日期"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#666666"
+        android:textSize="18sp" />
+
+    <com.niucong.selectdatetime.view.wheel.DateTimeSelectView
+        android:id="@+id/date_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:gravity="center"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="结束日期"
+        android:layout_marginLeft="10dp"
+        android:textColor="#666666"
+        android:textSize="18sp" />
+
+    <com.niucong.selectdatetime.view.wheel.DateTimeSelectView
+        android:id="@+id/date_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip"
+        android:gravity="center"
+        android:orientation="horizontal" />
+
+</LinearLayout>
