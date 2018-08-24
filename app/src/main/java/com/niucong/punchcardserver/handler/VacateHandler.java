@@ -99,6 +99,11 @@ public class VacateHandler implements RequestHandler {
                     Log.d("VacateHandler", jsonObject.toJSONString());
                     return;
                 }
+                VacateDB vacateDB = DataSupport.find(VacateDB.class, serverId);
+                vacateDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
+                vacateDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
+                vacateDB.update(serverId);
+
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "批复成功");
             }

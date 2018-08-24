@@ -18,8 +18,8 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
-import com.niucong.punchcardserver.db.PlanDB;
 import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.punchcardserver.db.PlanDB;
 import com.yanzhenjie.andserver.RequestHandler;
 import com.yanzhenjie.andserver.RequestMethod;
 import com.yanzhenjie.andserver.annotation.RequestMapping;
@@ -108,6 +108,12 @@ public class PlanHandler implements RequestHandler {
                     Log.d("PlanHandler", jsonObject.toJSONString());
                     return;
                 }
+
+                PlanDB planDB = DataSupport.find(PlanDB.class, serverId);
+                planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
+                planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                planDB.update(serverId);
+
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "操作成功");
             }
