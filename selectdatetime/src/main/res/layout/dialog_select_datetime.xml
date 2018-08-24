@@ -15,7 +15,7 @@
         android:textColor="#666666"
         android:textSize="18sp" />
 
-    <com.niucong.selectdatetime.view.wheel.DateSelectView
+    <com.niucong.selectdatetime.view.wheel.DateTimeSelectView
         android:id="@+id/date_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:textColor="#666666"
         android:textSize="18sp" />
 
-    <com.niucong.selectdatetime.view.wheel.DateSelectView
+    <com.niucong.selectdatetime.view.wheel.DateTimeSelectView
         android:id="@+id/date_end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

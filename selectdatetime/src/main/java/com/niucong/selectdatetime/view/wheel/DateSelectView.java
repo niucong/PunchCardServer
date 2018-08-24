@@ -37,8 +37,6 @@ public class DateSelectView extends LinearLayout {
     private int maxTextSize = 20;
     private int minTextSize = 14;
 
-    private boolean issetdata = false;
-
     /**
      * Constructor
      */
@@ -204,7 +202,7 @@ public class DateSelectView extends LinearLayout {
     }
 
     public void initYears() {
-        for (int i = 2016; i < getYear() + 1; i++) {
+        for (int i = 2018; i < 2048 + 1; i++) {
             arry_years.add(i + "");
         }
     }
@@ -281,12 +279,12 @@ public class DateSelectView extends LinearLayout {
      */
     public int setYear(int year) {
         int yearIndex = 0;
-        if (year != getYear()) {
+//        if (year != getYear()) {
             this.month = 12;
-        } else {
-            this.month = getMonth();
-        }
-        for (int i = 2016; i < getYear() + 1; i++) {
+//        } else {
+//            this.month = getMonth();
+//        }
+        for (int i = 2018; i < 2048 + 1; i++) {
             if (i == year) {
                 return yearIndex;
             }
@@ -349,9 +347,9 @@ public class DateSelectView extends LinearLayout {
                     break;
             }
         }
-        if (year == getYear() && month == getMonth()) {
-            this.day = getDay();
-        }
+//        if (year == getYear() && month == getMonth()) {
+//            this.day = getDay();
+//        }
     }
 
     /**
