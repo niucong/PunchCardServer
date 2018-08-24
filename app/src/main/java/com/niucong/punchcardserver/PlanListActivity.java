@@ -85,8 +85,6 @@ public class PlanListActivity extends AppCompatActivity implements BaseQuickAdap
             public void afterTextChanged(Editable s) {
                 searchKey = s.toString();
                 offset = 0;
-                startDate = null;
-                endDate = null;
                 queryPlans();
             }
         });
@@ -171,10 +169,14 @@ public class PlanListActivity extends AppCompatActivity implements BaseQuickAdap
     @Override
     public void onRefresh() {
         adapter.setEnableLoadMore(false);
-        offset = 0;
         startDate = null;
         endDate = null;
-        queryPlans();
+        if (planSearch.getText().length() > 0) {
+            planSearch.setText("");
+        } else {
+            offset = 0;
+            queryPlans();
+        }
     }
 
     @Override

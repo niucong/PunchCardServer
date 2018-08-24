@@ -89,24 +89,69 @@ public class PlanListHandler implements RequestHandler {
         if (params.containsKey("searchKey")) {
             searchKey = URLDecoder.decode(params.get("searchKey"), "utf-8");
         }
+
+        long startTime = 0;
+        long endTime = 0;
+        if (params.containsKey("startTime") && params.containsKey("endTime")) {
+            try {
+                startTime = Long.valueOf(params.get("startTime"));
+                endTime = Long.valueOf(params.get("endTime"));
+            } catch (NumberFormatException e) {
+                response.setStatusCode(400);
+                jsonObject.put("code", 0);
+                jsonObject.put("msg", "请求起止时间参数错误");
+                response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
+                Log.d("PlanListHandler", jsonObject.toJSONString());
+                return;
+            }
+        }
+
         Log.d("PlanListHandler", "searchKey=" + searchKey);
         if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("creatorId = ? or members like ?", userId, "%:" + userId + ",%")
-                        .count(PlanDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            userId, "%:" + userId + ",%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                            .count(PlanDB.class));
+                } else {
+                    jsonObject.put("allSize", DataSupport.where("creatorId = ? or members like ?", userId, "%:" + userId + ",%")
+                            .count(PlanDB.class));
+                }
             }
-            listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(PlanDB.class));
+            if (startTime != 0 && endTime != 0) {
+                listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and " +
+                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                        userId, "%:" + userId + ",%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                        .offset(offset).limit(pageSize).find(PlanDB.class));
+            } else {
+                listToArray(response, jsonObject, DataSupport.order("id desc")
+                        .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(PlanDB.class));
+            }
         } else {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?)",
-                        userId, "%:" + userId + ",%", "%" + searchKey + "%")
-                        .count(PlanDB.class));
-            }
-            listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("(creatorId = ? or members like ?) and (name like ?)",
+                if (startTime != 0 && endTime != 0) {
+                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?) and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            userId, "%:" + userId + ",%", "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                            .count(PlanDB.class));
+                } else {
+                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?)",
                             userId, "%:" + userId + ",%", "%" + searchKey + "%")
-                    .offset(offset).limit(pageSize).find(PlanDB.class));
+                            .count(PlanDB.class));
+                }
+            }
+            if (startTime != 0 && endTime != 0) {
+                listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and (name like ?) and " +
+                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                        userId, "%:" + userId + ",%", "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                        .offset(offset).limit(pageSize).find(PlanDB.class));
+            } else {
+                listToArray(response, jsonObject, DataSupport.order("id desc")
+                        .where("(creatorId = ? or members like ?) and (name like ?)",
+                                userId, "%:" + userId + ",%", "%" + searchKey + "%")
+                        .offset(offset).limit(pageSize).find(PlanDB.class));
+            }
         }
     }
 

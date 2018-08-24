@@ -84,8 +84,6 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
             public void afterTextChanged(Editable s) {
                 searchKey = s.toString();
                 offset = 0;
-                startDate = null;
-                endDate = null;
                 queryMembers();
             }
         });
@@ -170,10 +168,14 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
     @Override
     public void onRefresh() {
         adapter.setEnableLoadMore(false);
-        offset = 0;
         startDate = null;
         endDate = null;
-        queryMembers();
+        if (signSearch.getText().length() > 0) {
+            signSearch.setText("");
+        } else {
+            offset = 0;
+            queryMembers();
+        }
     }
 
     @Override

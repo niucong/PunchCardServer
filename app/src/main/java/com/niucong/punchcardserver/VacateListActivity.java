@@ -83,8 +83,6 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
             public void afterTextChanged(Editable s) {
                 searchKey = s.toString();
                 offset = 0;
-                startDate = null;
-                endDate = null;
                 queryVacates();
             }
         });
@@ -169,10 +167,14 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
     @Override
     public void onRefresh() {
         adapter.setEnableLoadMore(false);
-        offset = 0;
         startDate = null;
         endDate = null;
-        queryVacates();
+        if (vacateSearch.getText().length() > 0) {
+            vacateSearch.setText("");
+        } else {
+            offset = 0;
+            queryVacates();
+        }
     }
 
     @Override

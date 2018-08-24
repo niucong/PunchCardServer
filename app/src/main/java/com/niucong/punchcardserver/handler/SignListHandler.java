@@ -90,47 +90,133 @@ public class SignListHandler implements RequestHandler {
         if (params.containsKey("searchKey")) {
             searchKey = URLDecoder.decode(params.get("searchKey"), "utf-8");
         }
+
+        long startTime = 0;
+        long endTime = 0;
+        if (params.containsKey("startTime") && params.containsKey("endTime")) {
+            try {
+                startTime = Long.valueOf(params.get("startTime"));
+                endTime = Long.valueOf(params.get("endTime"));
+            } catch (NumberFormatException e) {
+                response.setStatusCode(400);
+                jsonObject.put("code", 0);
+                jsonObject.put("msg", "请求起止时间参数错误");
+                response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
+                Log.d("PlanListHandler", jsonObject.toJSONString());
+                return;
+            }
+        }
+
         MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
         int type = memberDB.getType();
         Log.d("SignListHandler", "userId=" + userId + ",type=" + type + ",searchKey=" + searchKey);
         if (type == 1) {
             if (TextUtils.isEmpty(searchKey)) {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.count(SignDB.class));
+                    if (startTime != 0 && endTime != 0) {
+                        jsonObject.put("allSize", DataSupport.where(
+                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                                .count(SignDB.class));
+                    } else {
+                        jsonObject.put("allSize", DataSupport.count(SignDB.class));
+                    }
                 }
-                listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
-                        .limit(pageSize).find(SignDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    listToArray(response, jsonObject, DataSupport.order("id desc").where(
+                            "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).offset(offset)
+                            .limit(pageSize).find(SignDB.class));
+                } else {
+                    listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
+                            .limit(pageSize).find(SignDB.class));
+                }
             } else {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
-                            .count(SignDB.class));
+                    if (startTime != 0 && endTime != 0) {
+                        jsonObject.put("allSize", DataSupport.where("name = ? and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                                .count(SignDB.class));
+                    } else {
+                        jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
+                                .count(SignDB.class));
+                    }
                 }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    listToArray(response, jsonObject, DataSupport.order("id desc").where("name = ? and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                            .offset(offset).limit(pageSize).find(SignDB.class));
+                } else {
+                    listToArray(response, jsonObject, DataSupport.order("id desc")
+                            .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
+                }
             }
         } else if (type == 2) {
             if (TextUtils.isEmpty(searchKey)) {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                            .count(SignDB.class));
+                    if (startTime != 0 && endTime != 0) {
+                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ?) and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                                .count(SignDB.class));
+                    } else {
+                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
+                                .count(SignDB.class));
+                    }
                 }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ?) and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                            .offset(offset).limit(pageSize).find(SignDB.class));
+                } else {
+                    listToArray(response, jsonObject, DataSupport.order("id desc")
+                            .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class));
+                }
             } else {
                 if (offset == 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                            .count(SignDB.class));
+                    if (startTime != 0 && endTime != 0) {
+                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ? and name = ?) and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                                .count(SignDB.class));
+                    } else {
+                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
+                                .count(SignDB.class));
+                    }
                 }
-                listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                        .offset(offset).limit(pageSize).find(SignDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ? and name = ?) and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                            .offset(offset).limit(pageSize).find(SignDB.class));
+                } else {
+                    listToArray(response, jsonObject, DataSupport.order("id desc")
+                            .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
+                            .offset(offset).limit(pageSize).find(SignDB.class));
+                }
             }
         } else {
             if (offset == 0) {
-                jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignDB.class));
+                if (startTime != 0 && endTime != 0) {
+                    jsonObject.put("allSize", DataSupport.where("memberId = ? and " +
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
+                } else {
+                    jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignDB.class));
+                }
             }
-            listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
-                    .offset(offset).limit(pageSize).find(SignDB.class));
+            if (startTime != 0 && endTime != 0) {
+                listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ? and " +
+                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                        userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                        .offset(offset).limit(pageSize).find(SignDB.class));
+            } else {
+                listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
+                        .offset(offset).limit(pageSize).find(SignDB.class));
+            }
         }
     }
 
