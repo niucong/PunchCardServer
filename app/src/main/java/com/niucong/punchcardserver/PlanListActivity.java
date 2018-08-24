@@ -17,10 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.niucong.punchcardserver.adapter.VacateAdapter;
+import com.niucong.punchcardserver.adapter.PlanAdapter;
 import com.niucong.punchcardserver.app.App;
-import com.niucong.punchcardserver.db.VacateDB;
+import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.punchcardserver.db.PlanDB;
 import com.niucong.punchcardserver.util.FileUtils;
 import com.niucong.selectdatetime.view.NiftyDialogBuilder;
 import com.niucong.selectdatetime.view.wheel.DateSelectView;
@@ -40,17 +42,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class VacateListActivity extends AppCompatActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class PlanListActivity extends AppCompatActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.plan_search)
-    EditText vacateSearch;
+    EditText planSearch;
     @BindView(R.id.plan_rv)
-    RecyclerView vacateRv;
+    RecyclerView planRv;
     @BindView(R.id.plan_srl)
-    SwipeRefreshLayout vacateSrl;
+    SwipeRefreshLayout planSrl;
 
-    private VacateAdapter adapter;
-    private List<VacateDB> list = new ArrayList<>();
+    private PlanAdapter adapter;
+    private List<PlanDB> list = new ArrayList<>();
 
     private int allSize;
     private int offset = 0;
@@ -60,7 +62,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vacate_list);
+        setContentView(R.layout.activity_plan_list);
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
@@ -68,7 +70,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        vacateSearch.addTextChangedListener(new TextWatcher() {
+        planSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -85,24 +87,24 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
                 offset = 0;
                 startDate = null;
                 endDate = null;
-                queryVacates();
+                queryPlans();
             }
         });
 
         setAdapter();
-        queryVacates();
+        queryPlans();
     }
 
     private void setAdapter() {
-        vacateSrl.setOnRefreshListener(this);
-        vacateSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
-        adapter = new VacateAdapter(R.layout.item_vacate, list);
-        adapter.setOnLoadMoreListener(this, vacateRv);
-        vacateRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        vacateRv.setAdapter(adapter);
+        planSrl.setOnRefreshListener(this);
+        planSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
+        adapter = new PlanAdapter(this, R.layout.item_plan, list);
+        adapter.setOnLoadMoreListener(this, planRv);
+        planRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        planRv.setAdapter(adapter);
     }
 
-    private void queryVacates() {
+    private void queryPlans() {
 
         long startTime = 0;
         long endTime = 0;
@@ -117,18 +119,18 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
                 if (startTime != 0 && endTime != 0) {
                     allSize = DataSupport.where("(startTime <= ? and endTime >= ?) " +
                                     "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?)",
-                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(VacateDB.class);
+                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(PlanDB.class);
                 } else {
-                    allSize = DataSupport.count(VacateDB.class);
+                    allSize = DataSupport.count(PlanDB.class);
                 }
             }
             if (startTime != 0 && endTime != 0) {
                 list.addAll(DataSupport.order("id desc").where("(startTime <= ? and endTime >= ?) " +
                                 "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?)",
                         "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                        .offset(offset).limit(pageSize).find(VacateDB.class));
+                        .offset(offset).limit(pageSize).find(PlanDB.class));
             } else {
-                list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(VacateDB.class));
+                list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(PlanDB.class));
             }
         } else {
             if (offset == 0) {
@@ -137,22 +139,22 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
                     allSize = DataSupport.where("name like ? and ((startTime <= ? and endTime >= ?) "
                                     + "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                             "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime,
-                            "" + startTime, "" + endTime).count(VacateDB.class);
+                            "" + startTime, "" + endTime).count(PlanDB.class);
                 } else {
-                    allSize = DataSupport.where("name like ?", "%" + searchKey + "%").count(VacateDB.class);
+                    allSize = DataSupport.where("name like ?", "%" + searchKey + "%").count(PlanDB.class);
                 }
             }
             if (startTime != 0 && endTime != 0) {
                 list.addAll(DataSupport.order("id desc").where("name like ? and ((startTime <= ? and endTime >= ?) "
                                 + "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                         "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                        .offset(offset).limit(pageSize).find(VacateDB.class));
+                        .offset(offset).limit(pageSize).find(PlanDB.class));
             } else {
                 list.addAll(DataSupport.order("id desc").where("name like ?", "%" + searchKey + "%").offset(offset)
-                        .limit(pageSize).find(VacateDB.class));
+                        .limit(pageSize).find(PlanDB.class));
             }
         }
-        Log.d("MemberListActivity", "queryMembers " + list.size() + "/" + allSize);
+        Log.d("PlanListActivity", "queryPlans " + list.size() + "/" + allSize);
 //        setAdapter();
         adapter.notifyDataSetChanged();
         if (allSize == list.size()) {
@@ -161,9 +163,9 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
             adapter.loadMoreComplete();
         }
         //取消下拉刷新动画
-        vacateSrl.setRefreshing(false);
+        planSrl.setRefreshing(false);
         //禁止下拉刷新
-        vacateSrl.setEnabled(true);
+        planSrl.setEnabled(true);
     }
 
     @Override
@@ -172,14 +174,14 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
         offset = 0;
         startDate = null;
         endDate = null;
-        queryVacates();
+        queryPlans();
     }
 
     @Override
     public void onLoadMoreRequested() {
-        vacateSrl.setEnabled(false);
+        planSrl.setEnabled(false);
         offset = list.size();
-        queryVacates();
+        queryPlans();
     }
 
     @Override
@@ -200,7 +202,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
                 break;
             case R.id.action_export:
                 SimpleDateFormat YMDHM = new SimpleDateFormat("yyyyMMddHHmm");
-                final String path = FileUtils.getSdcardDir() + "/请假表_" + YMDHM.format(new Date()) + ".xls";
+                final String path = FileUtils.getSdcardDir() + "/计划表_" + YMDHM.format(new Date()) + ".xls";
 //                showProgressDialog("正在导出人员……");
                 new Thread() {
                     @Override
@@ -239,18 +241,40 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
 //1、输出的文件地址及名称
         OutputStream out = new FileOutputStream(path);
 //2、sheet表中的标题行内容，需要输入excel的汇总数据
-        String[] summary = {"姓名", "类型", "开始时间", "结束时间", "状态"};
+        String[] summary = {"名称", "创建者", "关联人员", "开始时间", "结束时间", "状态"};
         List<List<String>> summaryData = new ArrayList<List<String>>();
-        List<VacateDB> dbs = DataSupport.findAll(VacateDB.class);
+        List<PlanDB> dbs = DataSupport.findAll(PlanDB.class);
         SimpleDateFormat YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (VacateDB db : dbs) {
+        for (PlanDB db : dbs) {
             List<String> rowData = new ArrayList<String>();
             rowData.add(db.getName());
-            rowData.add(db.getType() == 1 ? "事假" : db.getType() == 2 ? "病假" :
-                    db.getType() == 3 ? "年假" : db.getType() == 4 ? "调休" : "其它");
+            rowData.add(db.getCreatorName());
+            String names = "";
+            try {
+                List<MemberDB> members = JSON.parseArray(db.getMembers(), MemberDB.class);
+                for (MemberDB member : members) {
+                    names += "，" + member.getName();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            rowData.add(names);
             rowData.add(YMDHMS.format(new Date(db.getStartTime())));
             rowData.add(YMDHMS.format(new Date(db.getEndTime())));
-            rowData.add(db.getApproveResult() == 0 ? "待批复" : db.getApproveResult() == 1 ? "同意" : "不同意");
+
+            if (db.getForceFinish() == 0) {
+                if (db.getStartTime() > System.currentTimeMillis()) {
+                    rowData.add("未开始");
+                } else if (db.getEndTime() > System.currentTimeMillis()) {
+                    rowData.add("进行中");
+                } else {
+                    rowData.add("已结束");
+                }
+            } else if (db.getForceFinish() == 1) {
+                rowData.add("已取消");
+            } else {
+                rowData.add("已终止");
+            }
 
             summaryData.add(rowData);
         }
@@ -276,10 +300,10 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
         final DateSelectView ds = (DateSelectView) selectDateView.findViewById(R.id.date_start);
         final DateSelectView de = (DateSelectView) selectDateView.findViewById(R.id.date_end);
 
-        final SimpleDateFormat ymdhm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        final SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
         final Calendar c = Calendar.getInstance();
         try {
-            startDate = ymdhm.parse(ymdhm.format(new Date()));// 当日00：00：00
+            startDate = YMD.parse(YMD.format(new Date()));// 当日00：00：00
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -296,17 +320,17 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
             @Override
             public void onClick(View v) {
                 try {
-                    startDate = ymdhm.parse(ds.getDate());
+                    startDate = YMD.parse(ds.getDate());
 //                    if (ymd.format(new Date()).equals(de.getDate())) {// 结束日期是今天
 //                        endDate = new Date();// 当前时间
 //                    } else {
 //                        endDate = new Date(ymd.parse(de.getDate()).getTime() + 1000 * 60 * 60 * 24 - 1);// 当日23：59：59
 //                    }
-                    endDate = ymdhm.parse(de.getDate());
+                    endDate = YMD.parse(de.getDate());
                     if (endDate.before(startDate)) {
                         App.showToast("开始日期不能大于结束日期");
                     } else {
-                        queryVacates();
+                        queryPlans();
                         submitDia.dismiss();
                     }
                 } catch (Exception e) {

@@ -24,7 +24,7 @@ import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.SignDB;
 import com.niucong.punchcardserver.util.FileUtils;
 import com.niucong.selectdatetime.view.NiftyDialogBuilder;
-import com.niucong.selectdatetime.view.wheel.DateTimeSelectView;
+import com.niucong.selectdatetime.view.wheel.DateSelectView;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.litepal.crud.DataSupport;
@@ -84,6 +84,8 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
             public void afterTextChanged(Editable s) {
                 searchKey = s.toString();
                 offset = 0;
+                startDate = null;
+                endDate = null;
                 queryMembers();
             }
         });
@@ -102,18 +104,54 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
     }
 
     private void queryMembers() {
+
+        long startTime = 0;
+        long endTime = 0;
+        if (startDate != null && endDate != null) {
+            startTime = startDate.getTime();
+            endTime = endDate.getTime() + 24 * 60 * 60 * 1000;
+        }
+
         if (TextUtils.isEmpty(searchKey)) {
             if (offset == 0) {
                 list.clear();
-                allSize = DataSupport.count(SignDB.class);
+                if (startTime != 0 && endTime != 0) {
+                    allSize = DataSupport.where("(startTime <= ? and endTime >= ?) " +
+                                    "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?)",
+                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class);
+                } else {
+                    allSize = DataSupport.count(SignDB.class);
+                }
             }
-            list.addAll(DataSupport.offset(offset).limit(pageSize).find(SignDB.class));
+            if (startTime != 0 && endTime != 0) {
+                list.addAll(DataSupport.order("id desc").where("(startTime <= ? and endTime >= ?) " +
+                                "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?)",
+                        "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                        .offset(offset).limit(pageSize).find(SignDB.class));
+            } else {
+                list.addAll(DataSupport.order("id desc").offset(offset).limit(pageSize).find(SignDB.class));
+            }
         } else {
             if (offset == 0) {
                 list.clear();
-                allSize = DataSupport.where("name = ?", searchKey).count(MemberDB.class);
+                if (startTime != 0 && endTime != 0) {
+                    allSize = DataSupport.where("name = ? and ((startTime <= ? and endTime >= ?) "
+                                    + "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                            searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime,
+                            "" + startTime, "" + endTime).count(MemberDB.class);
+                } else {
+                    allSize = DataSupport.where("name = ?", searchKey).count(MemberDB.class);
+                }
             }
-            list.addAll(DataSupport.where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
+            if (startTime != 0 && endTime != 0) {
+                list.addAll(DataSupport.order("id desc").where("name = ? and ((startTime <= ? and endTime >= ?) "
+                                + "or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                        searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                        .offset(offset).limit(pageSize).find(SignDB.class));
+            } else {
+                list.addAll(DataSupport.order("id desc").where("name = ?", searchKey).offset(offset)
+                        .limit(pageSize).find(SignDB.class));
+            }
         }
         Log.d("MemberListActivity", "queryMembers " + list.size() + "/" + allSize);
 //        setAdapter();
@@ -133,6 +171,8 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
     public void onRefresh() {
         adapter.setEnableLoadMore(false);
         offset = 0;
+        startDate = null;
+        endDate = null;
         queryMembers();
     }
 
@@ -234,8 +274,8 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
     private void showSubmitDia() {
         final NiftyDialogBuilder submitDia = NiftyDialogBuilder.getInstance(this);
         View selectDateView = LayoutInflater.from(this).inflate(R.layout.dialog_select_date, null);
-        final DateTimeSelectView ds = (DateTimeSelectView) selectDateView.findViewById(R.id.date_start);
-        final DateTimeSelectView de = (DateTimeSelectView) selectDateView.findViewById(R.id.date_end);
+        final DateSelectView ds = (DateSelectView) selectDateView.findViewById(R.id.date_start);
+        final DateSelectView de = (DateSelectView) selectDateView.findViewById(R.id.date_end);
 
         final SimpleDateFormat ymdhm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final Calendar c = Calendar.getInstance();
