@@ -65,7 +65,7 @@ public class PlanActivity extends AppCompatActivity {
         binding.planStart.setText(YMDHM.format(new Date(db.getStartTime())));
         binding.planEnd.setText(YMDHM.format(new Date(db.getEndTime())));
 
-        if (db.getEditTime() > 0) {
+        if (db.getEditTime() > 0 && db.getEditTime() != db.getCreateTime()) {
             binding.planEdit.setVisibility(View.VISIBLE);
             binding.planEdit.setText("修改时间：" + YMDHM.format(new Date(db.getEditTime())));
         }

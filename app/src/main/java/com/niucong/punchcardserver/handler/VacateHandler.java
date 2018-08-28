@@ -18,6 +18,7 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.VacateDB;
 import com.yanzhenjie.andserver.RequestHandler;
@@ -35,6 +36,8 @@ import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +66,8 @@ public class VacateHandler implements RequestHandler {
         }
         Log.d("VacateHandler", "userId=" + userId + ",serverId=" + serverId);
         try {
+            List<String> ids = new ArrayList<>();
+            org.json.JSONObject object = new org.json.JSONObject();
             if (serverId == 0) {
                 if (!params.containsKey("type") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
@@ -85,11 +90,16 @@ public class VacateHandler implements RequestHandler {
                 vacateDB.setStartTime(start);
                 vacateDB.setEndTime(end);
                 vacateDB.setCreateTime(System.currentTimeMillis());
+                vacateDB.setEditTime(vacateDB.getCreateTime());
                 vacateDB.setApproveResult(0);
                 vacateDB.save();
 
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "创建成功");
+
+                ids.add(DataSupport.find(MemberDB.class, memberDB.getSuperId()).getBmobID());
+                object.put("msg", memberDB.getName() + "请假了");
+                App.addPush(ids, object);
             } else {
                 if (!params.containsKey("approveResult")) {
                     response.setStatusCode(400);
@@ -106,7 +116,12 @@ public class VacateHandler implements RequestHandler {
 
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "批复成功");
+
+                ids.add(DataSupport.find(MemberDB.class, vacateDB.getMemberId()).getBmobID());
+                object.put("msg", "你有假条被处理了");
             }
+            object.put("type", 0);
+            App.addPush(ids, object);
         } catch (Exception e) {
             response.setStatusCode(400);
             jsonObject.put("code", 0);

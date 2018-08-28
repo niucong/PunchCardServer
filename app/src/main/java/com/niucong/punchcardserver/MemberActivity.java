@@ -95,6 +95,10 @@ public class MemberActivity extends AppCompatActivity {
                 });
                 db = getIntent().getParcelableExtra("MemberDB");
                 isEdit = getIntent().getBooleanExtra("isEdit", false);
+
+                if (db.getType() == 1) {
+                    isOwner = true;
+                }
             }
         }
 
@@ -159,7 +163,6 @@ public class MemberActivity extends AppCompatActivity {
             binding.memberPassword.setEnabled(false);
             binding.memberStatus.setEnabled(false);
             binding.memberSpinner.setEnabled(false);
-            binding.memberMac.setEnabled(false);
             binding.memberTeacher.setEnabled(false);
             binding.memberStudent.setEnabled(false);
         }
@@ -218,7 +221,6 @@ public class MemberActivity extends AppCompatActivity {
         db.setNumber(number);
         db.setPhone(phone);
         db.setPassword(password);
-        db.setMAC("");
         db.setIsDelete(binding.memberStatus.isChecked() ? 0 : 1);
         db.setLastEditTime(System.currentTimeMillis());
         if (isEdit) {

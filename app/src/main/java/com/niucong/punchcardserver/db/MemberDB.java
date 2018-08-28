@@ -17,7 +17,7 @@ public class MemberDB extends DataSupport implements Parcelable {
     private String phone;// 手机号
     private int type;// 身份类型：1主任、2老师、3学生
     private int superId;// 上级id
-    private String MAC;// 蓝牙MAC地址
+    private String bmobID;// 推送设备标识
     private String faceId;// 人脸标识
     private long lastEditTime;// 最后一次编辑时间
     private int isDelete;// 是否删除：0正常、1停用
@@ -78,12 +78,12 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.superId = superId;
     }
 
-    public String getMAC() {
-        return MAC;
+    public String getBmobID() {
+        return bmobID;
     }
 
-    public void setMAC(String MAC) {
-        this.MAC = MAC;
+    public void setBmobID(String bmobID) {
+        this.bmobID = bmobID;
     }
 
     public String getFaceId() {
@@ -124,7 +124,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         dest.writeString(this.phone);
         dest.writeInt(this.type);
         dest.writeInt(this.superId);
-        dest.writeString(this.MAC);
+        dest.writeString(this.bmobID);
         dest.writeString(this.faceId);
         dest.writeLong(this.lastEditTime);
         dest.writeInt(this.isDelete);
@@ -141,7 +141,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.phone = in.readString();
         this.type = in.readInt();
         this.superId = in.readInt();
-        this.MAC = in.readString();
+        this.bmobID = in.readString();
         this.faceId = in.readString();
         this.lastEditTime = in.readLong();
         this.isDelete = in.readInt();

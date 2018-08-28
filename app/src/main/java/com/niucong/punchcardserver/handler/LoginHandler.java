@@ -80,6 +80,14 @@ public class LoginHandler implements RequestHandler {
             jsonObject.put("msg", "登录成功");
             jsonObject.put("memberId", memberDB.getId());
             jsonObject.put("type", memberDB.getType());
+
+            if (params.containsKey("bmobID")) {
+                String bmobID = URLDecoder.decode(params.get("bmobID"), "utf-8");
+                if (!TextUtils.isEmpty(bmobID)) {
+                    memberDB.setBmobID(bmobID);
+                    memberDB.update(memberDB.getId());
+                }
+            }
         }
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
     }

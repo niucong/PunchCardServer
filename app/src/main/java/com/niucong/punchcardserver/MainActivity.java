@@ -11,8 +11,18 @@ import android.view.View;
 import com.niucong.punchcardserver.databinding.ActivityMainBinding;
 import com.niucong.punchcardserver.service.ServerManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.PushListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,7 +60,29 @@ public class MainActivity extends AppCompatActivity {
 //                    utils.getAc().run();
 
 //                    new ServerListener().start();
-
+                    BmobPushManager bmobPushManager = new BmobPushManager();
+                    BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
+                    //TODO 属性值为android
+//                    query.addWhereEqualTo("deviceType", "android");
+                    List<String> ids = new ArrayList<>();
+                    query.addWhereContainsAll("installationId", ids);
+                    bmobPushManager.setQuery(query);
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("id", 0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    bmobPushManager.pushMessage(jsonObject, new PushListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                Log.e("MainActivity", "推送成功！");
+                            } else {
+                                Log.e("MainActivity", "异常：" + e.getMessage());
+                            }
+                        }
+                    });
                     break;
                 case R.id.main_member:
                     startActivity(new Intent(MainActivity.this, MemberListActivity.class));

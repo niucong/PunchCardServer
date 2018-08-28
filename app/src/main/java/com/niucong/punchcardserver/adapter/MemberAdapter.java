@@ -37,7 +37,6 @@ public class MemberAdapter extends BaseQuickAdapter<MemberDB, BaseViewHolder> {
         helper.setText(R.id.item_member_number, db.getNumber());
         helper.setText(R.id.item_member_phone, db.getPhone());
         helper.setText(R.id.item_member_password, db.getPassword());
-        helper.setText(R.id.item_member_mac, db.getMAC());
 
         if (0 == db.getIsDelete()) {
             if (db.getType() != 1 && db.getSuperId() == 0) {

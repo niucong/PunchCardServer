@@ -95,6 +95,7 @@ public class PlanHandler implements RequestHandler {
                 planDB.setStartTime(start);
                 planDB.setEndTime(end);
                 planDB.setCreateTime(System.currentTimeMillis());
+                planDB.setEditTime(planDB.getCreateTime());
                 planDB.save();
 
                 jsonObject.put("code", 1);

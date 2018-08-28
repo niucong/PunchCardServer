@@ -214,7 +214,7 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
 //1、输出的文件地址及名称
         OutputStream out = new FileOutputStream(path);
 //2、sheet表中的标题行内容，需要输入excel的汇总数据
-        String[] summary = {"姓名", "身份类型", "工号/学号", "手机号", "密码", "MAC地址", "是否删除"};
+        String[] summary = {"姓名", "身份类型", "工号/学号", "手机号", "密码", "是否删除"};
         List<List<String>> summaryData = new ArrayList<List<String>>();
         List<MemberDB> dbs = DataSupport.findAll(MemberDB.class);
         for (MemberDB db : dbs) {
@@ -224,7 +224,6 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
             rowData.add(db.getNumber());
             rowData.add(db.getPhone());
             rowData.add(db.getPassword());
-            rowData.add(db.getMAC());
             rowData.add(db.getIsDelete() == 0 ? "否" : "是");
             summaryData.add(rowData);
         }
@@ -397,8 +396,6 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                             } else if (columnIndex == 4) {
                                 memberDB.setPassword(myCell.toString());
                             } else if (columnIndex == 5) {
-                                memberDB.setMAC(myCell.toString());
-                            } else if (columnIndex == 6) {
                                 memberDB.setIsDelete(0);
                             } else {
                                 break;
@@ -419,7 +416,6 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
                             oldDb.setNumber(memberDB.getNumber());
                             oldDb.setPhone(memberDB.getPhone());
                             oldDb.setPassword(memberDB.getPassword());
-                            oldDb.setMAC(memberDB.getMAC());
                             oldDb.setLastEditTime(System.currentTimeMillis());
                             oldDb.setIsDelete(memberDB.getIsDelete());
                             oldDb.update(oldDb.getId());

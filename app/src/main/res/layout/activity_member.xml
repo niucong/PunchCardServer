@@ -140,25 +140,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/mamber_mac_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MAC地址："/>
-
-            <EditText
-                android:id="@+id/member_mac"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:maxLength="17"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
