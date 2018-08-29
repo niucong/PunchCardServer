@@ -17,7 +17,9 @@ package com.niucong.punchcardserver.handler;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.PlanDB;
 import com.yanzhenjie.andserver.RequestHandler;
@@ -35,6 +37,8 @@ import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +67,9 @@ public class PlanHandler implements RequestHandler {
         }
         Log.d("PlanHandler", "userId=" + userId + ",serverId=" + serverId);
         try {
+            List<String> ids = new ArrayList<>();
+            org.json.JSONObject object = new org.json.JSONObject();
+            PlanDB planDB;
             if (serverId == 0) {
                 if (!params.containsKey("name") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
@@ -77,11 +84,7 @@ public class PlanHandler implements RequestHandler {
                 long start = Long.valueOf(params.get("start"));
                 long end = Long.valueOf(params.get("end"));
 
-//                if (DataSupport.where("name = ? and creatorId = ?", name, userId).count(PlanDB.class) > 0) {
-//
-//                }
-
-                PlanDB planDB = new PlanDB();
+                planDB = new PlanDB();
                 planDB.setName(name);
                 MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
                 planDB.setCreatorId(Integer.valueOf(userId));
@@ -110,13 +113,37 @@ public class PlanHandler implements RequestHandler {
                     return;
                 }
 
-                PlanDB planDB = DataSupport.find(PlanDB.class, serverId);
+                planDB = DataSupport.find(PlanDB.class, serverId);
                 planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
                 planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
                 planDB.update(serverId);
 
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "操作成功");
+            }
+
+            List<MemberDB> members = JSON.parseArray(planDB.getMembers(), MemberDB.class);
+//            String bmobIDs = "";
+            for (MemberDB member : members) {
+                String bmobID = DataSupport.find(MemberDB.class, member.getId()).getBmobID();
+                ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+//                bmobIDs += "," + bmobID.substring(bmobID.indexOf("-") + 1);
+            }
+//            if (bmobIDs.length() > 1) {
+            if (ids.size() > 0) {
+//                ids.add(bmobIDs.substring(1));
+                for (String id : ids) {
+                    Log.d("PlanHandler", "id=" + id);
+                }
+                if (planDB.getForceFinish() == 0) {
+                    object.put("msg", planDB.getCreatorName() + "创建了 " + planDB.getName() + " 计划");
+                } else if (planDB.getForceFinish() == 1) {
+                    object.put("msg", planDB.getName() + " 计划被取消了");
+                } else {
+                    object.put("msg", planDB.getName() + " 计划被终止了");
+                }
+                object.put("code", 1);
+                App.addPush(ids, object);
             }
         } catch (Exception e) {
             response.setStatusCode(400);

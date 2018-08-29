@@ -68,6 +68,7 @@ public class VacateHandler implements RequestHandler {
         try {
             List<String> ids = new ArrayList<>();
             org.json.JSONObject object = new org.json.JSONObject();
+            String bmobID;
             if (serverId == 0) {
                 if (!params.containsKey("type") || !params.containsKey("start") || !params.containsKey("end")) {
                     response.setStatusCode(400);
@@ -97,9 +98,8 @@ public class VacateHandler implements RequestHandler {
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "创建成功");
 
-                ids.add(DataSupport.find(MemberDB.class, memberDB.getSuperId()).getBmobID());
+                bmobID = DataSupport.find(MemberDB.class, memberDB.getSuperId()).getBmobID();
                 object.put("msg", memberDB.getName() + "请假了");
-                App.addPush(ids, object);
             } else {
                 if (!params.containsKey("approveResult")) {
                     response.setStatusCode(400);
@@ -117,10 +117,14 @@ public class VacateHandler implements RequestHandler {
                 jsonObject.put("code", 1);
                 jsonObject.put("msg", "批复成功");
 
-                ids.add(DataSupport.find(MemberDB.class, vacateDB.getMemberId()).getBmobID());
+                bmobID = DataSupport.find(MemberDB.class, vacateDB.getMemberId()).getBmobID();
                 object.put("msg", "你有假条被处理了");
             }
-            object.put("type", 0);
+            object.put("code", 0);
+            ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+            for (String id : ids) {
+                Log.d("VacateHandler", "id=" + id);
+            }
             App.addPush(ids, object);
         } catch (Exception e) {
             response.setStatusCode(400);

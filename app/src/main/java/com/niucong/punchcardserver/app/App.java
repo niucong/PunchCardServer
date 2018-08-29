@@ -62,21 +62,21 @@ public class App extends MultiDexApplication {
     }
 
 
-
     public static void addPush(List<String> ids, org.json.JSONObject json) {
 
         BmobPushManager bmobPushManager = new BmobPushManager();
         BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-        //TODO 属性值为android
-//                    query.addWhereEqualTo("deviceType", "android");
-        query.addWhereContainsAll("installationId", ids);
+//        query.addWhereEqualTo("deviceType", "android");
+//        query.addWhereEqualTo("installationId", ids.get(0));
+        query.addWhereContainedIn("installationId", ids);
+        bmobPushManager.setQuery(query);
         bmobPushManager.pushMessage(json, new PushListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Log.e("MainActivity", "推送成功！");
+                    Log.e("App", "推送成功！");
                 } else {
-                    Log.e("MainActivity", "异常：" + e.getMessage());
+                    Log.e("App", "异常：" + e.getMessage());
                 }
             }
         });
