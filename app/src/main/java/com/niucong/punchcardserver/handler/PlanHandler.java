@@ -15,6 +15,7 @@
  */
 package com.niucong.punchcardserver.handler;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -123,15 +124,13 @@ public class PlanHandler implements RequestHandler {
             }
 
             List<MemberDB> members = JSON.parseArray(planDB.getMembers(), MemberDB.class);
-//            String bmobIDs = "";
             for (MemberDB member : members) {
                 String bmobID = DataSupport.find(MemberDB.class, member.getId()).getBmobID();
-                ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
-//                bmobIDs += "," + bmobID.substring(bmobID.indexOf("-") + 1);
+                if (!TextUtils.isEmpty(bmobID)) {
+                    ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                }
             }
-//            if (bmobIDs.length() > 1) {
             if (ids.size() > 0) {
-//                ids.add(bmobIDs.substring(1));
                 for (String id : ids) {
                     Log.d("PlanHandler", "id=" + id);
                 }
@@ -146,6 +145,7 @@ public class PlanHandler implements RequestHandler {
                 App.addPush(ids, object);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             response.setStatusCode(400);
             jsonObject.put("code", 0);
             jsonObject.put("msg", "请求异常");
