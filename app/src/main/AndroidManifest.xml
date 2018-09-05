@@ -52,6 +52,10 @@
         <service
             android:name=".service.CoreService"
             android:exported="false"/>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5b8f2bbaf43e487003000115"/>
     </application>
 
 </manifest>

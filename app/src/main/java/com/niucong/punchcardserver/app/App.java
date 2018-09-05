@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
+import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
 
@@ -49,6 +50,9 @@ public class App extends MultiDexApplication {
         });
 // 启动推送服务
         BmobPush.startWork(this);
+
+        MobclickAgent.setScenarioType(this, null);
+//        MobclickAgent. startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,"",""));
     }
 
     @Override

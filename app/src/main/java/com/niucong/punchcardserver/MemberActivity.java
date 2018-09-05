@@ -47,14 +47,14 @@ public class MemberActivity extends AppCompatActivity {
 
         if (isOwner) {
             binding.llMemberType.setVisibility(View.GONE);
-            db = DataSupport.where("type = ?", "1").findFirst(MemberDB.class);
+            db = DataSupport.where("type = ? and isDelete = ?", "1", "0").findFirst(MemberDB.class);
             if (db != null) {
                 isEdit = true;
             } else {
                 binding.memberOwnerTip.setVisibility(View.VISIBLE);
             }
         } else {
-            if (DataSupport.where("type = ?", "1").count(MemberDB.class) == 0) {
+            if (DataSupport.where("type = ? and isDelete = ?", "1", "0").count(MemberDB.class) == 0) {
                 isOwner = true;
                 binding.llMemberType.setVisibility(View.GONE);
                 binding.memberOwnerTip.setVisibility(View.VISIBLE);
@@ -95,16 +95,15 @@ public class MemberActivity extends AppCompatActivity {
                 });
                 db = getIntent().getParcelableExtra("MemberDB");
                 isEdit = getIntent().getBooleanExtra("isEdit", false);
-
-                if (db.getType() == 1) {
-                    isOwner = true;
-                }
             }
         }
 
         if (db == null) {
             actionBar.setTitle("新增人员");
         } else {
+            if (db.getType() == 1) {
+                isOwner = true;
+            }
             binding.memberNumber.setEnabled(false);
             if (isEdit) {
                 actionBar.setTitle("人员编辑");
@@ -136,7 +135,7 @@ public class MemberActivity extends AppCompatActivity {
                 binding.memberOwner.setVisibility(View.VISIBLE);
                 binding.memberNumberTip.setText("学号：");
 
-                dbs = DataSupport.where("type = ?", "2").find(MemberDB.class);
+                dbs = DataSupport.where("type = ? and isDelete = ?", "2", "0").find(MemberDB.class);
                 int size = dbs.size();
                 String[] strs = new String[size + 1];
                 strs[0] = "请选择老师";
