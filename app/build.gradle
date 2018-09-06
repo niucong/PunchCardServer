@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 android {
@@ -22,6 +24,20 @@ android {
     dataBinding {
         enabled = true
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            if ('release'.equals(variant.buildType.name)) {
+                outputFileName = "服务端_${variant.versionName}_${variant.versionCode}_${buildTime()}.apk"
+            }
+        }
+    }
+}
+
+def buildTime() {
+    def match = new SimpleDateFormat("yyyyMMddHHmm");
+    def date = new Date();
+    return match.format(date);
 }
 
 dependencies {
