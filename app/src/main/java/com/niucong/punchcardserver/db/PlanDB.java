@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.litepal.crud.DataSupport;
 
 /**
- * 课程计划
+ * 计划
  */
 public class PlanDB extends DataSupport implements Parcelable {
 

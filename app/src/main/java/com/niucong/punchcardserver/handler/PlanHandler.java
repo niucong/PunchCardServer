@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 课程计划接口
+ * 计划接口
  */
 public class PlanHandler implements RequestHandler {
 
