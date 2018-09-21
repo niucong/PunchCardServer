@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.baidu.tts.client.SpeechSynthesizer;
 import com.facebook.stetho.Stetho;
 import com.umeng.analytics.MobclickAgent;
 
@@ -26,6 +27,12 @@ import cn.bmob.v3.listener.PushListener;
 public class App extends MultiDexApplication {
 
     public static App app;
+
+    public String appId = "11785389";
+    public String appKey = "tajQ8tfjOzMFAurBlhQBLaKk";
+    public String secretKey = "CVbYIhkRZ66qjeRPi7cZfa9sFGhpv6Bi";
+
+    public SpeechSynthesizer mSpeechSynthesizer;
 
     @Override
     public void onCreate() {

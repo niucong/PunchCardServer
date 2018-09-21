@@ -18,6 +18,7 @@ package com.niucong.punchcardserver.handler;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.SignDB;
 import com.yanzhenjie.andserver.RequestHandler;
@@ -82,6 +83,7 @@ public class SignHandler implements RequestHandler {
             jsonObject.put("endTime", signDB.getEndTime());
             jsonObject.put("code", 1);
             jsonObject.put("msg", "签到成功");
+            App.app.mSpeechSynthesizer.speak(signDB.getName() + "打卡成功！");
         } catch (Exception e) {
             response.setStatusCode(400);
             jsonObject.put("code", 0);

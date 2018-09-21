@@ -33,4 +33,24 @@ public class ToolUtils {
         }
         return false;
     }
+
+    /**
+     * Activity 6.0运行权限设置
+     *
+     * @param context
+     * @param activity
+     * @param  permissions 权限  Manifest.permission.
+     * @param type
+     */
+    public static boolean setPermission(Context context, Activity activity, String[] permissions,
+                                        int type) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(context, permissions[0]) != PackageManager
+                    .PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, permissions , type);
+                return true;
+            }
+        }
+        return false;
+    }
 }

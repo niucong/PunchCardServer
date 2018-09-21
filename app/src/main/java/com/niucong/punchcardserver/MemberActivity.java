@@ -1,8 +1,12 @@
 package com.niucong.punchcardserver;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,13 +17,19 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.bumptech.glide.Glide;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMemberBinding;
 import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.yunshitu.AddUserActivity;
+import com.niucong.yunshitu.face.FaceReg;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
 import java.util.List;
+
+import cn.yunshitu.facesdk.face.Person;
 
 public class MemberActivity extends AppCompatActivity {
 
@@ -120,6 +130,65 @@ public class MemberActivity extends AppCompatActivity {
                 saveMember();
             }
         });
+
+        binding.memberIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phone = binding.memberPhone.getText().toString();
+                if (TextUtils.isEmpty(phone.trim()) || phone.length() < 11 || !phone.startsWith("1")) {
+                    App.showToast("手机号码错误");
+                    return;
+                } else if (db == null && DataSupport.where("phone = ?", phone).count(MemberDB.class) > 0) {
+                    App.showToast("手机号码已被使用");
+                    return;
+                }
+                if (hasHeader) {
+                    new AlertDialog.Builder(MemberActivity.this)
+                            .setTitle("确定要删除头像吗?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    hasHeader = false;
+                                    FaceReg.INSTANCE.del_face(phone);
+                                    binding.memberIcon.setImageResource(R.mipmap.ic_launcher);
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
+                } else {
+                    startActivityForResult(new Intent(MemberActivity.this, AddUserActivity.class).putExtra("phone", phone), 0);
+                }
+            }
+        });
+        List<Person> person_list = FaceReg.INSTANCE.get_all_person(0, 10000);
+        for (Person person : person_list) {
+            if (person.getName().equals(binding.memberPhone.getText().toString())) {
+                hasHeader = true;
+                Glide.with(this).load(Uri.fromFile(new File(person.getPortrait()))).into(binding.memberIcon);
+            }
+        }
+    }
+
+    private boolean hasHeader;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 0) {
+            List<Person> person_list = FaceReg.INSTANCE.get_all_person(0, 10000);
+            for (Person person : person_list) {
+                if (person.getName().equals(binding.memberPhone.getText().toString())) {
+                    Glide.with(this).load(Uri.fromFile(new File(person.getPortrait()))).into(binding.memberIcon);
+                }
+            }
+        }
     }
 
     /**
