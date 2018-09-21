@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">云识图</string>
+
+    <string name="go_back">返回</string>
+    <string name="not_enough_authority">权限不足</string>
+    <string name="please_grant">请重新允许权限</string>
+
+    <string name="camera_open_failed">无法打开摄像头</string>
+
+    <string name="settings">设置</string>
+    <string name="settings_network_title">网络</string>
+    <string name="settings_first_start_up_key">first_start_up</string>
+    <string name="settings_camera_face_key">camera_face</string>
+    <string name="settings_config_json_key">json</string>
+    <string name="settings_use_online_conf_key">online_conf</string>
+    <string name="settings_use_online_conf_title">使用最新的配置与模型</string>
+    <string name="settings_use_online_conf_summary">如果遇到问题，可尝试关闭这一项</string>
+    <string name="settings_cache_title">缓存</string>
+    <string name="settings_cache_clear_title">清空缓存</string>
+    <string name="settings_cache_clear_calculating">正在计算…</string>
+    <string name="settings_cache_clear_doing">正在清理…</string>
+    <string name="settings_cache_clear_key">clear_cache</string>
+
+    <string name="cin_username">请输入昵称</string>
+    <string name="add_bar">人脸入库</string>
+    <string name="add_img">添加图片</string>
+    <string name="upload">确定入库</string>
+    <string name="user_into_library">人脸入库</string>
+    <string name="title_activity_user_list">UserListActivity</string>
+
+    <!-- 人物列表页面 -->
+    <string name="userlist_title">人物底库</string>
+</resources>

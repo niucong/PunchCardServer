@@ -1,0 +1,7 @@
+<resources>
+    <declare-styleable name="Theme">
+        <attr name="color_Primary" format="color|reference"/>
+        <attr name="color_PrimaryDark" format="color|reference"/>
+        <attr name="color_Accent" format="color|reference"/>
+    </declare-styleable>
+</resources>
