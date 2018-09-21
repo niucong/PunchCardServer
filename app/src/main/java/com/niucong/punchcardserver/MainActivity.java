@@ -29,7 +29,7 @@ import com.baidu.tts.client.TtsMode;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMainBinding;
 import com.niucong.punchcardserver.service.ServerManager;
-import com.niucong.yunshitu.FaceDetectActivity;
+import com.niucong.punchcardserver.yunshitu.FaceDetectActivity;
 import com.niucong.yunshitu.config.Configuration;
 import com.niucong.yunshitu.config.GlobalConfiguration;
 import com.niucong.yunshitu.config.JSONConfiguration;

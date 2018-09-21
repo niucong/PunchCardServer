@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMemberBinding;
 import com.niucong.punchcardserver.db.MemberDB;
-import com.niucong.yunshitu.AddUserActivity;
+import com.niucong.punchcardserver.yunshitu.AddUserActivity;
 import com.niucong.yunshitu.face.FaceReg;
 
 import org.litepal.crud.DataSupport;

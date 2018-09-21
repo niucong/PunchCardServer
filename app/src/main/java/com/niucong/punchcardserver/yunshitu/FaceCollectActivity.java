@@ -1,4 +1,4 @@
-package com.niucong.yunshitu;
+package com.niucong.punchcardserver.yunshitu;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

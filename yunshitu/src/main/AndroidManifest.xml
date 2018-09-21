@@ -16,11 +16,5 @@
         android:hardwareAccelerated="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".FaceDetectActivity" />
-        <activity
-            android:name=".AddUserActivity" />
-        <activity
-            android:name=".FaceCollectActivity" />
     </application>
 </manifest>

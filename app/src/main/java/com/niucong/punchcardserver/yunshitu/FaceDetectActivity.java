@@ -1,4 +1,4 @@
-package com.niucong.yunshitu;
+package com.niucong.punchcardserver.yunshitu;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.punchcardserver.db.SignDB;
 import com.niucong.yunshitu.config.Configuration;
 import com.niucong.yunshitu.config.GlobalConfiguration;
 import com.niucong.yunshitu.face.FaceReg;
@@ -35,6 +37,7 @@ import com.niucong.yunshitu.view.AutoFixTextureView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -45,7 +48,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -144,9 +150,9 @@ public class FaceDetectActivity extends AppCompatActivity {
     private AtomicBoolean mIsPlaying = new AtomicBoolean(false);
 
     private void initView() {
-        mTextureView = findViewById(R.id.texture_view);
-        mRotateButton = findViewById(R.id.rotate_btn);
-        mTextView = findViewById(R.id.debug_info);
+        mTextureView = findViewById(com.niucong.yunshitu.R.id.texture_view);
+        mRotateButton = findViewById(com.niucong.yunshitu.R.id.rotate_btn);
+        mTextView = findViewById(com.niucong.yunshitu.R.id.debug_info);
     }
 
     private void initPaint() {
@@ -203,14 +209,14 @@ public class FaceDetectActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-        setContentView(R.layout.activity_face_detect);
+        setContentView(com.niucong.yunshitu.R.layout.activity_face_detect);
 
         initView();
 
         initPaint();
 
         mCameraType = SharedPreferencesUtils.getCameraFacing(getApplicationContext());
-        mCameraType = Camera.CameraInfo.CAMERA_FACING_BACK;
+        mCameraType = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
         mConfiguration = GlobalConfiguration.getConfiguration();
 
@@ -250,6 +256,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         VideoSource videoSrc = new VideoSource(file.getAbsolutePath(), 40);
         mProcessor.addInputSrc(videoSrc);*/
 
+        mRotateButton.setVisibility(View.GONE);
         mRotateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -338,9 +345,9 @@ public class FaceDetectActivity extends AppCompatActivity {
                 enableDraw();
             } else {
                 new AlertDialog.Builder(this)
-                        .setTitle(R.string.camera_open_failed)
+                        .setTitle(com.niucong.yunshitu.R.string.camera_open_failed)
                         .setCancelable(false)
-                        .setNegativeButton(R.string.go_back, (dialogInterface, i) -> finish())
+                        .setNegativeButton(com.niucong.yunshitu.R.string.go_back, (dialogInterface, i) -> finish())
                         .show();
             }
         }
@@ -595,14 +602,18 @@ public class FaceDetectActivity extends AppCompatActivity {
                             }
                             Log.i(TAG, "FaceReg: " + name);
                             if (name != null) {
+                                MemberDB db = DataSupport.where("phone = ?", name).findFirst(MemberDB.class);
+                                name = db.getName();
+                                updateSign(db.getId() + "");
+                                final String tipStr = name + "打卡成功！";
+
                                 // 准备语音URL请求参数
                                 String encode = "";
                                 try {
-                                    encode = URLEncoder.encode(name + "欢迎您", "UTF-8");
+                                    encode = URLEncoder.encode(tipStr, "UTF-8");
                                 } catch (UnsupportedEncodingException e) {
                                     e.printStackTrace();
                                 }
-                                final String tipStr = name;
                                 this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -639,6 +650,38 @@ public class FaceDetectActivity extends AppCompatActivity {
                     mat.release();
                 }
             }
+        }
+    }
+
+    /**
+     * 打卡
+     *
+     * @param userId
+     */
+    private void updateSign(String userId) {
+        try {
+            SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
+            long time = YMD.parse(YMD.format(new Date())).getTime();
+            SignDB signDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
+                    userId, time + "", time + 24 * 60 * 60 * 1000 + "").findFirst(SignDB.class);
+            Log.d("SignHandler", "startTime=" + YMD.format(new Date()));
+            if (signDB == null) {
+                signDB = new SignDB();
+                signDB.setMemberId(Integer.valueOf(userId));
+                MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
+                signDB.setName(memberDB.getName());
+                signDB.setSuperId(memberDB.getSuperId());
+                signDB.setStartTime(System.currentTimeMillis());
+                signDB.save();
+            } else {
+                signDB.setEndTime(System.currentTimeMillis());
+                signDB.update(signDB.getId());
+            }
+            Log.d("SignHandler", "SuperId=" + signDB.getSuperId());
+
+            // TODO 推送给客户端
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

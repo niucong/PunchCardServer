@@ -51,6 +51,13 @@
             android:name=".VacateListActivity"
             android:label="请假管理"/>
 
+        <activity
+            android:name=".yunshitu.FaceDetectActivity"/>
+        <activity
+            android:name=".yunshitu.AddUserActivity"/>
+        <activity
+            android:name=".yunshitu.FaceCollectActivity"/>
+
         <service
             android:name=".service.CoreService"
             android:exported="false"/>

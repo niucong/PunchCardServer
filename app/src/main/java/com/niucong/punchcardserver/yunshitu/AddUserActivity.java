@@ -1,4 +1,4 @@
-package com.niucong.yunshitu;
+package com.niucong.punchcardserver.yunshitu;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -75,7 +75,7 @@ public class AddUserActivity extends AppCompatActivity {
     String pname = "";
 
     private void init() {
-        setContentView(R.layout.activity_add_user);
+        setContentView(com.niucong.yunshitu.R.layout.activity_add_user);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -86,10 +86,10 @@ public class AddUserActivity extends AppCompatActivity {
         }
         pname = getIntent().getStringExtra("phone");
 
-        mGridView = findViewById(R.id.imgeGridView);
+        mGridView = findViewById(com.niucong.yunshitu.R.id.imgeGridView);
         mGridView.setAdapter(mGridviewAdapter);
-        uploadbutton = findViewById(R.id.uploadbutton);
-        addimgbutton = findViewById(R.id.addimgbutton);
+        uploadbutton = findViewById(com.niucong.yunshitu.R.id.uploadbutton);
+        addimgbutton = findViewById(com.niucong.yunshitu.R.id.addimgbutton);
         mMediaPlayer = new MediaPlayer();
         mGridView.setOnItemClickListener(new Myitemlistener());
         mConfiguration = GlobalConfiguration.getConfiguration();
@@ -119,7 +119,7 @@ public class AddUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectPicDialog = new SelectPicDialog(AddUserActivity.this, itemsOnClick);
-                selectPicDialog.showAtLocation(AddUserActivity.this.findViewById(R.id.adduser_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                selectPicDialog.showAtLocation(AddUserActivity.this.findViewById(com.niucong.yunshitu.R.id.adduser_main), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
             }
         });
     }
@@ -148,7 +148,6 @@ public class AddUserActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void startupload() {
         Log.d("AddUserActivity", "startupload pname=" + pname);
@@ -328,11 +327,11 @@ public class AddUserActivity extends AppCompatActivity {
 
         public void onClick(View v) {
             selectPicDialog.dismiss();
-            if (v.getId() == R.id.btn_pick_photo) {
+            if (v.getId() == com.niucong.yunshitu.R.id.btn_pick_photo) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
-            } else if (v.getId() == R.id.btn_take_photo) {
+            } else if (v.getId() == com.niucong.yunshitu.R.id.btn_take_photo) {
                 Intent it = new Intent(AddUserActivity.this, FaceCollectActivity.class);
                 it.putExtra("mUploadFlag", 1);
                 startActivityForResult(it, 1);

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:keepScreenOn="true"
     android:background="@android:color/black"
-    tools:context="com.niucong.yunshitu.FaceDetectActivity">
+    tools:context="com.niucong.yunshitu.com.niucong.punchcardserver.yunshitu.FaceDetectActivity">
 
     <com.niucong.yunshitu.view.AutoFixTextureView
         android:id="@+id/texture_view"
