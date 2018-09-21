@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.SignDB;
 import com.niucong.yunshitu.config.Configuration;
@@ -43,12 +44,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +52,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -602,43 +599,53 @@ public class FaceDetectActivity extends AppCompatActivity {
                             }
                             Log.i(TAG, "FaceReg: " + name);
                             if (name != null) {
-                                MemberDB db = DataSupport.where("phone = ?", name).findFirst(MemberDB.class);
-                                name = db.getName();
-                                updateSign(db.getId() + "");
-                                final String tipStr = name + "打卡成功！";
+                                MemberDB db = DataSupport.where("phone = ? and isDelete = 0", name).findFirst(MemberDB.class);
 
-                                // 准备语音URL请求参数
-                                String encode = "";
-                                try {
-                                    encode = URLEncoder.encode(tipStr, "UTF-8");
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
+                                String tip = "";
+                                if (db != null) {
+                                    name = db.getName();
+                                    updateSign(db);
+                                    tip = name + "打卡成功！";
+                                } else {
+                                    tip = "欢迎参观！";
                                 }
+
+                                final String tipStr = tip;
+
+//                                // 准备语音URL请求参数
+//                                String encode = "";
+//                                try {
+//                                    encode = URLEncoder.encode(tipStr, "UTF-8");
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
                                 this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(FaceDetectActivity.this, tipStr, Toast.LENGTH_LONG).show();
                                     }
                                 });
-                                // 下载语音
-                                File music = NetworkUtils.downloadMusic(getApplicationContext(),
-                                        String.format(TTS_TEMPLATE_URL, encode));
-                                if (music != null) {
-                                    // 播放
-                                    mMediaPlayer.reset();
-                                    try (FileInputStream in = new FileInputStream(music)) {
-                                        mMediaPlayer.setDataSource(in.getFD());
-                                        mMediaPlayer.prepare();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    // 由MediaPlayer的回调使mIsPlaying为false
-                                    mMediaPlayer.start();
-                                }
+                                App.app.mSpeechSynthesizer.speak(tipStr);
+//                                // 下载语音
+//                                File music = NetworkUtils.downloadMusic(getApplicationContext(),
+//                                        String.format(TTS_TEMPLATE_URL, encode));
+//                                if (music != null) {
+//                                    // 播放
+//                                    mMediaPlayer.reset();
+//                                    try (FileInputStream in = new FileInputStream(music)) {
+//                                        mMediaPlayer.setDataSource(in.getFD());
+//                                        mMediaPlayer.prepare();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    // 由MediaPlayer的回调使mIsPlaying为false
+//                                    mMediaPlayer.start();
+//                                }
                                 // 已识别
                                 mUUIDSet.add(faceUUID);
                             } else {
                                 mIsPlaying.set(false);
+                                App.app.mSpeechSynthesizer.speak("欢迎参观！");
                             }
                             mat.release();
                         });
@@ -656,10 +663,11 @@ public class FaceDetectActivity extends AppCompatActivity {
     /**
      * 打卡
      *
-     * @param userId
+     * @param db
      */
-    private void updateSign(String userId) {
+    private void updateSign(MemberDB db) {
         try {
+            String userId = db.getId() + "";
             SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
             long time = YMD.parse(YMD.format(new Date())).getTime();
             SignDB signDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
@@ -680,7 +688,15 @@ public class FaceDetectActivity extends AppCompatActivity {
             Log.d("SignHandler", "SuperId=" + signDB.getSuperId());
 
             // TODO 推送给客户端
-        } catch (ParseException e) {
+            SimpleDateFormat YMDHM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            List<String> ids = new ArrayList<>();
+            org.json.JSONObject object = new org.json.JSONObject();
+            String bmobID = db.getBmobID();
+            object.put("msg", YMDHM.format(new Date()) + "打卡成功");
+            object.put("code", 2);
+            ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+            App.addPush(ids, object);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
