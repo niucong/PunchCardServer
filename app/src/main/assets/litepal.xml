@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="punch-card-server"/>
-    <version value="1"/>
+    <version value="2"/>
 
     <list>
         <mapping class="com.niucong.punchcardserver.db.MemberDB"/>
         <mapping class="com.niucong.punchcardserver.db.SignDB"/>
         <mapping class="com.niucong.punchcardserver.db.PlanDB"/>
         <mapping class="com.niucong.punchcardserver.db.VacateDB"/>
+        <mapping class="com.niucong.punchcardserver.db.CalendarDB"/>
+        <mapping class="com.niucong.punchcardserver.db.CourseDB"/>
+        <mapping class="com.niucong.punchcardserver.db.ProjectDB"/>
+        <mapping class="com.niucong.punchcardserver.db.ScheduleDB"/>
     </list>
 
 </litepal>

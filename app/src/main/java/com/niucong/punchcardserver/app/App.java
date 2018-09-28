@@ -1,8 +1,8 @@
 package com.niucong.punchcardserver.app;
 
+import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ import cn.bmob.v3.InstallationListener;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.PushListener;
 
-public class App extends MultiDexApplication {
+public class App extends Application {
 
     public static App app;
 

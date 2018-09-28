@@ -312,7 +312,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.main_plan:
                 case R.id.main_attendance:
                 case R.id.main_vacate:
-                case R.id.main_setting:
+                case R.id.main_project:
+                case R.id.main_schedule:
+                case R.id.main_calendar:
                 case R.id.btn_start:
                 case R.id.btn_stop:
                     alertEdit(v.getId());
@@ -396,9 +398,16 @@ public class MainActivity extends AppCompatActivity {
                                 case R.id.main_vacate:
                                     startActivity(new Intent(MainActivity.this, VacateListActivity.class));
                                     break;
-                                case R.id.main_setting:
-                                    startActivity(new Intent(MainActivity.this, MemberActivity.class)
-                                            .putExtra("Owner", true));
+                                case R.id.main_project:
+
+                                    break;
+                                case R.id.main_schedule:
+//                                    startActivity(new Intent(MainActivity.this, MemberActivity.class)
+//                                            .putExtra("Owner", true));
+
+                                    break;
+                                case R.id.main_calendar:
+
                                     break;
                                 case R.id.btn_start:
                                     showDialog();

@@ -49,7 +49,17 @@
                 android:onClick="@{handlers::onClickName}"
                 android:text="查看计划"
                 android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/main_project"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="查看项目"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -79,15 +89,24 @@
                 android:textStyle="bold"/>
 
             <Button
-                android:id="@+id/main_setting"
+                android:id="@+id/main_schedule"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="20dp"
                 android:onClick="@{handlers::onClickName}"
-                android:text="设置"
+                android:text="作息表"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                android:visibility="invisible"/>
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/main_calendar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="20dp"
+                android:onClick="@{handlers::onClickName}"
+                android:text="校历"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <View
