@@ -25,7 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -50,6 +52,12 @@
         <activity
             android:name=".VacateListActivity"
             android:label="请假管理"/>
+        <activity
+            android:name=".ScheduleActivity"
+            android:label="作息表"/>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="校历"/>
 
         <activity
             android:name=".yunshitu.FaceDetectActivity"/>

@@ -404,10 +404,10 @@ public class MainActivity extends AppCompatActivity {
                                 case R.id.main_schedule:
 //                                    startActivity(new Intent(MainActivity.this, MemberActivity.class)
 //                                            .putExtra("Owner", true));
-
+                                    startActivity(new Intent(MainActivity.this, ScheduleActivity.class));
                                     break;
                                 case R.id.main_calendar:
-
+                                    startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                                     break;
                                 case R.id.btn_start:
                                     showDialog();

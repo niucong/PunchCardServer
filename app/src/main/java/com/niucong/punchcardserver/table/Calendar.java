@@ -1,31 +1,45 @@
-package com.niucong.punchcardserver.db;
+package com.niucong.punchcardserver.table;
 
-import org.litepal.crud.DataSupport;
+import com.bin.david.form.annotation.SmartColumn;
+import com.bin.david.form.annotation.SmartTable;
 
-/**
- * 校历表
- */
-public class CalendarDB extends DataSupport {
+@SmartTable(name = "校历")
+public class Calendar {
 
-    private int id;// 唯一主键
+    @SmartColumn(id = 1, name = "学期", autoMerge = true, width = 30)
+    private String session;
+    @SmartColumn(id = 2, name = "周数", autoMerge = true)
+    private String weekly;
+    @SmartColumn(id = 3, name = "月份", autoMerge = true)
+    private String month;
+    @SmartColumn(id = 4, name = "一")
+    private String monday;
+    @SmartColumn(id = 5, name = "二")
+    private String tuesday;
+    @SmartColumn(id = 6, name = "三")
+    private String wednesday;
+    @SmartColumn(id = 7, name = "四")
+    private String thursday;
+    @SmartColumn(id = 8, name = "五")
+    private String friday;
+    @SmartColumn(id = 9, name = "六")
+    private String saturday;
+    @SmartColumn(id = 10, name = "日")
+    private String sunday;
 
-    private String session;// 学期
-    private String weekly;// 周数
-    private String month;// 月份
-    private String monday;// 星期一
-    private String tuesday;// 星期二
-    private String wednesday;// 星期三
-    private String thursday;// 星期四
-    private String friday;// 星期五
-    private String saturday;// 星期六
-    private String sunday;// 星期日
+    public Calendar(String session, String weekly, String month, String monday, String tuesday,
+                    String wednesday, String thursday, String friday, String saturday, String sunday) {
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.session = session;
+        this.weekly = weekly;
+        this.month = month;
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
     }
 
     public String getSession() {
