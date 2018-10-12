@@ -99,7 +99,7 @@ public class PlanHandler implements RequestHandler {
                 planDB.setStartTime(start);
                 planDB.setEndTime(end);
                 planDB.setCreateTime(System.currentTimeMillis());
-                planDB.setEditTime(planDB.getCreateTime());
+//                planDB.setEditTime(planDB.getCreateTime());
                 planDB.save();
             } else {
                 if (!params.containsKey("forceFinish")) {
@@ -114,6 +114,7 @@ public class PlanHandler implements RequestHandler {
                 planDB = DataSupport.find(PlanDB.class, serverId);
                 planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
                 planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                planDB.setEditTime(System.currentTimeMillis());
                 planDB.update(serverId);
             }
 

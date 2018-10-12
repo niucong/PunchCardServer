@@ -115,21 +115,28 @@ public class SignListHandler implements RequestHandler {
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where(
                             "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).offset(offset)
-                            .limit(pageSize).find(SignDB.class));
+                            "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
+                                    .offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where(
+                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                    "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
                 } else {
                     listToArray(response, jsonObject, DataSupport.order("id desc").offset(offset)
-                            .limit(pageSize).find(SignDB.class));
+                            .limit(pageSize).find(SignDB.class), DataSupport.count(SignDB.class));
                 }
             } else {
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("name = ? and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                             searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                            .offset(offset).limit(pageSize).find(SignDB.class));
+                                    .offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("name = ? and " +
+                                            "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                    searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
                 } else {
                     listToArray(response, jsonObject, DataSupport.order("id desc")
-                            .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class));
+                                    .where("name = ?", searchKey).offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("name = ?", searchKey).count(SignDB.class));
                 }
             }
         } else if (type == 2) {
@@ -138,21 +145,29 @@ public class SignListHandler implements RequestHandler {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ?) and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                             userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                            .offset(offset).limit(pageSize).find(SignDB.class));
+                                    .offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("(memberId = ? or superId = ?) and " +
+                                            "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                    userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
                 } else {
                     listToArray(response, jsonObject, DataSupport.order("id desc")
-                            .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class));
+                                    .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("memberId = ? or superId = ?", userId, userId).count(SignDB.class));
                 }
             } else {
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ? and name = ?) and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                             userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                            .offset(offset).limit(pageSize).find(SignDB.class));
+                                    .offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("(memberId = ? or superId = ? and name = ?) and " +
+                                            "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                    userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
                 } else {
                     listToArray(response, jsonObject, DataSupport.order("id desc")
-                            .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                            .offset(offset).limit(pageSize).find(SignDB.class));
+                                    .where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
+                                    .offset(offset).limit(pageSize).find(SignDB.class),
+                            DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey).count(SignDB.class));
                 }
             }
         } else {
@@ -160,15 +175,19 @@ public class SignListHandler implements RequestHandler {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ? and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                         userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                        .offset(offset).limit(pageSize).find(SignDB.class));
+                                .offset(offset).limit(pageSize).find(SignDB.class),
+                        DataSupport.where("memberId = ? and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
             } else {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ?", userId)
-                        .offset(offset).limit(pageSize).find(SignDB.class));
+                                .offset(offset).limit(pageSize).find(SignDB.class),
+                        DataSupport.where("memberId = ?", userId).count(SignDB.class));
             }
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<SignDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<SignDB> list, int allSize) {
         JSONArray array = new JSONArray();
         for (SignDB signDB : list) {
             JSONObject json = new JSONObject();
@@ -181,6 +200,8 @@ public class SignListHandler implements RequestHandler {
             array.add(json);
         }
         jsonObject.put("list", array);
+        jsonObject.put("allSize", allSize);
+
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));

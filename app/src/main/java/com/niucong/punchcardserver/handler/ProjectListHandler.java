@@ -93,16 +93,21 @@ public class ProjectListHandler implements RequestHandler {
         Log.d("ProjectListHandler", "searchKey=" + searchKey);
         if (TextUtils.isEmpty(searchKey)) {
             listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(ProjectDB.class));
+                            .where("creatorId = ? or superId = ? or members like ?", userId, userId, "%:" + userId + ",%")
+                            .offset(offset).limit(pageSize).find(ProjectDB.class),
+                    DataSupport.where("creatorId = ? or superId = ? or members like ?",
+                            userId, userId, "%:" + userId + ",%").count(ProjectDB.class));
         } else {
             listToArray(response, jsonObject, DataSupport.order("id desc")
-                    .where("(creatorId = ? or members like ?) and (name like ?)",
-                            userId, "%:" + userId + ",%", "%" + searchKey + "%")
-                    .offset(offset).limit(pageSize).find(ProjectDB.class));
+                            .where("(creatorId = ? or superId = ? or members like ?) and (name like ?)",
+                                    userId, userId, "%:" + userId + ",%", "%" + searchKey + "%")
+                            .offset(offset).limit(pageSize).find(ProjectDB.class),
+                    DataSupport.where("(creatorId = ? or superId = ? or members like ?) and (name like ?)",
+                            userId, userId, "%:" + userId + ",%", "%" + searchKey + "%").count(ProjectDB.class));
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<ProjectDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<ProjectDB> list, int allSize) {
         JSONArray array = new JSONArray();
         for (ProjectDB projectDB : list) {
             JSONObject json = new JSONObject();
@@ -135,6 +140,8 @@ public class ProjectListHandler implements RequestHandler {
             array.add(json);
         }
         jsonObject.put("list", array);
+        jsonObject.put("allSize", allSize);
+
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));

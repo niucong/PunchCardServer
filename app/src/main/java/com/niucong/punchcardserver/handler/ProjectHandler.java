@@ -127,8 +127,10 @@ public class ProjectHandler implements RequestHandler {
                         } else {
                             object.put("msg", projectDB.getSuperName() + " 拒绝了" + projectDB.getCreatorName() + "创建的 " + projectDB.getName() + " 项目");
                         }
-                        String bmobID = DataSupport.find(MemberDB.class, Integer.valueOf(userId)).getBmobID();
-                        ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
+                        if (!TextUtils.isEmpty(bmobID)) {
+                            ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        }
                     } else if (params.containsKey("status")) {// 状态变更
                         int status = Integer.valueOf(params.get("status"));
                         projectDB.setStatus(status);
@@ -147,7 +149,9 @@ public class ProjectHandler implements RequestHandler {
                             object.put("msg", projectDB.getName() + " 项目已经完成了");
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
-                        ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        if (!TextUtils.isEmpty(bmobID)) {
+                            ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        }
                     } else if (params.containsKey("forceFinish")) {// 关闭
                         projectDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
                         projectDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
@@ -158,7 +162,9 @@ public class ProjectHandler implements RequestHandler {
                             object.put("msg", projectDB.getName() + " 项目被终止了");
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
-                        ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        if (!TextUtils.isEmpty(bmobID)) {
+                            ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                        }
                     }
                     projectDB.update(serverId);
 

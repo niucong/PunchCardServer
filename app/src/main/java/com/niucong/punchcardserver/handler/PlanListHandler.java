@@ -112,27 +112,37 @@ public class PlanListHandler implements RequestHandler {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                         userId, "%:" + userId + ",%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                        .offset(offset).limit(pageSize).find(PlanDB.class));
+                                .offset(offset).limit(pageSize).find(PlanDB.class),
+                        DataSupport.where("(creatorId = ? or members like ?) and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                userId, "%:" + userId + ",%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(PlanDB.class));
             } else {
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(PlanDB.class));
+                                .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%")
+                                .offset(offset).limit(pageSize).find(PlanDB.class),
+                        DataSupport.where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").count(PlanDB.class));
             }
         } else {
             if (startTime != 0 && endTime != 0) {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and (name like ?) and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
                         userId, "%:" + userId + ",%", "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                        .offset(offset).limit(pageSize).find(PlanDB.class));
+                                .offset(offset).limit(pageSize).find(PlanDB.class),
+                        DataSupport.where("(creatorId = ? or members like ?) and (name like ?) and " +
+                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
+                                userId, "%:" + userId + ",%", "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(PlanDB.class));
             } else {
                 listToArray(response, jsonObject, DataSupport.order("id desc")
-                        .where("(creatorId = ? or members like ?) and (name like ?)",
-                                userId, "%:" + userId + ",%", "%" + searchKey + "%")
-                        .offset(offset).limit(pageSize).find(PlanDB.class));
+                                .where("(creatorId = ? or members like ?) and (name like ?)",
+                                        userId, "%:" + userId + ",%", "%" + searchKey + "%")
+                                .offset(offset).limit(pageSize).find(PlanDB.class),
+                        DataSupport.where("(creatorId = ? or members like ?) and (name like ?)",
+                                userId, "%:" + userId + ",%", "%" + searchKey + "%").count(PlanDB.class));
             }
         }
     }
 
-    private void listToArray(HttpResponse response, JSONObject jsonObject, List<PlanDB> list) {
+    private void listToArray(HttpResponse response, JSONObject jsonObject, List<PlanDB> list, int allSize) {
         JSONArray array = new JSONArray();
         for (PlanDB planDB : list) {
             JSONObject json = new JSONObject();
@@ -150,6 +160,8 @@ public class PlanListHandler implements RequestHandler {
             array.add(json);
         }
         jsonObject.put("list", array);
+        jsonObject.put("allSize", allSize);
+
         jsonObject.put("code", 1);
         jsonObject.put("msg", "请求成功");
         response.setEntity(new StringEntity(jsonObject.toString(), "utf-8"));
