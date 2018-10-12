@@ -20,10 +20,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.niucong.punchcardserver.handler.CalendarListHandler;
 import com.niucong.punchcardserver.handler.LoginHandler;
 import com.niucong.punchcardserver.handler.MemberListHandler;
 import com.niucong.punchcardserver.handler.PlanHandler;
 import com.niucong.punchcardserver.handler.PlanListHandler;
+import com.niucong.punchcardserver.handler.ProjectHandler;
+import com.niucong.punchcardserver.handler.ProjectListHandler;
+import com.niucong.punchcardserver.handler.ScheduleListHandler;
 import com.niucong.punchcardserver.handler.SignHandler;
 import com.niucong.punchcardserver.handler.SignListHandler;
 import com.niucong.punchcardserver.handler.VacateHandler;
@@ -63,6 +67,10 @@ public class CoreService extends Service {
                 .registerHandler("/vacateList", new VacateListHandler())
                 .registerHandler("/plan", new PlanHandler())
                 .registerHandler("/planList", new PlanListHandler())
+                .registerHandler("/project", new ProjectHandler())
+                .registerHandler("/projectList", new ProjectListHandler())
+                .registerHandler("/scheduleList", new ScheduleListHandler())
+                .registerHandler("/calendarList", new CalendarListHandler())
                 .filter(new HttpCacheFilter())
                 .listener(mListener)
                 .build();

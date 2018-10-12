@@ -112,16 +112,6 @@ public class SignListHandler implements RequestHandler {
         Log.d("SignListHandler", "userId=" + userId + ",type=" + type + ",searchKey=" + searchKey);
         if (type == 1) {
             if (TextUtils.isEmpty(searchKey)) {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where(
-                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(SignDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.count(SignDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where(
                             "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -132,17 +122,6 @@ public class SignListHandler implements RequestHandler {
                             .limit(pageSize).find(SignDB.class));
                 }
             } else {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("name = ? and " +
-                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(SignDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("name = ?", searchKey)
-                                .count(SignDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("name = ? and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -155,17 +134,6 @@ public class SignListHandler implements RequestHandler {
             }
         } else if (type == 2) {
             if (TextUtils.isEmpty(searchKey)) {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ?) and " +
-                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(SignDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                                .count(SignDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ?) and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -176,17 +144,6 @@ public class SignListHandler implements RequestHandler {
                             .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(SignDB.class));
                 }
             } else {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ? and name = ?) and " +
-                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(SignDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                                .count(SignDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ? and name = ?) and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -199,15 +156,6 @@ public class SignListHandler implements RequestHandler {
                 }
             }
         } else {
-            if (offset == 0) {
-                if (startTime != 0 && endTime != 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? and " +
-                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                            userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(SignDB.class));
-                } else {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(SignDB.class));
-                }
-            }
             if (startTime != 0 && endTime != 0) {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ? and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",

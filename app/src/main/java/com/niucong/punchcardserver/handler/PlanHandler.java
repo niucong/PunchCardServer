@@ -101,9 +101,6 @@ public class PlanHandler implements RequestHandler {
                 planDB.setCreateTime(System.currentTimeMillis());
                 planDB.setEditTime(planDB.getCreateTime());
                 planDB.save();
-
-                jsonObject.put("code", 1);
-                jsonObject.put("msg", "创建成功");
             } else {
                 if (!params.containsKey("forceFinish")) {
                     response.setStatusCode(400);
@@ -118,10 +115,10 @@ public class PlanHandler implements RequestHandler {
                 planDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
                 planDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
                 planDB.update(serverId);
-
-                jsonObject.put("code", 1);
-                jsonObject.put("msg", "操作成功");
             }
+
+            jsonObject.put("code", 1);
+            jsonObject.put("msg", "操作成功");
 
             List<MemberDB> members = JSON.parseArray(planDB.getMembers(), MemberDB.class);
             for (MemberDB member : members) {

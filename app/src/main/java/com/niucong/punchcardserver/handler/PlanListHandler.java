@@ -108,17 +108,6 @@ public class PlanListHandler implements RequestHandler {
 
         Log.d("PlanListHandler", "searchKey=" + searchKey);
         if (TextUtils.isEmpty(searchKey)) {
-            if (offset == 0) {
-                if (startTime != 0 && endTime != 0) {
-                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and " +
-                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                            userId, "%:" + userId + ",%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                            .count(PlanDB.class));
-                } else {
-                    jsonObject.put("allSize", DataSupport.where("creatorId = ? or members like ?", userId, "%:" + userId + ",%")
-                            .count(PlanDB.class));
-                }
-            }
             if (startTime != 0 && endTime != 0) {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -129,18 +118,6 @@ public class PlanListHandler implements RequestHandler {
                         .where("creatorId = ? or members like ?", userId, "%:" + userId + ",%").offset(offset).limit(pageSize).find(PlanDB.class));
             }
         } else {
-            if (offset == 0) {
-                if (startTime != 0 && endTime != 0) {
-                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?) and " +
-                                    "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                            userId, "%:" + userId + ",%", "%" + searchKey + "%", "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                            .count(PlanDB.class));
-                } else {
-                    jsonObject.put("allSize", DataSupport.where("(creatorId = ? or members like ?) and (name like ?)",
-                            userId, "%:" + userId + ",%", "%" + searchKey + "%")
-                            .count(PlanDB.class));
-                }
-            }
             if (startTime != 0 && endTime != 0) {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("(creatorId = ? or members like ?) and (name like ?) and " +
                                 "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",

@@ -6,7 +6,6 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.niucong.punchcardserver"
-//        applicationId "cn.yunshitu.realtimedetect"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 1

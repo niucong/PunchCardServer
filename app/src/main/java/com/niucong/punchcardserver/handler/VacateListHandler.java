@@ -110,17 +110,6 @@ public class VacateListHandler implements RequestHandler {
         MemberDB memberDB = DataSupport.find(MemberDB.class, Integer.valueOf(userId));
         if (memberDB.getType() == 1) {
             if (TextUtils.isEmpty(searchKey)) {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where(
-                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(VacateDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.count(VacateDB.class));
-                    }
-                }
-
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where(
                             "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -131,15 +120,6 @@ public class VacateListHandler implements RequestHandler {
                             .offset(offset).limit(pageSize).find(VacateDB.class));
                 }
             } else {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("name = ? and " +
-                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(VacateDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("name = ?", searchKey).count(VacateDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("name = ? and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -152,17 +132,6 @@ public class VacateListHandler implements RequestHandler {
             }
         } else if (memberDB.getType() == 2) {
             if (TextUtils.isEmpty(searchKey)) {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ?) and " +
-                                        "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                userId, userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(VacateDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ?", userId, userId)
-                                .count(VacateDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ?) and " +
                                     "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -173,17 +142,6 @@ public class VacateListHandler implements RequestHandler {
                             .where("memberId = ? or superId = ?", userId, userId).offset(offset).limit(pageSize).find(VacateDB.class));
                 }
             } else {
-                if (offset == 0) {
-                    if (startTime != 0 && endTime != 0) {
-                        jsonObject.put("allSize", DataSupport.where("(memberId = ? or superId = ? and name = ?) and " +
-                                "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                                userId, userId, searchKey, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime)
-                                .count(VacateDB.class));
-                    } else {
-                        jsonObject.put("allSize", DataSupport.where("memberId = ? or superId = ? and name = ?", userId, userId, searchKey)
-                                .count(VacateDB.class));
-                    }
-                }
                 if (startTime != 0 && endTime != 0) {
                     listToArray(response, jsonObject, DataSupport.order("id desc").where("(memberId = ? or superId = ? and name = ?) and " +
                             "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
@@ -196,15 +154,6 @@ public class VacateListHandler implements RequestHandler {
                 }
             }
         } else {
-            if (offset == 0) {
-                if (startTime != 0 && endTime != 0) {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ? and " +
-                            "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",
-                            userId, "" + startTime, "" + startTime, "" + endTime, "" + endTime, "" + startTime, "" + endTime).count(VacateDB.class));
-                } else {
-                    jsonObject.put("allSize", DataSupport.where("memberId = ?", userId).count(VacateDB.class));
-                }
-            }
             if (startTime != 0 && endTime != 0) {
                 listToArray(response, jsonObject, DataSupport.order("id desc").where("memberId = ? and " +
                         "((startTime <= ? and endTime >= ?) or (startTime <= ? and endTime >= ?) or (startTime >= ? and endTime <= ?))",

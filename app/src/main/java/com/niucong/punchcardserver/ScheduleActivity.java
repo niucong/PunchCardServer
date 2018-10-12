@@ -7,11 +7,11 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.bin.david.form.core.SmartTable;
@@ -43,7 +43,6 @@ public class ScheduleActivity extends AppCompatActivity {
     ActivityScheduleBinding binding;
 
     private SmartTable<Schedule> table;
-    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +139,17 @@ public class ScheduleActivity extends AppCompatActivity {
                 }.start();
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
