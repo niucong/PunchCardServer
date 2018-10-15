@@ -46,6 +46,14 @@
             android:name=".PlanActivity"
             android:label="人员管理"/>
         <activity
+            android:name=".ProjectListActivity"
+            android:label="项目列表"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".ProjectActivity"
+            android:label="项目详情"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity
             android:name=".SignListActivity"
             android:label="考勤管理"/>
         <activity

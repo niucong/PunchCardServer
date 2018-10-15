@@ -38,10 +38,10 @@ public class PlanAdapter extends BaseQuickAdapter<PlanDB, BaseViewHolder> {
         final int position = helper.getLayoutPosition();
         helper.setText(R.id.item_plan_num, (position + 1) + "");
         helper.setText(R.id.item_plan_name, db.getName());
-        helper.setText(R.id.item_plan_creator, db.getCreatorName());
-        helper.setText(R.id.item_plan_starttime, YMDHM.format(new Date(db.getStartTime())));
-        helper.setText(R.id.item_plan_endtime, YMDHM.format(new Date(db.getEndTime())));
-        helper.setText(R.id.item_plan_creattime, YMDHM.format(new Date(db.getCreateTime())));
+        helper.setText(R.id.item_plan_creator, "创建者：" + db.getCreatorName());
+        helper.setText(R.id.item_plan_creattime, "创建时间：" + YMDHM.format(new Date(db.getCreateTime())));
+        helper.setText(R.id.item_plan_starttime, "开始时间：" + YMDHM.format(new Date(db.getStartTime())));
+        helper.setText(R.id.item_plan_endtime, "结束时间：" + YMDHM.format(new Date(db.getEndTime())));
 
         String names = "";
         Log.d("PlanAdapter", "members=" + db.getMembers());
@@ -57,7 +57,7 @@ public class PlanAdapter extends BaseQuickAdapter<PlanDB, BaseViewHolder> {
         if (names.length() > 0) {
             names = names.substring(1);
         }
-        helper.setText(R.id.item_plan_owners, names);
+        helper.setText(R.id.item_plan_owners, "关联人员：" + names);
 
         if (db.getForceFinish() == 0) {
             if (db.getStartTime() > System.currentTimeMillis()) {

@@ -48,7 +48,7 @@
             android:id="@+id/item_member_phone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:gravity="center_horizontal"
             android:text="手机号"
             android:textSize="18dp"/>
@@ -66,7 +66,7 @@
             android:id="@+id/item_member_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.7"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="账号状态"
             android:textSize="18dp"/>

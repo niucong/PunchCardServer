@@ -95,8 +95,8 @@ public class ProjectHandler implements RequestHandler {
                 if (params.containsKey("members")) {
                     projectDB.setMembers(URLDecoder.decode(params.get("members"), "utf-8"));
                 }
-                if (params.containsKey("cause")) {
-                    projectDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                if (params.containsKey("remark")) {
+                    projectDB.setRemark(URLDecoder.decode(params.get("remark"), "utf-8"));
                 }
                 projectDB.setStartTime(start);
                 projectDB.setEndTime(end);
@@ -125,6 +125,9 @@ public class ProjectHandler implements RequestHandler {
                         if (projectDB.getApproveResult() == 1) {
                             object.put("msg", projectDB.getSuperName() + " 同意了" + projectDB.getCreatorName() + " 创建的 " + projectDB.getName() + " 项目");
                         } else {
+                            if (params.containsKey("refuseCause")) {
+                                projectDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
+                            }
                             object.put("msg", projectDB.getSuperName() + " 拒绝了" + projectDB.getCreatorName() + "创建的 " + projectDB.getName() + " 项目");
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
@@ -148,13 +151,25 @@ public class ProjectHandler implements RequestHandler {
                             projectDB.setEndTimeReal(System.currentTimeMillis());
                             object.put("msg", projectDB.getName() + " 项目已经完成了");
                         }
+                        if (params.containsKey("remark")) {
+                            String remark = URLDecoder.decode(params.get("remark"), "utf-8");
+                            if (!TextUtils.isEmpty(remark)) {
+                                if (!TextUtils.isEmpty(projectDB.getRemark())) {
+                                    projectDB.setRemark(projectDB.getRemark() + "\n" + remark);
+                                } else {
+                                    projectDB.setRemark(remark);
+                                }
+                            }
+                        }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
                         if (!TextUtils.isEmpty(bmobID)) {
                             ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                         }
                     } else if (params.containsKey("forceFinish")) {// 关闭
                         projectDB.setForceFinish(Integer.valueOf(params.get("forceFinish")));
-                        projectDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                        if (params.containsKey("cause")) {
+                            projectDB.setCause(URLDecoder.decode(params.get("cause"), "utf-8"));
+                        }
                         projectDB.setCloseTime(System.currentTimeMillis());
                         if (projectDB.getForceFinish() == 1) {
                             object.put("msg", projectDB.getName() + " 项目被取消了");

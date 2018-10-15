@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(new Intent(MainActivity.this, VacateListActivity.class));
                                     break;
                                 case R.id.main_project:
-
+                                    startActivity(new Intent(MainActivity.this, ProjectListActivity.class));
                                     break;
                                 case R.id.main_schedule:
 //                                    startActivity(new Intent(MainActivity.this, MemberActivity.class)

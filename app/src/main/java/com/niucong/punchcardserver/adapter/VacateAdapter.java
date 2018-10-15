@@ -30,11 +30,11 @@ public class VacateAdapter extends BaseQuickAdapter<VacateDB, BaseViewHolder> {
         helper.setText(R.id.item_vacate_name, db.getName());
         helper.setText(R.id.item_vacate_type, db.getType() == 1 ? "事假" : db.getType() == 2 ? "病假" :
                 db.getType() == 3 ? "年假" : db.getType() == 4 ? "调休" : "其它");
-        helper.setText(R.id.item_vacate_starttime, YMDHM.format(new Date(db.getStartTime())));
-        helper.setText(R.id.item_vacate_endtime, YMDHM.format(new Date(db.getEndTime())));
-        helper.setText(R.id.item_vacate_creattime, YMDHM.format(new Date(db.getCreateTime())));
-        helper.setText(R.id.item_vacate_edittime, (db.getEditTime() > 0 && db.getEditTime() != db.getCreateTime()) ?
-                YMDHM.format(new Date(db.getEditTime())) : "");
+        helper.setText(R.id.item_vacate_starttime, "开始时间：" + YMDHM.format(new Date(db.getStartTime())));
+        helper.setText(R.id.item_vacate_endtime, "结束时间：" + YMDHM.format(new Date(db.getEndTime())));
+        helper.setText(R.id.item_vacate_creattime, "申请时间：" + YMDHM.format(new Date(db.getCreateTime())));
+        helper.setText(R.id.item_vacate_edittime, "批复时间：" + ((db.getEditTime() > 0 && db.getEditTime() != db.getCreateTime()) ?
+                YMDHM.format(new Date(db.getEditTime())) : ""));
 
         if (db.getApproveResult() == 0) {
             setTextStutas(helper, "待批复", Color.argb(128, 0, 0, 255));

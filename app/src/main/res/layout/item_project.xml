@@ -6,26 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/item_plan_num"
-            android:layout_width="wrap_content"
+            android:id="@+id/item_project_num"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="序号"
+            android:text="100"
             android:textSize="18dp"/>
 
         <TextView
-            android:id="@+id/item_plan_name"
+            android:id="@+id/item_project_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
@@ -33,11 +32,10 @@
             android:textSize="18dp"/>
 
         <TextView
-            android:id="@+id/item_plan_status"
+            android:id="@+id/item_project_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="计划状态"
+            android:text="项目状态"
             android:textSize="18dp"/>
 
     </LinearLayout>
@@ -45,53 +43,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
 
         <TextView
-            android:id="@+id/item_plan_creator"
-            android:layout_width="0dp"
+            android:id="@+id/item_project_creator"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="创建者"
             android:textSize="18dp"/>
 
         <TextView
-            android:id="@+id/item_plan_creattime"
-            android:layout_width="wrap_content"
+            android:id="@+id/item_project_creattime"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
             android:text="创建时间"
             android:textSize="18dp"/>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/item_plan_owners"
+        android:id="@+id/item_project_owners"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="1"
+        android:paddingBottom="5dp"
         android:text="关联人员"
         android:textSize="18dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/item_plan_starttime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="开始时间"
-            android:textSize="18dp"/>
-
-        <TextView
-            android:id="@+id/item_plan_endtime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="结束时间"
-            android:textSize="18dp"/>
-    </LinearLayout>
 </LinearLayout>
     <!--</layout>-->

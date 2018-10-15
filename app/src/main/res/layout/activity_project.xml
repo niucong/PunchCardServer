@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="项目名称："
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/project_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/project_creator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="创建者"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="创建时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/project_members_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关联人员："
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/project_members"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请点击选择"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="预计开始时间："
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/project_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请选择预计开始时间"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="预计完成时间："
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/project_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请选择预计完成时间"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/project_approveTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="审批时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_designTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="开始设计时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_developTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="开始研发时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_testTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="开始测试时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_end_real"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="实际完成时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/project_status_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="项目状态："
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/project_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未开始"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/project_status_cause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="拒绝原因"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLength="50"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_finish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="取消/终止时间"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_isfinish_cause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="取消/终止原因"
+                android:paddingBottom="10dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/project_remarkTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textSize="18dp"/>
+        </LinearLayout>
+    </ScrollView>
+</layout>
