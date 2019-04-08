@@ -11,8 +11,8 @@ public class SignDB extends DataSupport {
     private int memberId;// 实验室人员Id
     private String name;// 实验室人员名称
     private int superId;// 上级id
-    private long startTime;
-    private long endTime;
+    private long startTime;// 每天第一次打卡时间
+    private long endTime;// 每天最后一次打卡时间
 
     public long getId() {
         return id;

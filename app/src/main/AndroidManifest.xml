@@ -41,10 +41,10 @@
             android:label="人员管理"/>
         <activity
             android:name=".PlanListActivity"
-            android:label="人员管理"/>
+            android:label="计划列表"/>
         <activity
             android:name=".PlanActivity"
-            android:label="人员管理"/>
+            android:label="计划详情"/>
         <activity
             android:name=".ProjectListActivity"
             android:label="项目列表"
