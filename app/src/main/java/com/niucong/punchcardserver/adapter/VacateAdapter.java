@@ -1,6 +1,10 @@
 package com.niucong.punchcardserver.adapter;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -15,12 +19,17 @@ public class VacateAdapter extends BaseQuickAdapter<VacateDB, BaseViewHolder> {
 
     SimpleDateFormat YMDHM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
+    Context context;
+    List<VacateDB> dbs;
+
     /**
      * @param layoutResId
      * @param dbs
      */
-    public VacateAdapter(int layoutResId, List<VacateDB> dbs) {
+    public VacateAdapter(Context context, int layoutResId, List<VacateDB> dbs) {
         super(layoutResId, dbs);
+        this.context = context;
+        this.dbs = dbs;
     }
 
     @Override
@@ -44,6 +53,25 @@ public class VacateAdapter extends BaseQuickAdapter<VacateDB, BaseViewHolder> {
         } else {
             setTextStutas(helper, "不同意", Color.argb(128, 255, 0, 0));
         }
+
+        helper.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(context).setTitle("提示")
+                        .setIcon(android.R.drawable.sym_def_app_icon)
+                        .setMessage("删除此假条？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dbs.remove(position);
+                                db.delete();
+                                notifyDataSetChanged();
+                            }
+                        }).setNegativeButton("取消", null).show();
+
+                return false;
+            }
+        });
     }
 
     private void setTextStutas(BaseViewHolder helper, String status, int Color) {

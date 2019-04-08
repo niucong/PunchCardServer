@@ -591,10 +591,10 @@ public class FaceDetectActivity extends AppCompatActivity {
                         mServiceExecutor.execute(() -> {
                             String name = null;
                             if (mConfiguration.isUseOnlineRec()) {
-                                Log.i("use_online", "true");
+                                Log.i(TAG, "use_online true");
                                 name = faceIdentify(mat);
                             } else {
-                                Log.i("use_online", "false");
+                                Log.i(TAG, "use_online false");
                                 name = FaceReg.INSTANCE.search_face(mat);
                             }
                             Log.i(TAG, "FaceReg: " + name);
@@ -604,7 +604,9 @@ public class FaceDetectActivity extends AppCompatActivity {
                                 String tip = "";
                                 if (db != null) {
                                     name = db.getName();
-                                    updateSign(db);
+                                    if (!updateSign(db)) {
+                                        return;
+                                    }
                                     tip = name + "打卡成功！";
                                 } else {
                                     tip = "欢迎参观！";
@@ -665,14 +667,14 @@ public class FaceDetectActivity extends AppCompatActivity {
      *
      * @param db
      */
-    private void updateSign(MemberDB db) {
+    private boolean updateSign(MemberDB db) {
         try {
             String userId = db.getId() + "";
             SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
             long time = YMD.parse(YMD.format(new Date())).getTime();
             SignDB signDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
                     userId, time + "", time + 24 * 60 * 60 * 1000 + "").findFirst(SignDB.class);
-            Log.d("SignHandler", "startTime=" + YMD.format(new Date()));
+            Log.i(TAG, "SignHandler startTime=" + YMD.format(new Date()));
             if (signDB == null) {
                 signDB = new SignDB();
                 signDB.setMemberId(Integer.valueOf(userId));
@@ -682,10 +684,14 @@ public class FaceDetectActivity extends AppCompatActivity {
                 signDB.setStartTime(System.currentTimeMillis());
                 signDB.save();
             } else {
+//                long lastTime = Math.max(signDB.getStartTime(), signDB.getEndTime());
+//                if (System.currentTimeMillis() - lastTime < 60 * 1000) {// 避免一分钟内连续打卡
+//                    return false;
+//                }
                 signDB.setEndTime(System.currentTimeMillis());
                 signDB.update(signDB.getId());
             }
-            Log.d("SignHandler", "SuperId=" + signDB.getSuperId());
+            Log.i(TAG, "SignHandler SuperId=" + signDB.getSuperId());
 
             // TODO 推送给客户端
             SimpleDateFormat YMDHM = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -699,6 +705,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     /**

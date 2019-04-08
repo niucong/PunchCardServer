@@ -94,7 +94,7 @@ public class VacateListActivity extends AppCompatActivity implements BaseQuickAd
     private void setAdapter() {
         vacateSrl.setOnRefreshListener(this);
         vacateSrl.setColorSchemeColors(Color.rgb(47, 223, 189));
-        adapter = new VacateAdapter(R.layout.item_vacate, list);
+        adapter = new VacateAdapter(this, R.layout.item_vacate, list);
         adapter.setOnLoadMoreListener(this, vacateRv);
         vacateRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         vacateRv.setAdapter(adapter);

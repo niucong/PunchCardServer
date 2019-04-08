@@ -112,6 +112,7 @@ public class VacateHandler implements RequestHandler {
                 VacateDB vacateDB = DataSupport.find(VacateDB.class, serverId);
                 vacateDB.setApproveResult(Integer.valueOf(params.get("approveResult")));
                 vacateDB.setRefuseCause(URLDecoder.decode(params.get("refuseCause"), "utf-8"));
+                vacateDB.setEditTime(System.currentTimeMillis());
                 vacateDB.update(serverId);
 
                 jsonObject.put("code", 1);
