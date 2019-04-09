@@ -8,8 +8,8 @@ android {
         applicationId "com.niucong.punchcardserver"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -20,6 +20,12 @@ android {
 //        abiFilters "armeabi"
 
         }
+    }
+
+//打包的时候不再检测错误 即使有错误也不停止打包
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     buildTypes {
@@ -42,7 +48,7 @@ android {
 
     repositories {
         flatDir {
-            dirs '../yunshitu/libs','libs'
+            dirs '../yunshitu/libs', 'libs'
         }
     }
 

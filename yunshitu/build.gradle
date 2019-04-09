@@ -45,8 +45,8 @@ dependencies {
     implementation 'com.blazegraph:colt:2.1.4'
 
     implementation(name: 'caffe_android_lib-release', ext: 'aar')
-    compile(name: 'facesdk-release', ext: 'aar')
+    api(name: 'facesdk-release', ext: 'aar')
     implementation(name: 'kcfcpp-release', ext: 'aar')
     implementation(name: 'mtcnn-release', ext: 'aar')
-    compile(name: 'openCVLibrary330-release', ext: 'aar')
+    api(name: 'openCVLibrary330-release', ext: 'aar')
 }
