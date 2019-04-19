@@ -12,7 +12,7 @@
             android:id="@+id/plan_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="名称"
+            android:hint="计划名称"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"/>
