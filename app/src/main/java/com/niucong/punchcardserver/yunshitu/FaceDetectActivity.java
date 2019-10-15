@@ -607,7 +607,8 @@ public class FaceDetectActivity extends AppCompatActivity {
                                     if (!updateSign(db)) {
                                         return;
                                     }
-                                    tip = name + "打卡成功！";
+                                    int count = DataSupport.where("memberId = ?", "" + db.getId()).count(SignDB.class);
+                                    tip = name + "打卡成功，您已成功打卡" + count + "天";
                                 } else {
                                     tip = "欢迎参观！";
                                 }
