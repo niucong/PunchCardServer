@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bin.david.form.core.SmartTable;
@@ -57,6 +58,29 @@ public class CalendarActivity extends AppCompatActivity {
 //        FontStyle.setDefaultTextSize(DensityUtils.sp2px(this,15)); //设置全局字体大小
         table = binding.scheduleTable;
         getCalendarList();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(R.menu.menu_refresh, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+            case R.id.action_refresh:
+                if (!ToolUtils.setPermission(this, this, Manifest
+                        .permission.READ_EXTERNAL_STORAGE, 1)) {
+                    selectFilePath();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getCalendarList() {
@@ -126,6 +150,7 @@ public class CalendarActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 if (list.size() > 0) {
+                                    DataSupport.deleteAll(CalendarDB.class);
                                     DataSupport.saveAll(list);
 
                                     getCalendarList();
@@ -139,17 +164,6 @@ public class CalendarActivity extends AppCompatActivity {
                 }.start();
             }
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**
