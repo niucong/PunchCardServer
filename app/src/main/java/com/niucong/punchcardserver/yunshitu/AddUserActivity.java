@@ -1,5 +1,6 @@
 package com.niucong.punchcardserver.yunshitu;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -101,10 +102,30 @@ public class AddUserActivity extends AppCompatActivity {
         mResize = new Size(mConfiguration.getResizeWidth(), mConfiguration.getResizeHeight());
     }
 
+    private ProgressDialog pd;
+
+    private void showDialog() {
+        pd = new ProgressDialog(this);
+//        pd.setTitle("HORIZONTAL PROGRESS DIAGLOG");
+//        pd.setIcon(R.mipmap.ic_launcher);
+        pd.setMessage("正在保存头像，请稍后...");
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setCancelable(true);
+        pd.setIndeterminate(true);
+        pd.show();
+    }
+
+    private void dismissDialog() {
+        if (pd != null && pd.isShowing()) {
+            pd.dismiss();
+        }
+    }
+
     private void setonclicklistener() {
         uploadbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showDialog();
                 new Thread(
                         new Runnable() {
                             @Override
@@ -155,6 +176,7 @@ public class AddUserActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    dismissDialog();
                     Toast.makeText(AddUserActivity.this, "没有输入用户名", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -203,6 +225,7 @@ public class AddUserActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        dismissDialog();
                         Toast.makeText(AddUserActivity.this, result ? "添加成功" : "添加失败", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
                         finish();

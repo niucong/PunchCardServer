@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -99,6 +100,8 @@ public class MemberListActivity extends AppCompatActivity implements BaseQuickAd
 
         setAdapter();
         queryMembers();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void setAdapter() {
