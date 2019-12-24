@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
@@ -91,6 +92,7 @@ public class PlanListActivity extends AppCompatActivity implements BaseQuickAdap
 
         setAdapter();
         queryPlans();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void setAdapter() {
