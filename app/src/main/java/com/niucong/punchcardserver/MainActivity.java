@@ -26,9 +26,9 @@ import com.baidu.tts.client.SpeechError;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
+import com.niucong.punchcardserver.andserver.ServerManager;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMainBinding;
-import com.niucong.punchcardserver.service.ServerManager;
 import com.niucong.punchcardserver.yunshitu.FaceDetectActivity;
 import com.niucong.yunshitu.config.Configuration;
 import com.niucong.yunshitu.config.GlobalConfiguration;
@@ -411,11 +411,13 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case R.id.btn_start:
                                     showDialog();
-                                    mServerManager.startService();
+//                                    mServerManager.startService();
+                                    mServerManager.startServer();
                                     break;
                                 case R.id.btn_stop:
                                     showDialog();
-                                    mServerManager.stopService();
+//                                    mServerManager.stopService();
+                                    mServerManager.stopServer();
                                     break;
                             }
                         } else {

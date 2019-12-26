@@ -22,6 +22,16 @@ public class MemberDB extends DataSupport implements Parcelable {
     private long lastEditTime;// 最后一次编辑时间
     private int isDelete;// 是否删除：0正常、1停用
 
+    private String objectId;// 服务端唯一主键
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
     public int getId() {
         return id;
     }
@@ -110,6 +120,9 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.isDelete = isDelete;
     }
 
+    public MemberDB() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -128,9 +141,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         dest.writeString(this.faceId);
         dest.writeLong(this.lastEditTime);
         dest.writeInt(this.isDelete);
-    }
-
-    public MemberDB() {
+        dest.writeString(this.objectId);
     }
 
     protected MemberDB(Parcel in) {
@@ -145,6 +156,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.faceId = in.readString();
         this.lastEditTime = in.readLong();
         this.isDelete = in.readInt();
+        this.objectId = in.readString();
     }
 
     public static final Creator<MemberDB> CREATOR = new Creator<MemberDB>() {

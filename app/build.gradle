@@ -9,11 +9,13 @@ android {
         minSdkVersion 19
         targetSdkVersion 27
         versionCode 3
-        versionName "2.1"
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         multiDexEnabled true
+
+//        resValue("string", "PORT_NUMBER", "8081")
 
         ndk {
             abiFilters "armeabi-v7a", "x86", "armeabi"
@@ -99,7 +101,12 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'com.yanzhenjie:andserver:1.1.1'
+//    implementation 'com.yanzhenjie:andserver:1.1.1'
+    implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
+    implementation 'com.yanzhenjie.andserver:api:2.0.2'
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.1'
+//    implementation 'com.yanzhenjie.andserver:api:2.0.5'
+//    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.5'
 
     implementation 'com.alibaba:fastjson:1.2.47'
     //Bmob的数据服务SDK
@@ -112,6 +119,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 
     implementation 'com.github.huangyanbin:SmartTable:2.2.0'
+
+////    debugImplementation 'com.amitshekhar.android:debug-db:1.0.0'
+//    debugImplementation 'com.amitshekhar.android:debug-db-encrypt:1.0.6'
 
     configurations {
 //        all*.exclude group: 'com.android.support', module: 'support-fragment'

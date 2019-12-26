@@ -14,6 +14,16 @@ public class SignDB extends DataSupport {
     private long startTime;// 每天第一次打卡时间
     private long endTime;// 每天最后一次打卡时间
 
+    private String objectId;// 服务端唯一主键
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
     public long getId() {
         return id;
     }

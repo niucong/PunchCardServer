@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.db.MemberDB;
 import com.niucong.punchcardserver.db.SignDB;
+import com.niucong.punchcardserver.db.bmob.SignBmob;
 import com.niucong.yunshitu.config.Configuration;
 import com.niucong.yunshitu.config.GlobalConfiguration;
 import com.niucong.yunshitu.face.FaceReg;
@@ -692,6 +693,7 @@ public class FaceDetectActivity extends AppCompatActivity {
                 signDB.setEndTime(System.currentTimeMillis());
                 signDB.update(signDB.getId());
             }
+            new SignBmob().saveOrUpdate(signDB);
             Log.i(TAG, "SignHandler SuperId=" + signDB.getSuperId());
 
             // TODO 推送给客户端

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Yan Zhenjie.
+ * Copyright © 2018 Yan Zhenjie.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.niucong.punchcardserver.service;
+package com.niucong.punchcardserver.andserver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,7 +23,7 @@ import android.content.IntentFilter;
 import com.niucong.punchcardserver.MainActivity;
 
 /**
- * Created by Yan Zhenjie on 2017/3/17.
+ * Created by Yan Zhenjie on 2018/6/9.
  */
 public class ServerManager extends BroadcastReceiver {
 
@@ -41,7 +41,7 @@ public class ServerManager extends BroadcastReceiver {
      *
      * @param context context.
      */
-    public static void serverStart(Context context, String hostAddress) {
+    public static void onServerStart(Context context, String hostAddress) {
         sendBroadcast(context, CMD_VALUE_START, hostAddress);
     }
 
@@ -50,7 +50,7 @@ public class ServerManager extends BroadcastReceiver {
      *
      * @param context context.
      */
-    public static void serverError(Context context, String error) {
+    public static void onServerError(Context context, String error) {
         sendBroadcast(context, CMD_VALUE_ERROR, error);
     }
 
@@ -59,7 +59,7 @@ public class ServerManager extends BroadcastReceiver {
      *
      * @param context context.
      */
-    public static void serverStop(Context context) {
+    public static void onServerStop(Context context) {
         sendBroadcast(context, CMD_VALUE_STOP);
     }
 
@@ -90,19 +90,19 @@ public class ServerManager extends BroadcastReceiver {
         mActivity.registerReceiver(this, filter);
     }
 
-    public void startService() {
-        mActivity.startService(mService);
-    }
-
-    public void stopService() {
-        mActivity.stopService(mService);
-    }
-
     /**
      * UnRegister broadcast.
      */
     public void unRegister() {
         mActivity.unregisterReceiver(this);
+    }
+
+    public void startServer() {
+        mActivity.startService(mService);
+    }
+
+    public void stopServer() {
+        mActivity.stopService(mService);
     }
 
     @Override
@@ -128,5 +128,4 @@ public class ServerManager extends BroadcastReceiver {
             }
         }
     }
-
 }

@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
@@ -22,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMemberBinding;
 import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.punchcardserver.db.bmob.MemberBmob;
 import com.niucong.punchcardserver.yunshitu.AddUserActivity;
 import com.niucong.yunshitu.face.FaceReg;
 
@@ -299,6 +299,7 @@ public class MemberActivity extends AppCompatActivity {
             db.save();
             setResult(RESULT_OK);
         }
+        new MemberBmob().saveOrUpdate(db);
 
         Log.d("MemberActivity", "SuperId=" + db.getSuperId());
         finish();

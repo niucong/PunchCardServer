@@ -60,6 +60,7 @@ public class App extends Application {
 
         MobclickAgent.setScenarioType(this, null);
 //        MobclickAgent. startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,"",""));
+
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Yan Zhenjie.
+ * Copyright © 2018 Yan Zhenjie.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.niucong.punchcardserver.util;
+package com.niucong.punchcardserver.andserver.util;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -22,21 +22,22 @@ import java.util.Enumeration;
 import java.util.regex.Pattern;
 
 /**
- * Created by YanZhenjie on 2017/12/20.
+ * Created by YanZhenjie on 2018/6/9.
  */
 public class NetUtils {
 
     /**
      * Ipv4 address check.
      */
-    private static final Pattern IPV4_PATTERN = Pattern.compile("^(" +
-            "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}" +
+    private static final Pattern IPV4_PATTERN = Pattern.compile(
+        "^(" + "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}" +
             "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
 
     /**
      * Check if valid IPV4 address.
      *
      * @param input the address string to check for validity.
+     *
      * @return True if the input parameter is a valid IPv4 address.
      */
     public static boolean isIPv4Address(String input) {
@@ -57,16 +58,16 @@ public class NetUtils {
             while (enumeration.hasMoreElements()) {
                 NetworkInterface nif = enumeration.nextElement();
                 Enumeration<InetAddress> inetAddresses = nif.getInetAddresses();
-                if (inetAddresses != null)
+                if (inetAddresses != null) {
                     while (inetAddresses.hasMoreElements()) {
                         InetAddress inetAddress = inetAddresses.nextElement();
                         if (!inetAddress.isLoopbackAddress() && isIPv4Address(inetAddress.getHostAddress())) {
                             return inetAddress;
                         }
                     }
+                }
             }
         }
         return null;
     }
-
 }
