@@ -35,7 +35,7 @@ public class CoreService extends Service {
 
     @Override
     public void onCreate() {
-        mServer = AndServer.serverBuilder()
+        mServer = AndServer.serverBuilder(this)
             .inetAddress(NetUtils.getLocalIPAddress())
             .port(8080)
             .timeout(10, TimeUnit.SECONDS)

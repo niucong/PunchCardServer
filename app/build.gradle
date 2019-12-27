@@ -101,12 +101,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.android.support:multidex:1.0.3'
 
-//    implementation 'com.yanzhenjie:andserver:1.1.1'
-    implementation 'com.yanzhenjie:recyclerview-swipe:1.1.4'
-    implementation 'com.yanzhenjie.andserver:api:2.0.2'
-    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.1'
-//    implementation 'com.yanzhenjie.andserver:api:2.0.5'
-//    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.5'
+    implementation 'com.yanzhenjie.andserver:api:2.0.5'
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.0.5'
 
     implementation 'com.alibaba:fastjson:1.2.47'
     //Bmob的数据服务SDK
