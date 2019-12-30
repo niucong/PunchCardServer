@@ -2,8 +2,10 @@ package com.niucong.punchcardserver.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
@@ -95,6 +97,24 @@ public class ProjectAdapter extends BaseQuickAdapter<ProjectDB, BaseViewHolder> 
             }
         });
 
+        helper.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                new AlertDialog.Builder(context).setTitle("提示")
+                        .setIcon(android.R.drawable.sym_def_app_icon)
+                        .setMessage("删除此项目？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                getData().remove(position);
+                                db.delete();
+                                notifyDataSetChanged();
+                            }
+                        }).setNegativeButton("取消", null).show();
+
+                return false;
+            }
+        });
     }
 
     private void setTextStutas(BaseViewHolder helper, String status, int Color) {

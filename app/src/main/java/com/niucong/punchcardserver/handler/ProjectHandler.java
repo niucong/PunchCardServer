@@ -105,7 +105,10 @@ public class ProjectHandler implements RequestHandler {
 
                 object.put("msg", projectDB.getCreatorName() + " 创建了 " + projectDB.getName() + " 项目");
                 String bmobID = DataSupport.find(MemberDB.class, memberDB.getSuperId()).getBmobID();
-                ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                Log.d("ProjectHandler", "bmobID 1=" + bmobID);
+                if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
+                    ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
+                }
             } else {
                 if (!params.containsKey("approveResult") && !params.containsKey("status")
                         && !params.containsKey("forceFinish")) {
@@ -131,7 +134,8 @@ public class ProjectHandler implements RequestHandler {
                             object.put("msg", projectDB.getSuperName() + " 拒绝了" + projectDB.getCreatorName() + "创建的 " + projectDB.getName() + " 项目");
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
-                        if (!TextUtils.isEmpty(bmobID)) {
+                        Log.d("ProjectHandler", "bmobID 2=" + bmobID);
+                        if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
                             ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                         }
                     } else if (params.containsKey("status")) {// 状态变更
@@ -162,7 +166,8 @@ public class ProjectHandler implements RequestHandler {
                             }
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
-                        if (!TextUtils.isEmpty(bmobID)) {
+                        Log.d("ProjectHandler", "bmobID 3=" + bmobID);
+                        if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
                             ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                         }
                     } else if (params.containsKey("forceFinish")) {// 关闭
@@ -177,7 +182,8 @@ public class ProjectHandler implements RequestHandler {
                             object.put("msg", projectDB.getName() + " 项目被终止了");
                         }
                         String bmobID = DataSupport.find(MemberDB.class, projectDB.getSuperId()).getBmobID();
-                        if (!TextUtils.isEmpty(bmobID)) {
+                        Log.d("ProjectHandler", "bmobID 4=" + bmobID);
+                        if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
                             ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                         }
                     }
@@ -188,7 +194,8 @@ public class ProjectHandler implements RequestHandler {
                         List<MemberDB> members = JSON.parseArray(projectDB.getMembers(), MemberDB.class);
                         for (MemberDB member : members) {
                             String bmobID = DataSupport.find(MemberDB.class, member.getId()).getBmobID();
-                            if (!TextUtils.isEmpty(bmobID)) {
+                            Log.d("ProjectHandler", "bmobID 5=" + bmobID);
+                            if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
                                 ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                             }
                         }

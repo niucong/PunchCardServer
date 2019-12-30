@@ -124,7 +124,8 @@ public class PlanHandler implements RequestHandler {
             List<MemberDB> members = JSON.parseArray(planDB.getMembers(), MemberDB.class);
             for (MemberDB member : members) {
                 String bmobID = DataSupport.find(MemberDB.class, member.getId()).getBmobID();
-                if (!TextUtils.isEmpty(bmobID)) {
+                Log.d("PlanHandler", "bmobID=" + bmobID);
+                if (!TextUtils.isEmpty(bmobID) && bmobID.contains("-")) {
                     ids.add(bmobID.substring(bmobID.indexOf("-") + 1));
                 }
             }
