@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.niucong.punchcardserver">
+    package="com.niucong.punchcardserver">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <!--获取GSM（2g）、WCDMA（联通3g）等网络状态的信息  -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!--获取wifi网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--允许读取手机状态 用于创建BmobInstallation-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".app.App"
@@ -26,60 +26,80 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity" >
+            android:name=".MainActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MemberListActivity"
-            android:label="人员管理"/>
+            android:label="人员管理"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".MemberActivity"
-            android:label="人员管理"/>
+            android:label="人员管理"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".PlanListActivity"
-            android:label="计划列表"/>
+            android:label="计划列表"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".PlanActivity"
-            android:label="计划详情"/>
+            android:label="计划详情"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ProjectListActivity"
             android:label="项目列表"
-            android:windowSoftInputMode="stateHidden"/>
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ProjectActivity"
             android:label="项目详情"
-            android:windowSoftInputMode="stateHidden"/>
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SignListActivity"
-            android:label="考勤管理"/>
+            android:label="考勤管理"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".VacateListActivity"
-            android:label="请假管理"/>
+            android:label="请假管理"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ScheduleActivity"
-            android:label="作息表"/>
+            android:label="作息表"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".CalendarActivity"
-            android:label="校历"/>
+            android:label="校历"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="定制语音"
+            android:screenOrientation="landscape" />
 
         <activity
-            android:name=".yunshitu.FaceDetectActivity"/>
+            android:name=".yunshitu.FaceDetectActivity"
+
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".yunshitu.AddUserActivity"/>
+            android:name=".yunshitu.AddUserActivity"
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".yunshitu.FaceCollectActivity"/>
+            android:name=".yunshitu.FaceCollectActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="landscape" />
 
         <service
             android:name=".service.CoreService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5b8f2bbaf43e487003000115"/>
+            android:value="5b8f2bbaf43e487003000115" />
     </application>
 
 </manifest>

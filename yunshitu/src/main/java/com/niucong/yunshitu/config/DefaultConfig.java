@@ -19,7 +19,7 @@ public class DefaultConfig {
     static final String DEFAULT_DETECTOR = "mtcnn";
     static final String DEFAULT_DLIB_MODEL = "default";
     static final String DEFAULT_MTCNN_MODEL = "default";
-    static final int DEFAULT_MTCNN_MIN_FACE_SIZE = 80;
+    static final int DEFAULT_MTCNN_MIN_FACE_SIZE = 50;
     static final int DEFAULT_MTCNN_THREADS_NUM = 1;
     static final int DEFAULT_DETECTOR_WIDTH = 200;
 

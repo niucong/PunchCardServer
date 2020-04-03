@@ -1,5 +1,6 @@
 package com.niucong.punchcardserver.yunshitu;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -378,6 +379,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         if (result == null || result.getMats() == null) {
             return;
         }
+//        Log.d(TAG,"onDetectResultCallback skip=" + skip);
         drawResultOnTexture(result, skip);
         if (mConfiguration.isAutoMagnify()) {
             //autoMagnify(result, skip);
@@ -386,6 +388,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         Iterator<Mat> it1 = result.getAlignResult().iterator();
         Iterator<UUID> it2 = result.getUUID().iterator();
 
+        Log.e(TAG, "onDetectResultCallback result=" + result.toString());
         while (it1.hasNext() && it2.hasNext()) {
             Mat mat = it1.next();
             UUID uuid = it2.next();
@@ -396,6 +399,8 @@ public class FaceDetectActivity extends AppCompatActivity {
                 }
                 mFaceMats.put(uuid, mat.clone());
             }
+
+            Log.e(TAG, "onDetectResultCallback uuid=" + uuid.toString());
 
             if (mConfiguration.isUpload() && uploadCnt++ % mConfiguration.getUploadInterval() == 0) {
                 uploadFace(mat, uuid);
@@ -548,6 +553,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         params.put("trace_id", faceUUID.toString());
         params.put("device_id", OSUtils.getDeviceID(FaceDetectActivity.this));
         params.put("note", "");
+        Log.e(TAG, "uploadFace params=" + params.toString());
         final Mat mat = faceMat.clone();
 
         synchronized (mExecutorLock) {
@@ -562,7 +568,7 @@ public class FaceDetectActivity extends AppCompatActivity {
                                 mConfiguration.getUploadQuality(),
                                 "content",
                                 params);
-                        //Log.i(TAG, "upload " + response);
+                        Log.i(TAG, "uploadFace response=" + response);
                     });
                 } catch (RejectedExecutionException ignored) {
                     mat.release();
@@ -583,6 +589,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         if (faceMat == null || faceUUID == null) {
             return;
         }
+        Log.e(TAG, "faceRecognize faceUUID=" + faceUUID.toString());
         if (!mUUIDSet.contains(faceUUID) && mIsPlaying.compareAndSet(false, true)) {
             final Mat mat = faceMat.clone();
             synchronized (mExecutorLock) {
@@ -591,66 +598,50 @@ public class FaceDetectActivity extends AppCompatActivity {
                         mServiceExecutor.execute(() -> {
                             String name = null;
                             if (mConfiguration.isUseOnlineRec()) {
-                                Log.i(TAG, "use_online true");
+                                Log.i(TAG, "faceRecognize use_online true");
                                 name = faceIdentify(mat);
                             } else {
-                                Log.i(TAG, "use_online false");
+                                Log.i(TAG, "faceRecognize use_online false");
                                 name = FaceReg.INSTANCE.search_face(mat);
                             }
-                            Log.i(TAG, "FaceReg: " + name);
+                            Log.i(TAG, "faceRecognize name=" + name);
                             if (name != null) {
-                                MemberDB db = DataSupport.where("phone = ? and isDelete = 0", name).findFirst(MemberDB.class);
-
+                                MemberDB db = DataSupport
+                                        .where("phone = ? and isDelete = 0", name)
+                                        .findFirst(MemberDB.class);
                                 String tip = "";
                                 if (db != null) {
                                     name = db.getName();
-                                    if (!updateSign(db)) {
+                                    if (!updateSign(db))
                                         return;
-                                    }
-                                    int count = DataSupport.where("memberId = ?", "" + db.getId()).count(SignDB.class);
+                                    int count = DataSupport.where("memberId = ?",
+                                            "" + db.getId()).count(SignDB.class);
                                     tip = name + "打卡成功，您已成功打卡" + count + "天";
                                 } else {
-                                    tip = "欢迎参观！";
+                                    tip = App.sp.getString("welTip", "欢迎参观！");
                                 }
 
                                 final String tipStr = tip;
-
-//                                // 准备语音URL请求参数
-//                                String encode = "";
-//                                try {
-//                                    encode = URLEncoder.encode(tipStr, "UTF-8");
-//                                } catch (UnsupportedEncodingException e) {
-//                                    e.printStackTrace();
-//                                }
                                 this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(FaceDetectActivity.this, tipStr, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(FaceDetectActivity.this, tipStr,
+                                                Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 App.app.mSpeechSynthesizer.speak(tipStr);
-//                                // 下载语音
-//                                File music = NetworkUtils.downloadMusic(getApplicationContext(),
-//                                        String.format(TTS_TEMPLATE_URL, encode));
-//                                if (music != null) {
-//                                    // 播放
-//                                    mMediaPlayer.reset();
-//                                    try (FileInputStream in = new FileInputStream(music)) {
-//                                        mMediaPlayer.setDataSource(in.getFD());
-//                                        mMediaPlayer.prepare();
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    // 由MediaPlayer的回调使mIsPlaying为false
-//                                    mMediaPlayer.start();
-//                                }
                                 // 已识别
                                 mUUIDSet.add(faceUUID);
                             } else {
                                 mIsPlaying.set(false);
-                                App.app.mSpeechSynthesizer.speak("欢迎参观！");
+                                App.app.mSpeechSynthesizer.speak(App.sp.getString("welTip", "欢迎参观！"));
                             }
                             mat.release();
+
+                            Intent intent = getIntent();
+                            finish();
+                            startActivity(intent);
+
                         });
                     } catch (RejectedExecutionException ignored) {
                         mat.release();
@@ -719,49 +710,55 @@ public class FaceDetectActivity extends AppCompatActivity {
         if (mat == null || mat.width() == 0 || mat.height() == 0) {
             return null;
         }
-        //String result = NetworkUtils.detectService6009(mat);
-
-        //Log.d("liu", "onAlignFace: step5");
         String result = NetworkLiuUtils.detectService8888(mat);
         Log.i(TAG, "identify: " + result);
         if (result == null) {
             return null;
         }
-
-        //String name = getName(result);
-        String name = result;
-
-        return name;
+        return result;
     }
 
     private void initProcessor() {
+        // 初始化 构造函数签名
+        // 1 int bufferedSize	缓冲区大小（单位：帧）
+        // 2 long millisecondPerFrame	每隔多少毫秒从源取一帧
+        // 3 int maxFaces	同时维护的最大人脸序列
+        // 4 int detectPeriod	调用检测的周期
+        // 5 int detectorWidth	算法输入短边尺寸
+        // 6 Size resize	人脸对对齐后的缩放尺寸
+        // 7 Size cropSize	分类的居中尺寸
+        // 8 boolean discard	图像输入队列满时是否丢弃最早的数据
+        // int var1, long var2, int var4, int var5, int var6, Size var7, Size var8, boolean var9
         mProcessor = new FaceDetectProcessor(
                 mConfiguration.getBufferedSize(),
-                mConfiguration.getMillisecondPerFrame(), /*mConfiguration.getMaxNumOfFaces()*/ 50, mConfiguration.getDetectPeriod(),
+                mConfiguration.getMillisecondPerFrame(), /*mConfiguration.getMaxNumOfFaces()*/
+                50,
+                mConfiguration.getDetectPeriod(),
                 mConfiguration.getFaceDetectorWidth(),
                 new Size(mConfiguration.getResizeWidth(), mConfiguration.getResizeHeight()),
-                new Size(mConfiguration.getCropWidth(), mConfiguration.getCropHeight()), true) {
+                new Size(mConfiguration.getCropWidth(), mConfiguration.getCropHeight()),
+                true) {
             @Nullable
             @Override
             protected Classifier getClassifier() {
-                return mConfiguration.getClassifier();
+                return mConfiguration.getClassifier();// 获得分类器
             }
 
             @Nullable
             @Override
             protected FaceDetector getFaceDetector() {
-                return mConfiguration.getFaceDetector();
+                return mConfiguration.getFaceDetector();// 获得人脸检测模块
             }
 
             @Nullable
             @Override
             protected Tracker getNewTracker() {
-                return mConfiguration.getTracker();
+                return mConfiguration.getTracker();// 获得追踪器
             }
 
             @Override
             protected double getTrackerThreshold() {
-                return mConfiguration.getTrackerThreshold();
+                return mConfiguration.getTrackerThreshold();// 获得追踪器阈值
             }
         };
         mProcessor.setOnDetectCallback(this::onDetectResultCallback);

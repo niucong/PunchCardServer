@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.facebook.stetho.Stetho;
+import com.niucong.punchcardserver.util.SharedPrefUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
@@ -28,6 +29,8 @@ public class App extends Application {
 
     public static App app;
 
+    public static SharedPrefUtil sp;
+
     public String appId = "11785389";
     public String appKey = "tajQ8tfjOzMFAurBlhQBLaKk";
     public String secretKey = "CVbYIhkRZ66qjeRPi7cZfa9sFGhpv6Bi";
@@ -38,6 +41,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
+        sp = new SharedPrefUtil(app, "PunchCard");
         LitePal.initialize(this);
         Stetho.initializeWithDefaults(this);
 

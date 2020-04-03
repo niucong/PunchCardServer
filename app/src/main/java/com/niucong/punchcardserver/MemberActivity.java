@@ -1,18 +1,15 @@
 package com.niucong.punchcardserver;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
@@ -135,6 +132,10 @@ public class MemberActivity extends AppCompatActivity {
         binding.memberIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (db != null && !isEdit) {
+                    return;
+                }
+
                 String phone = binding.memberPhone.getText().toString();
                 if (TextUtils.isEmpty(phone.trim()) || phone.length() < 11 || !phone.startsWith("1")) {
                     App.showToast("手机号码错误");
@@ -143,41 +144,41 @@ public class MemberActivity extends AppCompatActivity {
                     App.showToast("手机号码已被使用");
                     return;
                 }
-                if (hasHeader) {
-                    new AlertDialog.Builder(MemberActivity.this)
-                            .setTitle("确定要删除头像吗?")
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    hasHeader = false;
-                                    FaceReg.INSTANCE.del_face(phone);
-                                    binding.memberIcon.setImageResource(R.mipmap.ic_launcher);
-                                    dialogInterface.dismiss();
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            })
-                            .show();
-                } else {
+//                if (hasHeader) {
+//                    new AlertDialog.Builder(MemberActivity.this)
+//                            .setTitle("确定要删除头像吗?")
+//                            .setIcon(android.R.drawable.ic_dialog_alert)
+//                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    hasHeader = false;
+//                                    FaceReg.INSTANCE.del_face(phone);
+//                                    binding.memberIcon.setImageResource(R.mipmap.ic_launcher);
+//                                    dialogInterface.dismiss();
+//                                }
+//                            })
+//                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    dialogInterface.dismiss();
+//                                }
+//                            })
+//                            .show();
+//                } else {
                     startActivityForResult(new Intent(MemberActivity.this, AddUserActivity.class).putExtra("phone", phone), 0);
-                }
+//                }
             }
         });
         List<Person> person_list = FaceReg.INSTANCE.get_all_person(0, 10000);
         for (Person person : person_list) {
             if (person.getName().equals(binding.memberPhone.getText().toString())) {
-                hasHeader = true;
+//                hasHeader = true;
                 Glide.with(this).load(Uri.fromFile(new File(person.getPortrait()))).into(binding.memberIcon);
             }
         }
     }
 
-    private boolean hasHeader;
+//    private boolean hasHeader;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

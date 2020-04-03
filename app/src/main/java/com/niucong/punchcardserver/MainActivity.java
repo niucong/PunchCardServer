@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             grantResults) {
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
             } else {
                 Toast.makeText(this, "权限被拒绝,无法使用此应用", Toast.LENGTH_LONG).show();
                 finish();
@@ -246,8 +249,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.i(TAG, "for-test: " + json);
              ****************For test****************/
+                Log.i("MainActivity", "for-test: " + json);
 
                 boolean success = false;
                 if (json != null) {
@@ -323,12 +326,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.getMenuInflater().inflate(R.menu.menu_setting, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_diy:
+                alertEdit(0);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * 初始化引擎
      */
     private void initialTts() {
+        // 获取 SpeechSynthesizer 实例
         App.app.mSpeechSynthesizer = SpeechSynthesizer.getInstance();
+        // 设置当前的Context
         App.app.mSpeechSynthesizer.setContext(this);
+        // 如合成成功后，SDK会调用用户设置的SpeechSynthesizerListener 里的回调方法
         App.app.mSpeechSynthesizer.setSpeechSynthesizerListener(new SpeechSynthesizerListener() {
             @Override
             public void onSynthesizeStart(String s) {
@@ -365,12 +388,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "initialTts onError s=" + s + ",speechError=" + speechError.description);
             }
         });
-        App.app.mSpeechSynthesizer.setAppId(App.app.appId/*这里只是为了让Demo运行使用的APPID,请替换成自己的id。*/);
+        App.app.mSpeechSynthesizer.setAppId(App.app.appId);
         App.app.mSpeechSynthesizer.setApiKey(App.app.appKey,
-                App.app.secretKey/*这里只是为了让Demo正常运行使用APIKey,请替换成自己的APIKey*/);
+                App.app.secretKey);
         App.app.mSpeechSynthesizer.auth(TtsMode.ONLINE); // 离在线混合
-        App.app.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, "0"); // 设置发声的人声音，在线生效
-        App.app.mSpeechSynthesizer.initTts(TtsMode.ONLINE); // 初始化离在线混合模式，如果只需要在线合成功能，使用 TtsMode.ONLINE
+        // 设置发声的人声音，在线生效
+        App.app.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_SPEAKER, "0");
+        // 初始化离在线混合模式，如果只需要在线合成功能，使用 TtsMode.ONLINE
+        App.app.mSpeechSynthesizer.initTts(TtsMode.ONLINE);
     }
 
     private void alertEdit(final int type) {
@@ -416,6 +441,9 @@ public class MainActivity extends AppCompatActivity {
                                 case R.id.btn_stop:
                                     showDialog();
                                     mServerManager.stopService();
+                                    break;
+                                case 0:
+                                    startActivity(new Intent(MainActivity.this, SettingActivity.class));
                                     break;
                             }
                         } else {

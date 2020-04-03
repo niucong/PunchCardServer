@@ -10,9 +10,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -39,6 +41,7 @@ import org.opencv.core.Size;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -100,6 +103,32 @@ public class AddUserActivity extends AppCompatActivity {
         }
         mDetector = mConfiguration.getFaceDetector();
         mResize = new Size(mConfiguration.getResizeWidth(), mConfiguration.getResizeHeight());
+
+        if (!TextUtils.isEmpty(pname)) {
+            try {
+                File folder = new File(Environment.getExternalStorageDirectory().getPath()+"/images/person/" + pname);
+                if (folder.exists()&&folder.isDirectory()){
+                    for (File file : folder.listFiles()) {
+                        try {
+                            Uri uri = Uri.fromFile(file);
+                            ContentResolver cr = this.getContentResolver();
+                            if (uri != null) {
+                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                                Mat face_mat = new Mat();
+                                Utils.bitmapToMat(bitmap, face_mat);
+                                List<Mat> crop_result_list = mDetector.crop_face(face_mat, mConfiguration.getFaceDetectorWidth(), mResize);
+                                mMatList.addAll(crop_result_list);
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                mGridviewAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private ProgressDialog pd;
@@ -192,7 +221,6 @@ public class AddUserActivity extends AppCompatActivity {
                     List<Mat> singleMatList = Collections.singletonList(mat);
                     if (NetworkLiuUtils.getUpNameresult8888(NetworkLiuUtils.addService8888(singleMatList, pname)))
                         upflag++;
-
                 }
 
                 if (mediaPlay(pname, upflag >= 1))
@@ -212,6 +240,7 @@ public class AddUserActivity extends AppCompatActivity {
             } else if (mMatList.size() > 0 && upselect == 2) {
                 Log.d("AddUserActivity", "startupload size=" + mMatList.size());
                 boolean succ = false;
+                FaceReg.INSTANCE.del_face(pname);
                 if (mConfiguration.isUseOnlineRec()) {
                     succ = NetworkLiuUtils.getUpNameresult8888(NetworkLiuUtils.addService8888(mMatList, pname));
                 } else {
@@ -266,7 +295,7 @@ public class AddUserActivity extends AppCompatActivity {
                 mGridviewAdapter.notifyDataSetChanged();
             }
         }
-        if (data != null && requestCode == PHOTO_REQUEST_GALLERY) {
+        if (data != null && requestCode == PHOTO_REQUEST_GALLERY) {// 拍照
             Uri uri = data.getData();
             Log.d("AddUserActivity", "onActivityResult uri=" + uri);
             ContentResolver cr = this.getContentResolver();
@@ -275,6 +304,8 @@ public class AddUserActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                 Mat face_mat = new Mat();
                 Utils.bitmapToMat(bitmap, face_mat);
+                // 从图片中检测出的的人脸区域图片
+                // Mat var1, int var2, Size var3
                 List<Mat> crop_result_list = mDetector.crop_face(face_mat, mConfiguration.getFaceDetectorWidth(), mResize);
                 mMatList.addAll(crop_result_list);
                 mGridviewAdapter.notifyDataSetChanged();
