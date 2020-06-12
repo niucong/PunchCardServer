@@ -314,6 +314,11 @@ public class FaceDetectActivity extends AppCompatActivity {
         mMediaPlayer.setOnCompletionListener(mediaPlayer -> mIsPlaying.set(false));
     }
 
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//    }
+
     @Override
     protected void onDestroy() {
         synchronized (mExecutorLock) {
@@ -639,8 +644,8 @@ public class FaceDetectActivity extends AppCompatActivity {
                             mat.release();
 
                             Intent intent = getIntent();
-                            finish();
                             startActivity(intent);
+                            finish();
 
                         });
                     } catch (RejectedExecutionException ignored) {
@@ -676,10 +681,10 @@ public class FaceDetectActivity extends AppCompatActivity {
                 signDB.setStartTime(System.currentTimeMillis());
                 signDB.save();
             } else {
-//                long lastTime = Math.max(signDB.getStartTime(), signDB.getEndTime());
-//                if (System.currentTimeMillis() - lastTime < 60 * 1000) {// 避免一分钟内连续打卡
-//                    return false;
-//                }
+                long lastTime = Math.max(signDB.getStartTime(), signDB.getEndTime());
+                if (System.currentTimeMillis() - lastTime < 60 * 1000) {// 避免一分钟内连续打卡
+                    return false;
+                }
                 signDB.setEndTime(System.currentTimeMillis());
                 signDB.update(signDB.getId());
             }

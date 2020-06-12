@@ -83,14 +83,12 @@
 
         <activity
             android:name=".yunshitu.FaceDetectActivity"
-
             android:screenOrientation="landscape" />
         <activity
             android:name=".yunshitu.AddUserActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".yunshitu.FaceCollectActivity"
-            android:launchMode="singleInstance"
             android:screenOrientation="landscape" />
 
         <service

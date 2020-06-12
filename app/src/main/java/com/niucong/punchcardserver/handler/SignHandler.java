@@ -51,7 +51,7 @@ public class SignHandler implements RequestHandler {
 
         String userId = "";
         for (Header header : request.getAllHeaders()) {
-            if ("userId".equals(header.getName())) {
+            if ("userId".equals(header.getName()) || "userid".equals(header.getName())) {
                 userId = header.getValue();
                 break;
             }

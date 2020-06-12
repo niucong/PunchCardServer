@@ -78,11 +78,8 @@ public class App extends Application {
 
 
     public static void addPush(List<String> ids, org.json.JSONObject json) {
-
         BmobPushManager bmobPushManager = new BmobPushManager();
         BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-//        query.addWhereEqualTo("deviceType", "android");
-//        query.addWhereEqualTo("installationId", ids.get(0));
         query.addWhereContainedIn("installationId", ids);
         bmobPushManager.setQuery(query);
         bmobPushManager.pushMessage(json, new PushListener() {

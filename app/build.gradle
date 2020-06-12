@@ -86,6 +86,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
+
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
@@ -106,6 +107,7 @@ dependencies {
     implementation 'cn.bmob.android:bmob-sdk:3.6.3'
     //Bmob的消息推送SDK
     implementation 'cn.bmob.android:bmob-push:1.0.2'
+
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.umeng.analytics:analytics:latest.integration'
     implementation files('libs/com.baidu.tts_2.3.2.20180713_6101c2a.jar')
