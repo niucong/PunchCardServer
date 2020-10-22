@@ -21,6 +21,8 @@ public class MemberDB extends DataSupport implements Parcelable {
     private String faceId;// 人脸标识
     private long lastEditTime;// 最后一次编辑时间
     private int isDelete;// 是否删除：0正常、1停用
+    private int isTest;// 是否测试数据：0正常、1测试
+
 
     public int getId() {
         return id;
@@ -110,6 +112,14 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.isDelete = isDelete;
     }
 
+    public int getIsTest() {
+        return isTest;
+    }
+
+    public void setIsTest(int isTest) {
+        this.isTest = isTest;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -128,6 +138,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         dest.writeString(this.faceId);
         dest.writeLong(this.lastEditTime);
         dest.writeInt(this.isDelete);
+        dest.writeInt(this.isTest);
     }
 
     public MemberDB() {
@@ -145,6 +156,7 @@ public class MemberDB extends DataSupport implements Parcelable {
         this.faceId = in.readString();
         this.lastEditTime = in.readLong();
         this.isDelete = in.readInt();
+        this.isTest = in.readInt();
     }
 
     public static final Creator<MemberDB> CREATOR = new Creator<MemberDB>() {

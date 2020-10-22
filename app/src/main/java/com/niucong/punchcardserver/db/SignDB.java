@@ -13,6 +13,7 @@ public class SignDB extends DataSupport {
     private int superId;// 上级id
     private long startTime;// 每天第一次打卡时间
     private long endTime;// 每天最后一次打卡时间
+    private int isTest;// 是否测试数据：0正常、1测试
 
     public long getId() {
         return id;
@@ -60,5 +61,13 @@ public class SignDB extends DataSupport {
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
+    }
+
+    public int getIsTest() {
+        return isTest;
+    }
+
+    public void setIsTest(int isTest) {
+        this.isTest = isTest;
     }
 }
