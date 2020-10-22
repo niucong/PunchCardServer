@@ -10,7 +10,10 @@
             type="com.niucong.punchcardserver.MainActivity.MainClickHandlers"/>
     </data>
 
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -144,5 +147,34 @@
                 android:text="@string/server_stop_succeed"/>
         </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_test"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/add_members"
+                    android:text="批量生成人员"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/add_signs"
+                    android:text="批量生成签到记录"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/clean_members"
+                    android:text="清除测试人员"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/clean_signs"
+                    android:text="清除测试签到记录"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </layout>

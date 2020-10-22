@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.baidu.tts.client.SpeechError;
@@ -30,7 +31,10 @@ import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
 import com.niucong.punchcardserver.app.App;
 import com.niucong.punchcardserver.databinding.ActivityMainBinding;
+import com.niucong.punchcardserver.db.MemberDB;
+import com.niucong.punchcardserver.db.SignDB;
 import com.niucong.punchcardserver.service.ServerManager;
+import com.niucong.punchcardserver.util.CreateTestData;
 import com.niucong.punchcardserver.yunshitu.FaceDetectActivity;
 import com.niucong.yunshitu.config.Configuration;
 import com.niucong.yunshitu.config.GlobalConfiguration;
@@ -41,7 +45,8 @@ import com.niucong.yunshitu.util.SharedPreferencesUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opencv.android.OpenCVLoader;
+import org.litepal.crud.DataSupport;
+//import org.opencv.android.OpenCVLoader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -78,6 +83,56 @@ public class MainActivity extends AppCompatActivity {
 
         // 开始后台载入工作
         new LoadTask().execute("1.8.0");
+
+        testData();
+    }
+
+    private void testData() {
+        binding.tvMessage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                App.showToast("测试");
+                if (binding.llTest.getVisibility() == View.GONE) {
+                    binding.llTest.setVisibility(View.VISIBLE);
+                } else {
+                    binding.llTest.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
+        binding.addMembers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.showToast("开始添加测试人员");
+                CreateTestData.createMembers();
+                App.showToast("测试人员添加完成");
+            }
+        });
+        binding.addSigns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.showToast("开始添加签到数据");
+                CreateTestData.createSignData();
+                App.showToast("签到数据添加成功");
+            }
+        });
+        binding.cleanMembers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.showToast("开始清除测试人员");
+                DataSupport.deleteAll(MemberDB.class,"istest=?","1");
+                App.showToast("测试人员清除完成");
+            }
+        });
+        binding.cleanSigns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.showToast("开始清除测试签到记录");
+                DataSupport.deleteAll(SignDB.class,"istest=?","1");
+//                DataSupport.deleteAll(SignDB.class);
+                App.showToast("测试签到记录清除完成");
+            }
+        });
     }
 
     /**
@@ -142,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             publishProgress("正在载入");
 
             // 载入OpenCV
-            OpenCVLoader.initDebug();
+//            OpenCVLoader.initDebug();
 
             // 获得单例配置
             if (GlobalConfiguration.getConfiguration() == null) {

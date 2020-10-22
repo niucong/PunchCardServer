@@ -10,6 +10,8 @@ import org.litepal.crud.DataSupport;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class CreateTestData {
 
@@ -60,23 +62,29 @@ public class CreateTestData {
      * 生成签到数据
      */
     public static void createSignData() {
+        int MIN = 7*60*60;
+        int MAX = 23*60*60;
+        Random random = new Random();
         try {
-            for (MemberDB memberDB : DataSupport.where("istest = ?", "1").find(MemberDB.class)) {
-                SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
-                long time = YMD.parse(YMD.format(new Date())).getTime();
-                SignDB signDB = DataSupport.where("memberId = ? and startTime > ? and startTime < ?",
-                        "" + memberDB.getId(), time + "", time + 24 * 60 * 60 * 1000 + "").findFirst(SignDB.class);
-                Log.d("SignHandler", "startTime=" + YMD.format(new Date()));
-                if (signDB == null) {
-                    signDB = new SignDB();
-                    signDB.setMemberId(memberDB.getId());
-                    signDB.setName(memberDB.getName());
-                    signDB.setSuperId(memberDB.getSuperId());
-                    signDB.setStartTime(System.currentTimeMillis());
-                    signDB.save();
-                } else {
-                    signDB.setEndTime(System.currentTimeMillis());
-                    signDB.update(signDB.getId());
+            List<MemberDB> list = DataSupport.where("istest = ?", "1").find(MemberDB.class);
+            for (String date : dates) {
+                for (MemberDB memberDB : list) {
+                    if (random.nextInt(100)>1) {
+                        SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
+                        long time = YMD.parse(date).getTime();
+                        long time1 = time + (MIN + random.nextInt(MAX-MIN))*1000;
+                        long time2 = time + (MIN + random.nextInt(MAX-MIN))*1000;
+                        SignDB signDB = new SignDB();
+                        signDB.setMemberId(memberDB.getId());
+                        signDB.setName(memberDB.getName());
+                        signDB.setSuperId(memberDB.getSuperId());
+                        signDB.setStartTime(Math.min(time1,time2));
+                        if (random.nextInt(100)>2) {
+                            signDB.setEndTime(Math.max(time1,time2));
+                        }
+                        signDB.setIsTest(1);
+                        signDB.save();
+                    }
                 }
             }
         } catch (ParseException e) {
