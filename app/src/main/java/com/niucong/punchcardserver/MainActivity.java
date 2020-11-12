@@ -133,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
                 App.showToast("测试签到记录清除完成");
             }
         });
+        binding.statisticsSigns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateTestData.showStartNumbers();
+            }
+        });
     }
 
     /**

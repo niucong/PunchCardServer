@@ -9,8 +9,11 @@ import org.litepal.crud.DataSupport;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CreateTestData {
@@ -92,4 +95,36 @@ public class CreateTestData {
         }
     }
 
+    /**
+     * 打印每个时间段的人数和各个时长人数
+     */
+    public static void showStartNumbers(){
+        List<SignDB> list = DataSupport.findAll(SignDB.class);
+        Map<String,Integer> mapTimeFrame = new HashMap<>();
+        for (int i = 7; i < 23; i++) {
+            mapTimeFrame.put(i+"",0);
+        }
+        Map<String,Integer> mapDuration = new HashMap<>();
+        for (int i = 0; i < 16; i++) {
+            mapDuration.put(i+"",0);
+        }
+        for (SignDB signDB : list) {
+            Date date1 = new Date(signDB.getStartTime());
+            String key1 = date1.getHours() + "";
+            int value1 = mapTimeFrame.get(key1);
+            mapTimeFrame.put(key1,++value1);
+
+            Date date2 = new Date(signDB.getEndTime());
+            String key2 = date2.getHours() - date1.getHours() + "";
+            int value2 = mapDuration.get(key2);
+            mapDuration.put(key2,++value2);
+        }
+        for (Map.Entry<String, Integer> entry : mapTimeFrame.entrySet()) {
+            Log.d("","" + entry.getKey()+"点总人数：" + entry.getValue());
+        }
+        for (Map.Entry<String, Integer> entry : mapDuration.entrySet()) {
+            Log.d("","每日时长" + entry.getKey()+"个小时总人数：" + entry.getValue());
+        }
+
+    }
 }
