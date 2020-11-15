@@ -66,6 +66,7 @@ public class CreateTestData {
      */
     public static void createSignData() {
         int MIN = 7*60*60;
+//        int MID = 12*60*60;
         int MAX = 23*60*60;
         Random random = new Random();
         try {
@@ -73,18 +74,24 @@ public class CreateTestData {
             for (String date : dates) {
                 for (MemberDB memberDB : list) {
                     if (random.nextInt(100)>1) {
-                        SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
-                        long time = YMD.parse(date).getTime();
-                        long time1 = time + (MIN + random.nextInt(MAX-MIN))*1000;
-                        long time2 = time + (MIN + random.nextInt(MAX-MIN))*1000;
                         SignDB signDB = new SignDB();
                         signDB.setMemberId(memberDB.getId());
                         signDB.setName(memberDB.getName());
                         signDB.setSuperId(memberDB.getSuperId());
-                        signDB.setStartTime(Math.min(time1,time2));
+                        SimpleDateFormat YMD = new SimpleDateFormat("yyyy-MM-dd");
+                        long time = YMD.parse(date).getTime();
+                        long time1 = time + (MIN + random.nextInt(MAX-MIN))*1000;
+                        long time2 = time + (MIN + random.nextInt(MAX-MIN))*1000;
+                        signDB.setStartTime(Math.min(time1, time2));
                         if (random.nextInt(100)>2) {
                             signDB.setEndTime(Math.max(time1,time2));
                         }
+//                        long time1 = time + (MIN + random.nextInt(MID-MIN))*1000;
+//                        long time2 = time + (MID + random.nextInt(MAX-MID))*1000;
+//                        signDB.setStartTime(time1);
+//                        if (random.nextInt(100)>2) {
+//                            signDB.setEndTime(time2);
+//                        }
                         signDB.setIsTest(1);
                         signDB.save();
                     }
@@ -98,7 +105,7 @@ public class CreateTestData {
     /**
      * 打印每个时间段的人数和各个时长人数
      */
-    public static void showStartNumbers(){
+    public static void statisticsSigns(){
         List<SignDB> list = DataSupport.findAll(SignDB.class);
         Map<String,Integer> mapTimeFrame = new HashMap<>();
         for (int i = 7; i < 23; i++) {
@@ -109,22 +116,23 @@ public class CreateTestData {
             mapDuration.put(i+"",0);
         }
         for (SignDB signDB : list) {
-            Date date1 = new Date(signDB.getStartTime());
-            String key1 = date1.getHours() + "";
-            int value1 = mapTimeFrame.get(key1);
-            mapTimeFrame.put(key1,++value1);
+            if (signDB.getEndTime()>signDB.getStartTime()) {
+                Date date1 = new Date(signDB.getStartTime());
+                String key1 = date1.getHours() + "";
+                int value1 = mapTimeFrame.get(key1);
+                mapTimeFrame.put(key1,++value1);
 
-            Date date2 = new Date(signDB.getEndTime());
-            String key2 = date2.getHours() - date1.getHours() + "";
-            int value2 = mapDuration.get(key2);
-            mapDuration.put(key2,++value2);
+                Date date2 = new Date(signDB.getEndTime());
+                String key2 = date2.getHours() - date1.getHours() + "";
+                int value2 = mapDuration.get(key2);
+                mapDuration.put(key2,++value2);
+            }
         }
         for (Map.Entry<String, Integer> entry : mapTimeFrame.entrySet()) {
-            Log.d("","" + entry.getKey()+"点总人数：" + entry.getValue());
+            Log.d("CreateTestData","" + entry.getKey()+"点总人数：" + entry.getValue());
         }
         for (Map.Entry<String, Integer> entry : mapDuration.entrySet()) {
-            Log.d("","每日时长" + entry.getKey()+"个小时总人数：" + entry.getValue());
+            Log.d("CreateTestData","每日时长" + entry.getKey()+"个小时总人数：" + entry.getValue());
         }
-
     }
 }

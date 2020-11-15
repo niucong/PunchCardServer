@@ -65,6 +65,10 @@
             android:label="考勤管理"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".SignStatisticsActivity"
+            android:label="考勤统计"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".VacateListActivity"
             android:label="请假管理"
             android:screenOrientation="landscape" />

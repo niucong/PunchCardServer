@@ -1,5 +1,6 @@
 package com.niucong.punchcardserver;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -232,6 +233,9 @@ public class SignListActivity extends AppCompatActivity implements BaseQuickAdap
                         super.run();
                     }
                 }.start();
+                break;
+            case R.id.action_statistics:
+                startActivity(new Intent(SignListActivity.this, SignStatisticsActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

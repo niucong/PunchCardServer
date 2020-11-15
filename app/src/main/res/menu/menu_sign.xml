@@ -8,4 +8,8 @@
     <item
         android:id="@+id/action_export"
         android:title="导出"/>
+
+    <item
+        android:id="@+id/action_statistics"
+        android:title="考勤统计"/>
 </menu>

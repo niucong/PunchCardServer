@@ -21,6 +21,7 @@ allprojects {
         jcenter()
         //SmartTable的maven仓库地址
         maven { url 'https://www.jitpack.io' }
+        maven { url "https://jitpack.io"}//chart需求
         //Bmob的maven仓库地址--必填
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
     }
